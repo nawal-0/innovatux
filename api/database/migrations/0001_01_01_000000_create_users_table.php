@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('password');
             $table->integer('age');
             $table->string('gender');
-            $table->unsignedBigInteger('friendlist_id');
-            $table->unsignedBigInteger('log_id');
+            $table->unsignedBigInteger('friendlist_id')->nullable();
+            $table->unsignedBigInteger('log_id')->nullable();
             //$table->foreign('friendlist_id')->references('list_id')->on('friendlist');
             $table->rememberToken();
             $table->timestamps();
