@@ -130,9 +130,9 @@ const styles = StyleSheet.create({
 export default Login;
 */
 
-// LOGIN WITHOUT THE SIGN UP PART !!!
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, Button, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
+
 import { getUsers } from '../api-functions';
 
 function Login({ navigation }) {
@@ -152,31 +152,35 @@ function Login({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      {/* Image at the top */}
+      <Image source={require('../assets/alcohol.png')} style={styles.image} />
+
+      <Text style={styles.title}>LOGIN</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Username"
+        placeholderTextColor="#fff" // White text color for placeholder
       />
 
       <TextInput
         style={styles.input}
         placeholder="Password"
         secureTextEntry
+        placeholderTextColor="#fff" // White text color for placeholder
       />
 
-      <Button title="Login" onPress={handlePress} color="#007BFF" />
+      <TouchableOpacity style={styles.loginButton} onPress={handlePress}>
+        <Text style={styles.loginText}>Login</Text>
+      </TouchableOpacity>
 
       {users.map(user => (
         <Text key={user.id} style={styles.userText}>{user.first_name} {user.last_name}</Text>
       ))}
       
-      {/* Commented out until SignUp page is created */}
-      {/* 
       <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.signupText}>Sign Up</Text>
       </TouchableOpacity>
-      */}
     </View>
   );
 }
@@ -185,22 +189,46 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center', // Center horizontally
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#E1F9EB', // Background color
+  },
+  image: {
+    width: 150, // Adjust width as needed
+    height: 150, // Adjust height as needed
+    resizeMode: 'contain', // Adjust how the image is resized
+    marginBottom: 20,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 24,
     textAlign: 'center',
+    color: '#245C3B', // Color for title
+    textTransform: 'uppercase', // Make the text uppercase
   },
   input: {
+    width: '100%', // Full width for input fields
     height: 40,
-    borderColor: '#ddd',
+    backgroundColor: '#A9DFBF', // Background color for input fields
+    borderColor: '#245C3B',
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 8,
     marginBottom: 16,
+    color: '#245C3B', // Text color for input fields
+  },
+  loginButton: {
+    width: '100%', // Full width for login button
+    padding: 10,
+    backgroundColor: '#245C3B', // Background color for login button
+    borderRadius: 4,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  loginText: {
+    color: '#E1F9EB', // Text color for login button
+    fontSize: 16,
   },
   userText: {
     fontSize: 16,
@@ -209,10 +237,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   signupButton: {
-    marginTop: 20,
+    position: 'absolute',
+    bottom: 30,
+    right: 16,
     padding: 10,
-    backgroundColor: '#007BFF',
-    borderRadius: 4,
+    backgroundColor: '#245C3B', // Background color for signup button
+    borderRadius: 50,
     alignItems: 'center',
   },
   signupText: {
@@ -222,3 +252,4 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
+

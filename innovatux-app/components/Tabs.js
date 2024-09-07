@@ -29,7 +29,7 @@ function Tabs() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
+        tabBarActiveTintColor: 'green',
         tabBarInactiveTintColor: 'gray',
       })}
     >
