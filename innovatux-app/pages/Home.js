@@ -210,7 +210,6 @@ const styles = StyleSheet.create({
 export default Home;
 */
 
-
 // GREEN COLOUR THEME 
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
@@ -263,7 +262,7 @@ function Home() {
         height={220}
         yAxisLabel=""
         chartConfig={{
-          backgroundColor: '#d4edda',
+          backgroundColor: '#359A5E',
           backgroundGradientFrom: '#b4e197',
           backgroundGradientTo: '#6db36e',
           decimalPlaces: 2,
@@ -283,12 +282,12 @@ function Home() {
         height={220}
         yAxisLabel="$"
         chartConfig={{
-          backgroundColor: '#eafaf1',
+          backgroundColor: '#245C3B',
           backgroundGradientFrom: '#c4e7c6',
           backgroundGradientTo: '#8dcf91',
           decimalPlaces: 2,
-          color: (opacity = 1) => `rgba(34, 139, 34, ${opacity})`, // Forest green for the bars
-          labelColor: (opacity = 1) => `rgba(46, 139, 87, ${opacity})`, // Sea green for text
+          color: (opacity = 1) => `rgba(53, 154, 94, ${opacity})`, // 359A5E color for the lines
+          labelColor: (opacity = 1) => `rgba(37, 105, 60, ${opacity})`, // Darker green for text
           style: {
             borderRadius: 16,
           },
@@ -303,20 +302,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f0fff4', // Light pastel green background
+    backgroundColor: '#E1F9EB', // Light pastel green background
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 24,
     textAlign: 'center',
-    color: '#2e8b57', // Sea green title
+    color: '#245C3B', // title
   },
   subtitle: {
     fontSize: 24,
     marginBottom: 8,
     marginTop: 16,
-    color: '#556b2f', // Olive green subtitle
+    color: '#245C3B', // subtitle colour 
   },
   chart: {
     marginVertical: 8,

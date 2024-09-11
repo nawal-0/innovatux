@@ -1,67 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Button, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { getUsers, postLogin } from '../api-functions';
 
-function Login({ navigation }) {
-  const [email, setEmail] = useState(['']);
-  const [password, setPassword] = useState(['']);
-  const [error, setError] = useState(null);
+import React, { useState, useEffect } from 'react';
+import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity } from 'react-native';
+//import { Picker } from '@react-native-picker/picker';
+
+function Goals({ navigation }) {
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  const [isEnabled2, setIsEnabled2] = useState(false);
+
+  const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
 
   const handlePress = () => {
     navigation.navigate('Tabs');
   }
-
-  const handleLogin = () => {
-    async function fetchUsers() {
-      console.log(email, password);
-      const response = await postLogin(email, password);
-      console.log(response);
-      if (response['message']) {
-        setError(response['message']);
-      } else {
-        navigation.navigate('Tabs');
-      }
-  }
-    fetchUsers();
-  }
-
+  
   return (
     <View style={styles.container}>
-      {/* Image at the top */}
-      <Image source={require('../assets/alcohol.png')} style={styles.image} />
-
-      <Text style={styles.title}>LOGIN</Text>
+      <Text style={styles.title}>User Preferences</Text>
+      
+      <View style={styles.inputTitle}>
+        <Text style={styles.subtitle}>Goals</Text>
+      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Goal"
+        placeholderTextColor="#fff" // White text color for placeholder
+      />
+      
+      <View style={styles.inputTitle}>
+        <Text style={styles.subtitle}>Weekly Limit</Text>
+      </View>
 
       <TextInput
         style={styles.input}
-        placeholder="Username or Email"
-        onChangeText={setEmail}
+        placeholder="Weekly Limit"
         placeholderTextColor="#fff" // White text color for placeholder
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        onChangeText={setPassword}
-        placeholderTextColor="#fff" // White text color for placeholder
-      />
-      {error && <Text style={styles.userText}>{error}</Text>}
+      
+    
+      <View style={styles.toggleContainer}>
+        <Text style={styles.subtitle}>Push Notifications</Text>
+        <Switch
+          style={styles.toggle}
+          trackColor={{ false: '#767577', true: '#245C3B' }}
+          thumbColor={isEnabled ? '#fff' : '#f4f3f4'}
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+      </View>
 
+      <View style={styles.toggleContainer}>
+        <Text style={styles.subtitle}>Public</Text>
+        <Switch
+          style={styles.toggle}
+          trackColor={{ false: '#767577', true: '#245C3B' }}
+          thumbColor={isEnabled2 ? '#fff' : '#f4f3f4'}
+          onValueChange={toggleSwitch2}
+          value={isEnabled2}
+        />
+      </View>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginText}>Login</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handlePress}>
+        <Text style={styles.loginText}>Submit</Text>
       </TouchableOpacity>
-
-      <Button title="Fake Login" onPress={handlePress} color="#007BFF" />
-
-      <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignUp')}>
-        <Text style={styles.signupText}>Sign Up</Text>
-      </TouchableOpacity>
+    
     </View>
+    
   );
 }
 
 const styles = StyleSheet.create({
+  inputTitle: {
+    width: '90%'
+  },
+  subtitle: {
+    fontSize: 24,
+    marginBottom: 8,
+    marginTop: 16,
+    color: '#245C3B', // subtitle colour 
+  },
+  toggleContainer: {
+    width: '90%',
+    flexDirection: 'row',
+    position: 'relative',
+    alignItems: 'center',
+    paddingVertical: 20
+  },
+  toggle: {
+    position: 'absolute',
+    right: 0
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -127,5 +157,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Login;
-
+export default Goals;

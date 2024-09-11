@@ -9,3 +9,5 @@ use App\Http\Controllers\UserController;
 // })->middleware('auth:sanctum');
 
 Route::get('/users', [UserController::class, 'index']);
+
+Route::post('/login', [UserController::class, 'login']);
