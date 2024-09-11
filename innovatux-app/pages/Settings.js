@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch, ScrollView, Image, Modal, TextInput, TouchableOpacity } from 'react-native';
 
-export default function Settings() {
+export default function SettingsPage() {
   const [isPushEnabled, setIsPushEnabled] = useState(true);
   const [isPublic, setIsPublic] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
@@ -30,6 +30,11 @@ export default function Settings() {
     alert(`Weekly limit set to: ${weeklyLimit}`);
     setLimitModalVisible(false);
     setWeeklyLimit('');
+  };
+
+  const handleLogout = () => {
+    alert('Logged out successfully!');
+    // You can add your logout logic here (e.g., clearing user data or navigating to login screen)
   };
 
   return (
@@ -106,6 +111,11 @@ export default function Settings() {
         />
       </View>
 
+      {/* Logout Button */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutButtonText}>Logout</Text>
+      </TouchableOpacity>
+
       {/* Modals */}
       <Modal
         transparent={true}
@@ -179,7 +189,7 @@ export default function Settings() {
 
     </ScrollView>
   );
-} 
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -271,17 +281,26 @@ const styles = StyleSheet.create({
   switch: {
     transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],  // Slightly larger switches
   },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    backgroundColor: '#fff',
+  logoutButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: '#4CAF50',  // Same green color as the rest of the app
+    alignItems: 'center',
+    marginHorizontal: 20,
+    marginVertical: 10,
+    borderRadius: 10,  // Round the corners a bit more
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,  // Slight shadow for depth
   },
-  navIcon: {
-    fontSize: 24,
+  logoutButtonText: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: 'bold',
   },
+
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
