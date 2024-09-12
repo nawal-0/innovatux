@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('consumption_threshold');
             $table->integer('savings_threshold');
             $table->boolean('notification')->default(true);
+            $table->boolean('public')->default(true);
         });
     }
 

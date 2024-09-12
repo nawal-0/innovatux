@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Button, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { getUsers, postLogin } from '../api-functions';
+import { postLogin } from '../api-functions';
+import { useUser } from '../components/UserContext';
 
 function Login({ navigation }) {
   const [email, setEmail] = useState(['']);
   const [password, setPassword] = useState(['']);
   const [error, setError] = useState(null);
+  const { setUser } = useUser();
 
   const handlePress = () => {
     navigation.navigate('Tabs');
@@ -16,9 +18,11 @@ function Login({ navigation }) {
       console.log(email, password);
       const response = await postLogin(email, password);
       console.log(response);
-      if (response['message']) {
-        setError(response['message']);
+      if (response.message) {
+        setError(response.message);
       } else {
+        const userInfo = { token: response.token, id: response.user.id, firstName: response.user.first_name };
+        setUser(userInfo);
         navigation.navigate('Tabs');
       }
   }

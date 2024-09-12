@@ -13,11 +13,8 @@ return new class extends Migration
     {
         Schema::create('friendlist', function (Blueprint $table) {
             $table->id('list_id');
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('friends_id')->constrained('users');
-        });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('friendlist_id')->references('list_id')->on('friendlist');
         });
     }
 

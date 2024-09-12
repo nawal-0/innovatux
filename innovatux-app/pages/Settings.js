@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch, ScrollView, Image, Modal, TextInput, TouchableOpacity } from 'react-native';
 
-export default function SettingsPage() {
+import { logout } from '../api-functions';
+import { useUser } from '../components/UserContext';
+
+export default function SettingsPage( { navigation } ) {
   const [isPushEnabled, setIsPushEnabled] = useState(true);
   const [isPublic, setIsPublic] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
@@ -13,6 +16,7 @@ export default function SettingsPage() {
 
   const togglePushNotifications = () => setIsPushEnabled(prev => !prev);
   const togglePublic = () => setIsPublic(prev => !prev);
+  const { user } = useUser();
 
   const handlePasswordChange = () => {
     if (newPassword !== confirmPassword) {
@@ -33,8 +37,20 @@ export default function SettingsPage() {
   };
 
   const handleLogout = () => {
-    alert('Logged out successfully!');
-    // You can add your logout logic here (e.g., clearing user data or navigating to login screen)
+    async function fetchLogout() {
+      const response = await logout(user.token);
+     
+      if (response.message) {
+        alert(response.message);
+        navigation.navigate('Login');
+
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [{ name: 'Login' }],
+        // });
+      }
+    }
+    fetchLogout();
   };
 
   return (

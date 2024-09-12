@@ -20,5 +20,31 @@ class UserController extends Controller
             return response()->json(['message' => 'Invalid Email or Password. Sucks to be YOU !!'], 401);
         }
     }
+
+    public function logout(Request $request) {
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'Successfully logged out'], 200);
+    }
+
+    public function signup(Request $request) {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email|unique:users',
+            'username' => 'required|unique:users',
+            'age' => 'required',
+            'gender' => 'required',
+            'password' => 'required'
+        ]);
+
+        $request['password'] = bcrypt($request->password);
+        $user = User::create($request->all());
+        $token = $user->createToken('token')->plainTextToken;
+        return response()->json([
+            'user' => $user,
+            'token' => $token], 201);
+    }
+
+
 }
 

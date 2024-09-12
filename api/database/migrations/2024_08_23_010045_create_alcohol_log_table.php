@@ -13,13 +13,10 @@ return new class extends Migration
     {
         Schema::create('alcohol_log', function (Blueprint $table) {
             $table->id('log_id');
+            $table->foreignId('user_id')->constrained('users');
             $table->decimal('price', 8, 2);
             $table->integer('quantity');
             $table->date('date');
-        });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('log_id')->references('log_id')->on('alcohol_log');
         });
     }
 
