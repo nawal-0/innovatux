@@ -3,7 +3,6 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingVi
 import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function SignUp({navigation}) {
-  console.log(navigation);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
