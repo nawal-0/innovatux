@@ -56,7 +56,7 @@ function Login({ navigation }) {
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
 
-      <Button title="Fake Login" onPress={handlePress} color="#007BFF" />
+      {/* <Button title="Fake Login" onPress={handlePress} color="#007BFF" /> */}
 
       <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.signupText}>Sign Up</Text>

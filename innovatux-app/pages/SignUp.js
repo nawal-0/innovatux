@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useUser } from '../components/UserContext';
+import { signup } from '../api-functions';
 
 export default function SignUp({navigation}) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [age, setAge] = useState('18');
+  const [age, setAge] = useState('');
   const [password, setPassword] = useState('');
+  const { setUser } = useUser();
 
   // DropDownPicker state
   const [open, setOpen] = useState(false);
@@ -46,21 +50,27 @@ export default function SignUp({navigation}) {
   };
 
   const handleSignUp = () => {
-    if (!firstName || !lastName || !username || !age || !gender || !password) {
-      Alert.alert('Missing Information', 'Please fill out all the fields.');
-      return;
+    async function fetchSign() {
+      if (!first_name || !last_name || !email || !username || !age || !gender || !password) {
+        Alert.alert('Missing Information', 'Please fill out all the fields.');
+        return;
+      }
+        console.log({
+          first_name,
+          last_name,
+          email,
+          username,
+          age,
+          gender,
+          password
+        });
+        const response = await signup(first_name, last_name, username, email, password, age, gender);
+        console.log(response);
+        const userInfo = { token: response.token, id: response.user.id, first_name: response.user.first_name };
+        setUser(userInfo);
+        navigation.navigate('Preferences');
     }
-
-    if (validateUsername(username)) {
-      console.log({
-        firstName,
-        lastName,
-        username,
-        age,
-        gender,
-        password
-      });
-    }
+    fetchSign();
   };
 
   return (
@@ -77,7 +87,7 @@ export default function SignUp({navigation}) {
         <TextInput
           style={styles.input}
           placeholder="First Name"
-          value={firstName}
+          value={first_name}
           onChangeText={setFirstName}
         />
 
@@ -86,8 +96,17 @@ export default function SignUp({navigation}) {
         <TextInput
           style={styles.input}
           placeholder="Last Name"
-          value={lastName}
+          value={last_name}
           onChangeText={setLastName}
+        />
+
+        {/* Email */}
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
         />
 
         {/* Username */}

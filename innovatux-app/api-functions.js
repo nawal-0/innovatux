@@ -15,6 +15,18 @@ export const postLogin = async (email, password) => {
     return data;
 }
 
+export const signup = async (first_name, last_name, username, email, password, age, gender) => {
+    const response = await fetch(`${URL}signup`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ first_name, last_name, username, email, password, age, gender }),
+    });
+    const data = await response.json();
+    return data;
+}
+
 export const logout = async (token) => {
     const response = await fetch(`${URL}logout`, {
         method: 'POST',

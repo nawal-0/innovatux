@@ -27,15 +27,15 @@ class UserController extends Controller
     }
 
     public function signup(Request $request) {
-        $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:users',
-            'username' => 'required|unique:users',
-            'age' => 'required',
-            'gender' => 'required',
-            'password' => 'required'
-        ]);
+        // $request->validate([
+        //     'first_name' => 'required',
+        //     'last_name' => 'required',
+        //     'email' => 'required|email|unique:users',
+        //     'username' => 'required|unique:users',
+        //     'age' => 'required',
+        //     'gender' => 'required',
+        //     'password' => 'required'
+        // ]);
 
         $request['password'] = bcrypt($request->password);
         $user = User::create($request->all());
