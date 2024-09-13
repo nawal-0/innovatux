@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
 export default Home;
 */
 
+/*
 // GREEN COLOUR THEME 
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
@@ -316,6 +317,140 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 16,
     color: '#245C3B', // subtitle colour 
+  },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
+  },
+});
+
+export default Home;
+*/
+// Just Added an Input Button
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { LineChart, BarChart } from 'react-native-chart-kit';
+
+const generateRandomData = (numPoints) => {
+  let data = [];
+  let currentValue = 50; 
+
+  for (let i = 0; i < numPoints; i++) {
+    currentValue += Math.floor(Math.random() * 11) - 5; 
+    data.push(Math.max(currentValue, 0)); 
+  }
+
+  return data;
+};
+
+const screenWidth = Dimensions.get('window').width;
+
+function Home() {
+  const alcoholData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        data: generateRandomData(7),
+      },
+    ],
+  };
+
+  const savingsData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        data: generateRandomData(7),
+      },
+    ],
+  };
+
+  const handleButtonPress = () => {
+    console.log('Button Pressed!');
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Home</Text>
+        <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
+          <Text style={styles.buttonText}>Input</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.subtitle}>Alcohol Intake</Text>
+      <LineChart
+        data={alcoholData}
+        width={screenWidth - 32}
+        height={220}
+        yAxisLabel=""
+        chartConfig={{
+          backgroundColor: '#359A5E',
+          backgroundGradientFrom: '#b4e197',
+          backgroundGradientTo: '#6db36e',
+          decimalPlaces: 2,
+          color: (opacity = 1) => `rgba(0, 100, 0, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(85, 107, 47, ${opacity})`,
+          style: {
+            borderRadius: 16,
+          },
+        }}
+        style={styles.chart}
+      />
+
+      <Text style={styles.subtitle}>Savings</Text>
+      <BarChart
+        data={savingsData}
+        width={screenWidth - 32}
+        height={220}
+        yAxisLabel="$"
+        chartConfig={{
+          backgroundColor: '#245C3B',
+          backgroundGradientFrom: '#c4e7c6',
+          backgroundGradientTo: '#8dcf91',
+          decimalPlaces: 2,
+          color: (opacity = 1) => `rgba(53, 154, 94, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(37, 105, 60, ${opacity})`,
+          style: {
+            borderRadius: 16,
+          },
+        }}
+        style={styles.chart}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#E1F9EB', 
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#245C3B', 
+  },
+  button: {
+    backgroundColor: '#359A5E', 
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  subtitle: {
+    fontSize: 24,
+    marginBottom: 8,
+    marginTop: 16,
+    color: '#245C3B', 
   },
   chart: {
     marginVertical: 8,
