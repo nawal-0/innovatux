@@ -7,7 +7,7 @@ function Search({ navigation }) {
       <Text>Search</Text>
     </View>
   );
-}
+}r
 
 export default Search;
 */
@@ -114,3 +114,4 @@ const styles = StyleSheet.create({
 });
 
 export default SearchPage;
+
