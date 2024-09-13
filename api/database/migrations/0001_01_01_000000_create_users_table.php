@@ -17,13 +17,9 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('username')->unique();
             $table->string('email')->unique();
-            // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('age');
             $table->string('gender');
-            $table->unsignedBigInteger('friendlist_id')->nullable();
-            $table->unsignedBigInteger('log_id')->nullable();
-            //$table->foreign('friendlist_id')->references('list_id')->on('friendlist');
             $table->rememberToken();
             $table->timestamps();
         });

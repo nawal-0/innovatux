@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch, ScrollView, Image, Modal, TextInput, TouchableOpacity } from 'react-native';
 
-export default function SettingsPage() {
+import { logout } from '../api-functions';
+import { useUser } from '../components/UserContext';
+
+export default function SettingsPage( { navigation } ) {
   const [isPushEnabled, setIsPushEnabled] = useState(true);
   const [isPublic, setIsPublic] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
@@ -9,10 +12,12 @@ export default function SettingsPage() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [weeklyLimit, setWeeklyLimit] = useState('');
+  const [weeklycLimit, setcWeeklyLimit] = useState('');
+  const [weeklysLimit, setsWeeklyLimit] = useState('');
 
   const togglePushNotifications = () => setIsPushEnabled(prev => !prev);
   const togglePublic = () => setIsPublic(prev => !prev);
+  const { user } = useUser();
 
   const handlePasswordChange = () => {
     if (newPassword !== confirmPassword) {
@@ -27,14 +32,28 @@ export default function SettingsPage() {
   };
 
   const handleLimitChange = () => {
-    alert(`Weekly limit set to: ${weeklyLimit}`);
+    //alert(`Weekly spending limit set to: ${weeklysLimit}`);
+    alert('Limit updated');
     setLimitModalVisible(false);
-    setWeeklyLimit('');
+    setcWeeklyLimit('');
+    setsWeeklyLimit('');
   };
 
   const handleLogout = () => {
-    alert('Logged out successfully!');
-    // You can add your logout logic here (e.g., clearing user data or navigating to login screen)
+    async function fetchLogout() {
+      const response = await logout(user.token);
+     
+      if (response.message) {
+        alert(response.message);
+        //navigation.navigate('Login');
+
+        navigation.reset({
+           index: 0,
+           routes: [{ name: 'Login' }],
+        });
+      }
+    }
+    fetchLogout();
   };
 
   return (
@@ -69,8 +88,8 @@ export default function SettingsPage() {
           <Text style={styles.infoValue}>Male</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Phone Number</Text>
-          <Text style={styles.infoValue}>0412544567</Text>
+          <Text style={styles.infoLabel}>Email</Text>
+          <Text style={styles.infoValue}>test@123.org</Text>
         </View>
       </View>
 
@@ -133,6 +152,7 @@ export default function SettingsPage() {
               placeholder="Enter old password"
               value={oldPassword}
               onChangeText={setOldPassword}
+              placeholderTextColor="#808080"
             />
 
             <TextInput
@@ -141,6 +161,7 @@ export default function SettingsPage() {
               placeholder="Enter new password"
               value={newPassword}
               onChangeText={setNewPassword}
+              placeholderTextColor="#808080"
             />
 
             <TextInput
@@ -149,6 +170,7 @@ export default function SettingsPage() {
               placeholder="Confirm new password"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              placeholderTextColor="#808080"
             />
 
             <TouchableOpacity style={styles.submitButton} onPress={handlePasswordChange}>
@@ -173,9 +195,18 @@ export default function SettingsPage() {
             <TextInput
               style={styles.modalInput}
               keyboardType="numeric"
-              placeholder="Enter weekly limit"
-              value={weeklyLimit}
-              onChangeText={setWeeklyLimit}
+              placeholder="Enter weekly consumption limit"
+              value={weeklycLimit}
+              onChangeText={setcWeeklyLimit}
+              placeholderTextColor="#808080"
+            />
+            <TextInput
+              style={styles.modalInput}
+              keyboardType="numeric"
+              placeholder="Enter weekly spending limit"
+              value={weeklysLimit}
+              onChangeText={setsWeeklyLimit}
+              placeholderTextColor="#808080"
             />
             <TouchableOpacity style={styles.submitButton} onPress={handleLimitChange}>
               <Text style={styles.submitButtonText}>Submit</Text>
