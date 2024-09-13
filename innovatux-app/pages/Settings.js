@@ -12,7 +12,8 @@ export default function SettingsPage( { navigation } ) {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [weeklyLimit, setWeeklyLimit] = useState('');
+  const [weeklycLimit, setcWeeklyLimit] = useState('');
+  const [weeklysLimit, setsWeeklyLimit] = useState('');
 
   const togglePushNotifications = () => setIsPushEnabled(prev => !prev);
   const togglePublic = () => setIsPublic(prev => !prev);
@@ -31,9 +32,11 @@ export default function SettingsPage( { navigation } ) {
   };
 
   const handleLimitChange = () => {
-    alert(`Weekly limit set to: ${weeklyLimit}`);
+    //alert(`Weekly spending limit set to: ${weeklysLimit}`);
+    alert('Limit updated');
     setLimitModalVisible(false);
-    setWeeklyLimit('');
+    setcWeeklyLimit('');
+    setsWeeklyLimit('');
   };
 
   const handleLogout = () => {
@@ -42,12 +45,12 @@ export default function SettingsPage( { navigation } ) {
      
       if (response.message) {
         alert(response.message);
-        navigation.navigate('Login');
+        //navigation.navigate('Login');
 
-        // navigation.reset({
-        //   index: 0,
-        //   routes: [{ name: 'Login' }],
-        // });
+        navigation.reset({
+           index: 0,
+           routes: [{ name: 'Login' }],
+        });
       }
     }
     fetchLogout();
@@ -85,8 +88,8 @@ export default function SettingsPage( { navigation } ) {
           <Text style={styles.infoValue}>Male</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Phone Number</Text>
-          <Text style={styles.infoValue}>0412544567</Text>
+          <Text style={styles.infoLabel}>Email</Text>
+          <Text style={styles.infoValue}>test@123.org</Text>
         </View>
       </View>
 
@@ -149,6 +152,7 @@ export default function SettingsPage( { navigation } ) {
               placeholder="Enter old password"
               value={oldPassword}
               onChangeText={setOldPassword}
+              placeholderTextColor="#808080"
             />
 
             <TextInput
@@ -157,6 +161,7 @@ export default function SettingsPage( { navigation } ) {
               placeholder="Enter new password"
               value={newPassword}
               onChangeText={setNewPassword}
+              placeholderTextColor="#808080"
             />
 
             <TextInput
@@ -165,6 +170,7 @@ export default function SettingsPage( { navigation } ) {
               placeholder="Confirm new password"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              placeholderTextColor="#808080"
             />
 
             <TouchableOpacity style={styles.submitButton} onPress={handlePasswordChange}>
@@ -189,9 +195,18 @@ export default function SettingsPage( { navigation } ) {
             <TextInput
               style={styles.modalInput}
               keyboardType="numeric"
-              placeholder="Enter weekly limit"
-              value={weeklyLimit}
-              onChangeText={setWeeklyLimit}
+              placeholder="Enter weekly consumption limit"
+              value={weeklycLimit}
+              onChangeText={setcWeeklyLimit}
+              placeholderTextColor="#808080"
+            />
+            <TextInput
+              style={styles.modalInput}
+              keyboardType="numeric"
+              placeholder="Enter weekly spending limit"
+              value={weeklysLimit}
+              onChangeText={setsWeeklyLimit}
+              placeholderTextColor="#808080"
             />
             <TouchableOpacity style={styles.submitButton} onPress={handleLimitChange}>
               <Text style={styles.submitButtonText}>Submit</Text>
