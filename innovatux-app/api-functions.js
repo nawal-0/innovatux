@@ -37,3 +37,40 @@ export const logout = async (token) => {
     const message = await response.json();
     return message;
 }
+
+export const getThings = async (item, token) => {
+    const response = await fetch(`${URL}${item}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const addPreference = async (preferences, token) => {
+    const response = await fetch(`${URL}add/preferences`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ ...preferences }),
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const changePassword = async (old_password, new_password, token) => {
+    const response = await fetch(`${URL}change/password`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ old_password, new_password }),
+    });
+    const message = await response.json();
+    return message;
+}

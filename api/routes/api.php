@@ -13,3 +13,7 @@ Route::get('/users', [UserController::class, 'index']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/signup', [UserController::class, 'signup']);
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/settings', [UserController::class, 'getSettings'])->middleware('auth:sanctum');
+Route::post('/add/preferences', [UserController::class, 'createPreference'])->middleware('auth:sanctum');
+Route::get('/user', [UserController::class, 'getUser'])->middleware('auth:sanctum');
+Route::post('/change/password', [UserController::class, 'changePassword'])->middleware('auth:sanctum');

@@ -1,42 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, ScrollView, Image, Modal, TextInput, TouchableOpacity } from 'react-native';
 
-import { logout } from '../api-functions';
+import { logout, getThings, addPreference, changePassword } from '../api-functions';
 import { useUser } from '../components/UserContext';
 
+
 export default function SettingsPage( { navigation } ) {
-  const [isPushEnabled, setIsPushEnabled] = useState(true);
-  const [isPublic, setIsPublic] = useState(false);
+  const { user } = useUser();
+  const [userSettings, setUserSettings] = useState({});
+  const [userInfo, setUserInfo] = useState({});
+
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [limitModalVisible, setLimitModalVisible] = useState(false);
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [weeklycLimit, setcWeeklyLimit] = useState('');
   const [weeklysLimit, setsWeeklyLimit] = useState('');
 
-  const togglePushNotifications = () => setIsPushEnabled(prev => !prev);
-  const togglePublic = () => setIsPublic(prev => !prev);
-  const { user } = useUser();
+  
+  // toggle push notifications and save to db
+  const togglePushNotifications = async () => {
+    const updatedSettings = { ...userSettings, notification: !userSettings.notification };
+    setUserSettings(updatedSettings);
+    const response = await addPreference(updatedSettings, user.token);
+    console.log(response);
+  };
 
-  const handlePasswordChange = () => {
+  // toggle public setting and save to db
+  const togglePublic = async () => {
+    const updatedSettings = { ...userSettings, public: !userSettings.public };
+    setUserSettings(updatedSettings);
+    const response = await addPreference(updatedSettings, user.token);
+    console.log(response);
+  }
+  
+
+  // retrieve settings from db
+  useEffect(() => {
+    async function fetchSettings() {
+      const settings = await getThings('settings', user.token);
+      console.log(settings);
+      setUserSettings(settings);
+      setcWeeklyLimit(settings.consumption_threshold.toString());
+      setsWeeklyLimit(settings.savings_threshold.toString());
+    }
+    fetchSettings();
+  }, []);
+
+  // retrieve user info from db
+  useEffect(() => {
+    async function fetchUser() {
+      const users = await getThings('user', user.token);
+      setUserInfo(users);
+    }
+    fetchUser();
+  }, []);
+
+  const handlePasswordChange = async () => {
     if (newPassword !== confirmPassword) {
       alert('New passwords do not match!');
       return;
     }
-    alert(`Password changed successfully!`);
+    const response = await changePassword(oldPassword, newPassword, user.token);
+    alert(response.message);
     setPasswordModalVisible(false);
     setOldPassword('');
     setNewPassword('');
     setConfirmPassword('');
   };
 
-  const handleLimitChange = () => {
-    //alert(`Weekly spending limit set to: ${weeklysLimit}`);
-    alert('Limit updated');
+  const handleLimitChange = async () => {
+    alert('Limits updated');
+    const updatedSettings = { ...userSettings, consumption_threshold: weeklycLimit, savings_threshold: weeklysLimit };
+    setUserSettings(updatedSettings);
+
+    const response = await addPreference(updatedSettings, user.token);
+    console.log(response);
     setLimitModalVisible(false);
-    setcWeeklyLimit('');
-    setsWeeklyLimit('');
   };
 
   const handleLogout = () => {
@@ -72,8 +114,8 @@ export default function SettingsPage( { navigation } ) {
           source={{ uri: 'https://via.placeholder.com/50' }} 
         />
         <View>
-          <Text style={styles.profileName}>John Oscar</Text>
           <Text style={styles.profileLabel}>Name</Text>
+          <Text style={styles.profileName}>{userInfo.first_name} {userInfo.last_name}</Text>
         </View>
       </View>
 
@@ -81,15 +123,15 @@ export default function SettingsPage( { navigation } ) {
       <View style={styles.infoSection}>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Age</Text>
-          <Text style={styles.infoValue}>21</Text>
+          <Text style={styles.infoValue}>{userInfo.age}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Gender</Text>
-          <Text style={styles.infoValue}>Male</Text>
+          <Text style={styles.infoValue}>{userInfo.gender}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Email</Text>
-          <Text style={styles.infoValue}>test@123.org</Text>
+          <Text style={styles.infoValue}>{userInfo.email}</Text>
         </View>
       </View>
 
@@ -112,9 +154,9 @@ export default function SettingsPage( { navigation } ) {
         <Text style={styles.optionLabel}>Push Notifications</Text>
         <Switch
           trackColor={{ false: '#ddd', true: '#4CAF50' }}  // green toggle when enabled
-          thumbColor={isPushEnabled ? '#fff' : '#f4f3f4'}
+          thumbColor={userSettings.notification ? '#fff' : '#f4f3f4'}
           onValueChange={togglePushNotifications}
-          value={isPushEnabled}
+          value={userSettings.notification}
           style={styles.switch}
         />
       </View>
@@ -123,9 +165,9 @@ export default function SettingsPage( { navigation } ) {
         <Text style={styles.optionLabel}>Public</Text>
         <Switch
           trackColor={{ false: '#ddd', true: '#4CAF50' }}  // green toggle when enabled
-          thumbColor={isPublic ? '#fff' : '#f4f3f4'}
+          thumbColor={userSettings.public ? '#fff' : '#f4f3f4'}
           onValueChange={togglePublic}
-          value={isPublic}
+          value={userSettings.public}
           style={styles.switch}
         />
       </View>
@@ -195,7 +237,7 @@ export default function SettingsPage( { navigation } ) {
             <TextInput
               style={styles.modalInput}
               keyboardType="numeric"
-              placeholder="Enter weekly consumption limit"
+              //placeholder="Enter weekly consumption limit"
               value={weeklycLimit}
               onChangeText={setcWeeklyLimit}
               placeholderTextColor="#808080"
@@ -203,7 +245,7 @@ export default function SettingsPage( { navigation } ) {
             <TextInput
               style={styles.modalInput}
               keyboardType="numeric"
-              placeholder="Enter weekly spending limit"
+              //placeholder="Enter weekly spending limit"
               value={weeklysLimit}
               onChangeText={setsWeeklyLimit}
               placeholderTextColor="#808080"
@@ -211,7 +253,11 @@ export default function SettingsPage( { navigation } ) {
             <TouchableOpacity style={styles.submitButton} onPress={handleLimitChange}>
               <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setLimitModalVisible(false)}>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => {
+              setLimitModalVisible(false);
+              setcWeeklyLimit(userSettings.consumption_threshold.toString()); // reset to original value
+              setsWeeklyLimit(userSettings.savings_threshold.toString());     // if changes were made
+            }}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>

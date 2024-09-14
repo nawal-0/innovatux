@@ -1,22 +1,33 @@
 
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { addPreference } from '../api-functions';
+import { useUser } from '../components/UserContext';
 //import { Picker } from '@react-native-picker/picker';
 
 function Goals({ navigation }) {
-  const [isEnabled, setIsEnabled] = useState(false);
 
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const [preferences, setPreferences] = useState({
+    goal: '',
+    consumption_threshold: '',
+    savings_threshold: '',
+    notification: true,
+    public: true,
+  });
+  
+  const toggleNotificationSwitch = () => setPreferences({ ...preferences, notification: !preferences.notification });
+  const togglePublicSwitch = () => setPreferences({ ...preferences, public: !preferences.public });
+  const { user } = useUser();
 
-  const [isEnabled2, setIsEnabled2] = useState(false);
-
-  const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
-
-  const handlePress = () => {
+  const handlePress = async () => {
+    // Add preferences to database
+    const response = await addPreference(preferences, user.token);
+    console.log(response);
     navigation.navigate('Tabs');
   }
   
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <Text style={styles.title}>User Preferences</Text>
       
@@ -27,16 +38,29 @@ function Goals({ navigation }) {
         style={styles.input}
         placeholder="Goal"
         placeholderTextColor="#fff" // White text color for placeholder
+        onChangeText={(text) => setPreferences({ ...preferences, goal: text })}
       />
       
       <View style={styles.inputTitle}>
-        <Text style={styles.subtitle}>Weekly Limit</Text>
+        <Text style={styles.subtitle}>Weekly Consumption Limit</Text>
       </View>
 
       <TextInput
         style={styles.input}
-        placeholder="Weekly Limit"
+        placeholder="Weekly Consumption Limit"
         placeholderTextColor="#fff" // White text color for placeholder
+        onChangeText={(text) => setPreferences({ ...preferences, consumption_threshold: text })}
+      />
+
+      <View style={styles.inputTitle}>
+        <Text style={styles.subtitle}>Weekly Spending Limit</Text>
+      </View>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Weekly Spending Limit"
+        placeholderTextColor="#fff" // White text color for placeholder
+        onChangeText={(text) => setPreferences({ ...preferences, savings_threshold: text })}
       />
       
     
@@ -45,9 +69,9 @@ function Goals({ navigation }) {
         <Switch
           style={styles.toggle}
           trackColor={{ false: '#767577', true: '#245C3B' }}
-          thumbColor={isEnabled ? '#fff' : '#f4f3f4'}
-          onValueChange={toggleSwitch}
-          value={isEnabled}
+          thumbColor={preferences.notification ? '#fff' : '#f4f3f4'}
+          onValueChange={toggleNotificationSwitch}
+          value={preferences.notification}
         />
       </View>
 
@@ -56,9 +80,9 @@ function Goals({ navigation }) {
         <Switch
           style={styles.toggle}
           trackColor={{ false: '#767577', true: '#245C3B' }}
-          thumbColor={isEnabled2 ? '#fff' : '#f4f3f4'}
-          onValueChange={toggleSwitch2}
-          value={isEnabled2}
+          thumbColor={preferences.public ? '#fff' : '#f4f3f4'}
+          onValueChange={togglePublicSwitch}
+          value={preferences.public}
         />
       </View>
 
@@ -67,6 +91,7 @@ function Goals({ navigation }) {
       </TouchableOpacity>
     
     </View>
+    </TouchableWithoutFeedback>
     
   );
 }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('savings_threshold');
             $table->boolean('notification')->default(true);
             $table->boolean('public')->default(true);
+            $table->timestamps();
         });
     }
 
