@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Button, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, TextInput, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { postLogin } from '../api-functions';
 import { useUser } from '../components/UserContext';
 
 function Login({ navigation }) {
-  const [email, setEmail] = useState(['']);
-  const [password, setPassword] = useState(['']);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const { setUser } = useUser();
-
-  const handlePress = () => {
-    navigation.navigate('Tabs');
-  }
 
   const handleLogin = () => {
     async function fetchUsers() {
@@ -25,43 +21,44 @@ function Login({ navigation }) {
         setUser(userInfo);
         navigation.navigate('Tabs');
       }
-  }
+    }
     fetchUsers();
-  }
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Image at the top */}
-      <Image source={require('../assets/alcohol.png')} style={styles.image} />
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          {/* Image at the top */}
+          <Image source={require('../assets/alcohol.png')} style={styles.image} />
 
-      <Text style={styles.title}>LOGIN</Text>
+          <Text style={styles.title}>LOGIN</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Username or Email"
-        onChangeText={setEmail}
-        placeholderTextColor="#fff" // White text color for placeholder
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        onChangeText={setPassword}
-        placeholderTextColor="#fff" // White text color for placeholder
-      />
-      {error && <Text style={styles.userText}>{error}</Text>}
+          <TextInput
+            style={styles.input}
+            placeholder="Username or Email"
+            onChangeText={setEmail}
+            placeholderTextColor="#fff" // White text color for placeholder
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            onChangeText={setPassword}
+            placeholderTextColor="#fff" // White text color for placeholder
+          />
+          {error && <Text style={styles.userText}>{error}</Text>}
 
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginText}>Login</Text>
-      </TouchableOpacity>
-
-      {/* <Button title="Fake Login" onPress={handlePress} color="#007BFF" /> */}
-
-      <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignUp')}>
-        <Text style={styles.signupText}>Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+          <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignUp')}>
+            <Text style={styles.signupText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -132,4 +129,3 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
-
