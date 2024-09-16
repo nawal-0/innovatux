@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   image: {
     width: 150, // Adjust width as needed
     height: 150, // Adjust height as needed
+    borderRadius: 75, // Half of the width/height to make it circular
     resizeMode: 'contain', // Adjust how the image is resized
     marginBottom: 20,
   },
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 24,
     textAlign: 'center',
-    color: '#245C3B', // Color for title
+    color: '#245C3B', // Colour for title
     textTransform: 'uppercase', // Make the text uppercase
   },
   input: {
