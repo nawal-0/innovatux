@@ -3,39 +3,58 @@ import { Text, View, StyleSheet, Image, TouchableOpacity, Dimensions } from 'rea
 import {Ionicons} from '@expo/vector-icons';
 //import * as ImagePicker from 'expo-image-picker';
 
-function Post({ navigation, username, postImage, profileImage }) {
-  const handlePress = () => {
-    navigation.navigate('Tabs');
-  }
-
+function Post({ id, username, postImage, profileImage, caption }) {
+  
   const { width, height } = Dimensions.get('window');
   
   return ( 
-      <View style={[styles.postContainer]}> 
-        <View style={styles.profileContainer}>
-          <View style={styles.profileImageContainer}>
-            <Image style={styles.profileImage} source={profileImage}/>
-          </View>
+      // <View style={[styles.postContainer]}> 
+      //   <View style={styles.profileContainer}>
+      //     <View style={styles.profileImageContainer}>
+      //       <Image style={styles.profileImage} source={profileImage}/>
+      //     </View>
       
-          <View style={styles.infoContainer}>
-            <Text>{username}</Text>
-          </View>
-        </View>
-          <View style={styles.postImageContainer}> 
-            <Image style={[styles.postImage, {width: width * 0.9, height: width * 0.9}]} source={postImage}/>
+      //     <View style={styles.infoContainer}>
+      //       <Text>{username}</Text>
+      //     </View>
+      //   </View>
+      //     <View style={styles.postImageContainer}> 
+      //       <Image style={[styles.postImage, {width: width * 0.9, height: width * 0.9}]} source={{uri: postImage}}/>
           
-                <View style={styles.interactionContainer}>
-                <TouchableOpacity style={styles.likeContainer} onPress={handlePress}>
-                <Ionicons size={40} name='heart' color='red'/>
-                </TouchableOpacity>
+      //           <View style={styles.interactionContainer}>
+      //           <TouchableOpacity style={styles.likeContainer}>
+      //           <Ionicons size={40} name='heart' color='red'/>
+      //           </TouchableOpacity>
                 
-                <View style={styles.likeCounter}>
-                <Text styles={styles.likesText}>100 Likes</Text>
-                </View>
-                </View>
-          </View>
+      //           <View style={styles.likeCounter}>
+      //           <Text styles={styles.likesText}>100 Likes</Text>
+                
+      //           </View>
+      //           </View>
+      //     </View>
+      // </View>
+      <View key={id} style={styles.postContainer}>
+            <View style={styles.profileContainer}>
+              <Image style={styles.profileImage} source={profileImage} />
+              <Text>{username}</Text>
+            </View>
+            <View style={styles.postImageContainer}> 
+             <Image style={[styles.postImage, {width: width * 0.9, height: width * 0.9}]} source={{uri: postImage}}/>
           
-          
+                 <View style={styles.interactionContainer}>
+                 <TouchableOpacity style={styles.likeContainer}>
+                 <Ionicons size={40} name='heart' color='red'/>
+                 {/* <Text styles={[styles.title, {color: 'red'}]}>100 Likes</Text> */}
+                 </TouchableOpacity>
+
+                
+                 {/* <View style={styles.likeCounter}>
+                 <Text styles={styles.title}>100 Likes</Text>
+                
+                 </View> */}
+                 </View>
+           </View>
+            <Text style={styles.caption}>{caption}</Text>
       </View>
   );
 }
@@ -48,15 +67,20 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#E1F9EB', // Background color
   },
+  caption: {
+    padding: 10
+  },
   postContainer: {
     //width: '100%',
     //height: 400,
     //aspectRatio: 1,
     justifyContent: 'flex-start',
-    //backgroundColor: '#FFFFFF',
-    paddingBottom: 30,
+    backgroundColor: '#FFFFFF',
+    //paddingBottom: 10,
     borderRadius: 20,
-    position: 'relative'
+    position: 'relative', 
+    //padding: 10
+    marginBottom: 20
   },
   profileContainer: {
     display: 'flex',
@@ -87,11 +111,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // Adjust how the image is resized
     marginBottom: 20,
   },
-  postImageContainer: {
-    overflow: 'hidden',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20
-  },
+  // postImageContainer: {
+  //   overflow: 'hidden',
+  //   borderBottomLeftRadius: 20,
+  //   borderBottomRightRadius: 20
+  // },
   postImage: {
     //width: 340, // Adjust width as needed
     //height: 340, // Adjust height as needed
@@ -101,11 +125,12 @@ const styles = StyleSheet.create({
     //justifyContent: 'center',
     alignItems: 'center',
     resizeMode: 'cover', // Adjust how the image is resized
+    //marginBottom: 10
   },
   interactionContainer: {
     flexDirection: 'column',
     position: 'absolute',
-    bottom: 0,
+    bottom: 10,
     right: 0
   },
   likeContainer: {
@@ -114,12 +139,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  likeCounter: {
+  // likeCounter: {
+  //   width: 80,
+  //   height: 30
+  // },
+  likesText: {
+    color: 'white',
     width: 80,
     height: 30
-  },
-  likesText: {
-    color: '#fff'
   },
   title: {
     fontSize: 32,

@@ -301,17 +301,44 @@ function Feed({ navigation }) {
 
 // NEW CODE
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, TextInput, Alert } from 'react-native';
+import { Modal, Button, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, TextInput, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import Post from '../components/Post';
+
 
 function Feed({ navigation }) {
   const { width } = Dimensions.get('window');
+  const [modalVisible, setModalVisible] = useState(false);
+
 
   // State for image, caption, and posts
   const [imageUri, setImageUri] = useState(null);
   const [caption, setCaption] = useState('');
   const [posts, setPosts] = useState([]);
+
+/// CODE TO SHOW OLD POSTS
+  // const [posts, setPosts] = useState([{
+  //   id: 1,
+  //   username: 'Samudi', 
+  //   postImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'), 
+  //   profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
+  //   caption: 'a'
+  // },
+  // {
+  //   id: 2,
+  //   username: 'Samudi', 
+  //   postImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'), 
+  //   profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
+  //   caption: 'b'
+  // },
+  // {
+  //   id: 3,
+  //   username: 'Samudi', 
+  //   postImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'), 
+  //   profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
+  //   caption: 'b'
+  // }]);
 
   // Request permission to access media library
   useEffect(() => {
@@ -354,14 +381,40 @@ function Feed({ navigation }) {
     } else {
       Alert.alert('Incomplete', 'Please select an image and add a caption.');
     }
+
+
+      
   
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scroll}>
-
+      
           {/* Add Post Section */}
+          {/* <Button title="+" onPress={() => setModalVisible(true)} /> */}
+          <TouchableOpacity style={styles.addPostButton} onPress={() => setModalVisible(true)}>
+            <Text style={styles.addPostButtonText}>Add Post</Text>
+          </TouchableOpacity>
+
+
+          <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+
+          <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeText}>x</Text>
+            </TouchableOpacity>
+
           <View style={styles.addPostContainer}>
           {/* Button to select image */}
           <TouchableOpacity style={styles.selectImageButton} onPress={handleSelectImage}>
@@ -387,8 +440,17 @@ function Feed({ navigation }) {
           </TouchableOpacity>
         </View>
 
+          </View>
+        </View>
+      </Modal>
+          
+          
+      <ScrollView style={styles.scroll}>
+
+          
+
         {/* Map through posts and display them */}
-        {posts.map(post => (
+        {/* {posts.map(post => (
           <View key={post.id} style={styles.postContainer}>
             <View style={styles.profileContainer}>
               <Image style={styles.profileImage} source={post.profileImage} />
@@ -397,8 +459,16 @@ function Feed({ navigation }) {
             <Image style={[styles.postImage, { width: width * 0.9, height: width * 0.9 }]} source={{ uri: post.postImage }} />
             <Text>{post.caption}</Text>
           </View>
+        ))} */}
+        {posts.map(post => (
+          <Post
+            key={post.id}
+            username={post.username}
+            postImage={post.postImage}
+            profileImage={post.profileImage}
+            caption={post.caption}
+          />
         ))}
-
 
       </ScrollView>
     </View>
@@ -406,14 +476,35 @@ function Feed({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  closeText: {
+    fontSize:30
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 5,
+    right: 15,
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background overlay
+  },
+  modalContainer: {
+    width: 300,
+    padding: 30,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
   scroll: {
-    paddingVertical: 20
+    paddingVertical: 50
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    //padding: 16,
     backgroundColor: '#E1F9EB', // Background color
   },
   postContainer: {
@@ -438,11 +529,12 @@ const styles = StyleSheet.create({
     resizeMode: 'cover', // Cover image mode
     marginBottom: 10,
   },
-  addPostContainer: {
-    marginTop: 20,
-    width: '100%',
-    alignItems: 'center',
-  },
+  // addPostContainer: {
+  //   flex: 1,
+  //   marginTop: 20,
+  //   width: '100%',
+  //   alignItems: 'center',
+  // },
   selectImageButton: {
     backgroundColor: '#245C3B',
     padding: 10,
@@ -461,6 +553,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   addPostButton: {
+    marginTop: 30,
     backgroundColor: '#245C3B',
     padding: 10,
     borderRadius: 5,
