@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Shop;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
+use App\Models\Settings;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,6 +27,39 @@ class DatabaseSeeder extends Seeder
             'username' => '123',
             'remember_token' => '1234567890'
 
+        ]);
+
+        Settings::create([
+            'user_id' => 1,
+            'goal' => 'Health',
+            'consumption_threshold' => 20,
+            'savings_threshold' => 100,
+            'notification' => 1,
+            'public' => 1
+        ]);
+
+        Shop::create([
+            'name' => 'Drink 1',
+            'image' => "Goblet_of_Fire_Cocktail.jpg",
+            'price' => 20
+        ]);
+
+        Shop::create([
+            'name' => 'Drink 2',
+            'image' => "Goblet_of_Fire_Cocktail.jpg",
+            'price' => 12
+        ]);
+
+        Shop::create([
+            'name' => 'Drink 3',
+            'image' => "Goblet_of_Fire_Cocktail.jpg",
+            'price' => 15
+        ]);
+
+        Shop::create([
+            'name' => 'Drink 4',
+            'image' => "Goblet_of_Fire_Cocktail.jpg",
+            'price' => 15
         ]);
     }
 }
