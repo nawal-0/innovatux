@@ -5,8 +5,6 @@ import { addPreference } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-//import { Picker } from '@react-native-picker/picker';
-
 function Goals({ navigation }) {
 
   const [preferences, setPreferences] = useState({
@@ -37,6 +35,15 @@ function Goals({ navigation }) {
     { label: 'Health', value: 'Health' },
     { label: 'Religous', value: 'Religous' }
   ]);
+
+  // Function to handle setting the selected goal in preferences
+  const handleSetGoal = (callbackValue) => {
+    setGoal(callbackValue); // Update the selected value in dropdown
+    setPreferences((prevPreferences) => ({
+      ...prevPreferences,
+      goal: callbackValue, // Update goal in preferences state
+    }));
+  };
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -49,21 +56,16 @@ function Goals({ navigation }) {
 
         <DropDownPicker
           open={open}
-          value={preferences.goal}
+          value={goal}
           items={goalItems}
           setOpen={setOpen}
-          setValue={(text) => setPreferences({ ...preferences, goal: text })}
+          setValue={setGoal}
+          onChangeValue={handleSetGoal}
           setItems={setGoalItems}
           placeholder="Select Goal"
           style={styles.dropdown}
           dropDownStyle={styles.dropdown}
         />
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Goal"
-        placeholderTextColor="#fff" // White text color for placeholder
-        onChangeText={(text) => setPreferences({ ...preferences, goal: text })}
-      /> */}
       
       <View style={styles.inputTitle}>
         <Text style={styles.subtitle}>Weekly Consumption Limit</Text>
