@@ -315,30 +315,30 @@ function Feed({ navigation }) {
   // State for image, caption, and posts
   const [imageUri, setImageUri] = useState(null);
   const [caption, setCaption] = useState('');
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
 
 /// CODE TO SHOW OLD POSTS
-  // const [posts, setPosts] = useState([{
-  //   id: 1,
-  //   username: 'Samudi', 
-  //   postImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'), 
-  //   profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
-  //   caption: 'a'
-  // },
-  // {
-  //   id: 2,
-  //   username: 'Samudi', 
-  //   postImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'), 
-  //   profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
-  //   caption: 'b'
-  // },
-  // {
-  //   id: 3,
-  //   username: 'Samudi', 
-  //   postImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'), 
-  //   profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
-  //   caption: 'b'
-  // }]);
+  const [posts, setPosts] = useState([{
+    id: 1,
+    username: 'Samudi', 
+    postImage: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Goblet_of_Fire_Cocktail.jpg', 
+    profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
+    caption: 'a'
+  },
+  {
+    id: 2,
+    username: 'Samudi', 
+    postImage: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Goblet_of_Fire_Cocktail.jpg', 
+    profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
+    caption: 'b'
+  },
+  {
+    id: 3,
+    username: 'Samudi', 
+    postImage: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Goblet_of_Fire_Cocktail.jpg', 
+    profileImage: require('../assets/Goblet_of_Fire_Cocktail.jpg'),
+    caption: 'b'
+  }]);
 
   // Request permission to access media library
   useEffect(() => {
@@ -382,8 +382,7 @@ function Feed({ navigation }) {
       Alert.alert('Incomplete', 'Please select an image and add a caption.');
     }
 
-
-      
+    setModalVisible(false);
   
   };
 
