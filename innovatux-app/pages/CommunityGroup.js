@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { useUser } from '../components/UserContext';
+import { getThings, joinCommunity } from '../api-functions'
 
-// Example data for groups
-const groups = [
-  { id: 1, name: 'Group 1', description: 'description', members: 125 },
-  { id: 2, name: 'Group 2', description: 'description', members: 250 },
-  { id: 3, name: 'Group 3', description: 'descritpion', members: 175 },
-  { id: 4, name: 'Group 4', description: 'descritpion', members: 95 },
-];
 
-export default function GroupSelection() {
+
+export default function GroupSelection({ navigation }) {
+  const { user } = useUser();
   const [searchText, setSearchText] = useState('');
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    async function fetchCommunities() {
+      const com = await getThings('communities', user.token);
+      setGroups(com);
+    }
+    fetchCommunities();
+  }, []);
+
+  handleJoin = async (id) => {
+    console.log('Joining group with id:', id);
+    const res = await joinCommunity(id, user.token);
+    console.log(res);
+    navigation.navigate('Chat');
+  }
 
   // Function to filter groups based on search
   const filteredGroups = groups.filter(group =>
@@ -32,12 +45,13 @@ export default function GroupSelection() {
 
       {/* Group List */}
       <ScrollView>
-        {filteredGroups.map((group) => (
-          <View key={group.id} style={styles.groupCard}>
-            <Text style={styles.groupName}>{group.name}</Text>
-            <Text style={styles.groupDescription}>{group.description}</Text>
-            <Text style={styles.groupMembers}>{group.members} members</Text>
-            <TouchableOpacity style={styles.joinButton}>
+        {filteredGroups.map((groups) => (
+          <View key={groups.id} style={styles.groupCard}>
+            <Text style={styles.groupName}>{groups.name}</Text>
+            <Text style={styles.groupDescription}>{groups.description}</Text>
+            {/* <Text style={styles.groupMembers}>{group.members} members</Text> */}
+            <TouchableOpacity style={styles.joinButton}
+             onPress={() => handleJoin(groups.id)}>
               <Text style={styles.joinButtonText}>Join Group</Text>
             </TouchableOpacity>
           </View>

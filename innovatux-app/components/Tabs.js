@@ -1,5 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from '@react-navigation/stack';
+
 import { Ionicons } from '@expo/vector-icons'; 
 
 import Home from '../pages/Home';
@@ -7,8 +9,21 @@ import Feed from '../pages/Feed';
 import Search from '../pages/Search';
 import Settings from '../pages/Settings';
 import GroupSelection from '../pages/CommunityGroup';
+import GroupChat from '../pages/Chat';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+function CommunityPageStack() {
+  return (
+      <Stack.Navigator screenOptions={{
+          headerShown: false
+      }}>
+          <Stack.Screen name = "Community" component={GroupSelection}/>
+          <Stack.Screen name="Chat" component={GroupChat}/>
+      </Stack.Navigator>
+  );
+}
 
 function Tabs() {
   return (
@@ -44,7 +59,7 @@ function Tabs() {
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Feed" component={Feed} />
-      <Tab.Screen name="Community" component={GroupSelection} />
+      <Tab.Screen name="Communities" component={CommunityPageStack} />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>

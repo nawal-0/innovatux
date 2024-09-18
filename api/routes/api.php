@@ -3,10 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+use App\Http\Controllers\CommunityController;
 
 Route::get('/users', [UserController::class, 'index']);
 
@@ -17,3 +14,6 @@ Route::get('/settings', [UserController::class, 'getSettings'])->middleware('aut
 Route::post('/add/preferences', [UserController::class, 'createPreference'])->middleware('auth:sanctum');
 Route::get('/user', [UserController::class, 'getUser'])->middleware('auth:sanctum');
 Route::post('/change/password', [UserController::class, 'changePassword'])->middleware('auth:sanctum');
+
+Route::get('/communities', [CommunityController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/join', [CommunityController::class, 'join'])->middleware('auth:sanctum');

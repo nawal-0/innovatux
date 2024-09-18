@@ -74,3 +74,16 @@ export const changePassword = async (old_password, new_password, token) => {
     const message = await response.json();
     return message;
 }
+
+export const joinCommunity = async (community_id, token) => {
+    const response = await fetch(`${URL}join`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ community_id }),
+    });
+    const message = await response.json();
+    return message;
+}

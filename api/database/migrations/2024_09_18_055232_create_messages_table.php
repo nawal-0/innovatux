@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('community_id')->constrained()->onDelete('cascade');
             $table->text('content');
             $table->timestamp('posted_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
