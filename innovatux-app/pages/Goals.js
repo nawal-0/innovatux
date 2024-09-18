@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { addPreference } from '../api-functions';
 import { useUser } from '../components/UserContext';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 //import { Picker } from '@react-native-picker/picker';
 
 function Goals({ navigation }) {
@@ -20,11 +22,21 @@ function Goals({ navigation }) {
   const { user } = useUser();
 
   const handlePress = async () => {
-    // Add preferences to database
+    // Add preferences to databas
     const response = await addPreference(preferences, user.token);
     console.log(response);
     navigation.navigate('Tabs');
   }
+
+  // DropDownPicker state
+  const [open, setOpen] = useState(false);
+  const [goal, setGoal] = useState(null);
+  const [goalItems, setGoalItems] = useState([
+    { label: 'Money', value: 'Money' },
+    { label: 'Energy', value: 'Energy' },
+    { label: 'Health', value: 'Health' },
+    { label: 'Religous', value: 'Religous' }
+  ]);
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -34,12 +46,24 @@ function Goals({ navigation }) {
       <View style={styles.inputTitle}>
         <Text style={styles.subtitle}>Goals</Text>
       </View>
-      <TextInput
+
+        <DropDownPicker
+          open={open}
+          value={preferences.goal}
+          items={goalItems}
+          setOpen={setOpen}
+          setValue={(text) => setPreferences({ ...preferences, goal: text })}
+          setItems={setGoalItems}
+          placeholder="Select Goal"
+          style={styles.dropdown}
+          dropDownStyle={styles.dropdown}
+        />
+      {/* <TextInput
         style={styles.input}
         placeholder="Goal"
         placeholderTextColor="#fff" // White text color for placeholder
         onChangeText={(text) => setPreferences({ ...preferences, goal: text })}
-      />
+      /> */}
       
       <View style={styles.inputTitle}>
         <Text style={styles.subtitle}>Weekly Consumption Limit</Text>
