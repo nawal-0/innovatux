@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, ScrollView, Image, Modal, TextInput, TouchableOpacity } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { logout, getThings, addPreference, changePassword } from '../api-functions';
 import { useUser } from '../components/UserContext';
-
 
 export default function SettingsPage( { navigation } ) {
   const { user } = useUser();
@@ -13,13 +13,22 @@ export default function SettingsPage( { navigation } ) {
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [limitModalVisible, setLimitModalVisible] = useState(false);
 
+  // DropDownPicker state for goals
+  const [open, setOpen] = useState(false);
+  const [goal, setGoal] = useState(null);
+  const [goalItems, setGoalItems] = useState([
+    { label: 'Money', value: 'Money' },
+    { label: 'Energy', value: 'Energy' },
+    { label: 'Health', value: 'Health' },
+    { label: 'Religous', value: 'Religous' }
+  ]);
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [weeklycLimit, setcWeeklyLimit] = useState('');
   const [weeklysLimit, setsWeeklyLimit] = useState('');
 
-  
   // toggle push notifications and save to db
   const togglePushNotifications = async () => {
     const updatedSettings = { ...userSettings, notification: !userSettings.notification };
@@ -34,8 +43,7 @@ export default function SettingsPage( { navigation } ) {
     setUserSettings(updatedSettings);
     const response = await addPreference(updatedSettings, user.token);
     console.log(response);
-  }
-  
+  };
 
   // retrieve settings from db
   useEffect(() => {
@@ -87,7 +95,6 @@ export default function SettingsPage( { navigation } ) {
      
       if (response.message) {
         alert(response.message);
-        //navigation.navigate('Login');
 
         navigation.reset({
            index: 0,
@@ -97,6 +104,7 @@ export default function SettingsPage( { navigation } ) {
     }
     fetchLogout();
   };
+
 
   return (
     <ScrollView style={styles.container}>
@@ -135,19 +143,19 @@ export default function SettingsPage( { navigation } ) {
         </View>
       </View>
 
-      {/* Options */}
-      <View style={styles.optionRow}>
-        <Text style={styles.optionLabel}>Goals</Text>
-        <Text style={styles.optionArrow}>›</Text>
-      </View>
-      <TouchableOpacity style={styles.optionRow} onPress={() => setLimitModalVisible(true)}>
-        <Text style={styles.optionLabel}>Weekly Limit</Text>
-        <Text style={styles.optionArrow}>›</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.optionRow} onPress={() => setPasswordModalVisible(true)}>
-        <Text style={styles.optionLabel}>Change Password</Text>
-        <Text style={styles.optionArrow}>›</Text>
-      </TouchableOpacity>
+      {/* Goals Dropdown */}
+      <Text style={styles.label}>Goals</Text>
+      <DropDownPicker
+        open={open}
+        value={goal}
+        items={goalItems}
+        setOpen={setOpen}
+        setValue={setGoal}
+        setItems={setGoalItems}
+        placeholder="Select a Goal"
+        style={styles.dropdown}
+        dropDownStyle={styles.dropdown} 
+      />
 
       {/* Switches */}
       <View style={styles.switchRow}>
@@ -237,7 +245,6 @@ export default function SettingsPage( { navigation } ) {
             <TextInput
               style={styles.modalInput}
               keyboardType="numeric"
-              //placeholder="Enter weekly consumption limit"
               value={weeklycLimit}
               onChangeText={setcWeeklyLimit}
               placeholderTextColor="#808080"
@@ -245,7 +252,6 @@ export default function SettingsPage( { navigation } ) {
             <TextInput
               style={styles.modalInput}
               keyboardType="numeric"
-              //placeholder="Enter weekly spending limit"
               value={weeklysLimit}
               onChangeText={setsWeeklyLimit}
               placeholderTextColor="#808080"
@@ -330,22 +336,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     width: '60%',
   },
-  optionRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  optionLabel: {
-    fontSize: 16,
-    color: '#2f4f4f',
-  },
-  optionArrow: {
-    fontSize: 16,
-    color: '#2f4f4f',
-  },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -373,9 +363,9 @@ const styles = StyleSheet.create({
     elevation: 3,  // Slight shadow for depth
   },
   logoutButtonText: {
-      color: '#fff',
-      fontSize: 16,
-      fontWeight: 'bold',
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 
   modalContainer: {
@@ -426,5 +416,16 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginBottom: 10,
+  },
+  dropdown: {
+    marginHorizontal: 20,
+    marginBottom: 20,
+    zIndex: 1,
   },
 });
