@@ -6,7 +6,7 @@
     
         @vite('resources/css/app.css')
         @vite(['resources/css/app.css','resources/js/app.js'])
-        {{-- <link rel="stylesheet" href="{{  asset('build/assets/app-BW44QvBb.css') }}"> --}}
+        <link rel="stylesheet" href="{{  asset('build/assets/app-BW44QvBb.css') }}">
 
         <title>InnovaTUX Ordering System</title>
 
