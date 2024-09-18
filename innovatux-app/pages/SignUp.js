@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, FlatList } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useUser } from '../components/UserContext';
 import { signup } from '../api-functions';
@@ -22,7 +22,6 @@ export default function SignUp({navigation}) {
     { label: 'Other', value: 'Other' }
   ]);
 
-  // Validate username
   const validateUsername = (input) => {
     const regex = /^[a-z0-9._]+$/;
 
@@ -55,20 +54,20 @@ export default function SignUp({navigation}) {
         Alert.alert('Missing Information', 'Please fill out all the fields.');
         return;
       }
-        console.log({
-          first_name,
-          last_name,
-          email,
-          username,
-          age,
-          gender,
-          password
-        });
-        const response = await signup(first_name, last_name, username, email, password, age, gender);
-        console.log(response);
-        const userInfo = { token: response.token, id: response.user.id, first_name: response.user.first_name };
-        setUser(userInfo);
-        navigation.navigate('Preferences');
+      console.log({
+        first_name,
+        last_name,
+        email,
+        username,
+        age,
+        gender,
+        password
+      });
+      const response = await signup(first_name, last_name, username, email, password, age, gender);
+      console.log(response);
+      const userInfo = { token: response.token, id: response.user.id, first_name: response.user.first_name };
+      setUser(userInfo);
+      navigation.navigate('Preferences');
     }
     fetchSign();
   };
@@ -77,90 +76,97 @@ export default function SignUp({navigation}) {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
-      keyboardVerticalOffset={200}  
+      keyboardVerticalOffset={100}
     >
-      <View style={styles.container}>
-        <Text style={styles.header}>Sign Up</Text>
+      <FlatList
+        data={[{ key: 'form' }]}  // Dummy data to make FlatList work
+        renderItem={() => (
+          <View style={styles.container}>
+            <Text style={styles.header}>Sign Up</Text>
 
-        {/* First Name */}
-        <Text style={styles.label}>First Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="First Name"
-          value={first_name}
-          onChangeText={setFirstName}
-        />
+            {/* First Name */}
+            <Text style={styles.label}>First Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="First Name"
+              value={first_name}
+              onChangeText={setFirstName}
+            />
 
-        {/* Last Name */}
-        <Text style={styles.label}>Last Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Last Name"
-          value={last_name}
-          onChangeText={setLastName}
-        />
+            {/* Last Name */}
+            <Text style={styles.label}>Last Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Last Name"
+              value={last_name}
+              onChangeText={setLastName}
+            />
 
-        {/* Email */}
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-        />
+            {/* Email */}
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
 
-        {/* Username */}
-        <Text style={styles.label}>Username</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-          onBlur={() => validateUsername(username)}
-        />
+            {/* Username */}
+            <Text style={styles.label}>Username</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+              onBlur={() => validateUsername(username)}
+            />
 
-        {/* Age */}
-        <Text style={styles.label}>Age</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Age"
-          keyboardType="numeric"
-          value={age}
-          onChangeText={setAge}
-        />
+            {/* Age */}
+            <Text style={styles.label}>Age</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Age"
+              keyboardType="numeric"
+              value={age}
+              onChangeText={setAge}
+            />
 
-        {/* Gender Dropdown */}
-        <Text style={styles.label}>Gender</Text>
-        <DropDownPicker
-          open={open}
-          value={gender}
-          items={genderItems}
-          setOpen={setOpen}
-          setValue={setGender}
-          setItems={setGenderItems}
-          placeholder="Select Gender"
-          style={styles.dropdown}
-          dropDownStyle={styles.dropdown}
-        />
+            {/* Gender Dropdown */}
+            <Text style={styles.label}>Gender</Text>
+            <DropDownPicker
+              open={open}
+              value={gender}
+              items={genderItems}
+              setOpen={setOpen}
+              setValue={setGender}
+              setItems={setGenderItems}
+              placeholder="Select Gender"
+              style={styles.dropdown}
+              dropDownStyle={styles.dropdown}
+            />
 
-        {/* Password */}
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-        />
+            {/* Password */}
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry={true}
+              value={password}
+              onChangeText={setPassword}
+            />
 
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.loginText}>Log In</Text>
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.loginText}>Log In</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </KeyboardAvoidingView>
   );
 }
