@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 
 
 // Example data for groups
 const groups = [
-  { id: 1, name: 'Group 1', description: 'descritpion', members: 125 },
-  { id: 2, name: 'Group 2', description: 'descritpion', members: 250 },
+  { id: 1, name: 'Group 1', description: 'description', members: 125 },
+  { id: 2, name: 'Group 2', description: 'description', members: 250 },
   { id: 3, name: 'Group 3', description: 'descritpion', members: 175 },
   { id: 4, name: 'Group 4', description: 'descritpion', members: 95 },
 ];

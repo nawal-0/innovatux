@@ -6,6 +6,7 @@ use App\Models\Shop;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
 use App\Models\Settings;
+use App\Models\Community;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -60,6 +61,26 @@ class DatabaseSeeder extends Seeder
             'name' => 'Drink 4',
             'image' => "Goblet_of_Fire_Cocktail.jpg",
             'price' => 15
+        ]);
+
+        Community::create([
+            'name' => 'Testing',
+            'description' => 'Lmao'
+        ]);
+        
+        Community::create([
+            'name' => 'wow',
+            'description' => 'Lmao'
+        ]);
+        
+        Community::create([
+            'name' => 'hahaha',
+            'description' => 'Lmao'
+        ]);
+        
+        Community::create([
+            'name' => 'Fan',
+            'description' => 'Lmao'
         ]);
     }
 }
