@@ -157,6 +157,16 @@ export default function SettingsPage( { navigation } ) {
         dropDownStyle={styles.dropdown} 
       />
 
+       {/* Options */}
+       <TouchableOpacity style={styles.optionRow} onPress={() => setLimitModalVisible(true)}>
+        <Text style={styles.optionLabel}>Weekly Limit</Text>
+        <Text style={styles.optionArrow}>›</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.optionRow} onPress={() => setPasswordModalVisible(true)}>
+        <Text style={styles.optionLabel}>Change Password</Text>
+        <Text style={styles.optionArrow}>›</Text>
+      </TouchableOpacity>
+
       {/* Switches */}
       <View style={styles.switchRow}>
         <Text style={styles.optionLabel}>Push Notifications</Text>
@@ -289,6 +299,22 @@ const styles = StyleSheet.create({
     color: '#2f4f4f',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  optionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  optionLabel: {
+    fontSize: 16,
+    color: '#2f4f4f',
+  },
+  optionArrow: {
+    fontSize: 16,
+    color: '#2f4f4f',
   },
   profileSection: {
     flexDirection: 'row',
