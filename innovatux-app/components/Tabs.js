@@ -19,7 +19,7 @@ function CommunityPageStack() {
       <Stack.Navigator screenOptions={{
           headerShown: false
       }}>
-          <Stack.Screen name = "Community" component={GroupSelection}/>
+          <Stack.Screen name = "CommunityGroup" component={GroupSelection}/>
           <Stack.Screen name="Chat" component={GroupChat}/>
       </Stack.Navigator>
   );
@@ -59,7 +59,7 @@ function Tabs() {
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Feed" component={Feed} />
-      <Tab.Screen name="Communities" component={CommunityPageStack} />
+      <Tab.Screen name="Community" component={CommunityPageStack} />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>

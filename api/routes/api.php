@@ -17,3 +17,6 @@ Route::post('/change/password', [UserController::class, 'changePassword'])->midd
 
 Route::get('/communities', [CommunityController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/join', [CommunityController::class, 'join'])->middleware('auth:sanctum');
+
+Route::post('/is-user-in-group', [CommunityController::class, 'isUserInGroup'])->middleware('auth:sanctum');
+

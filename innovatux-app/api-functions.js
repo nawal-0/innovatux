@@ -45,8 +45,8 @@ export const getThings = async (item, token) => {
             'Authorization': `Bearer ${token}`,
         },
     });
-    const data = await response.json();
-    return data;
+        const data = await response.json();
+        return data;
 }
 
 export const addPreference = async (preferences, token) => {
@@ -87,3 +87,16 @@ export const joinCommunity = async (community_id, token) => {
     const message = await response.json();
     return message;
 }
+
+export const isUserInGroup = async (community_id, token) => {
+    const response = await fetch(`${URL}is-user-in-group/?communityId=${community_id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ community_id }),
+    });
+    const data = await response.json();
+    return data.is_member;
+};

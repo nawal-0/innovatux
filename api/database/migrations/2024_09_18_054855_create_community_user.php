@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('community_id')->constrained()->onDelete('cascade');
             $table->timestamp('joined_at')->useCurrent();
-            $table->timestamps();
+            //$table->timestamps();
             $table->primary(['user_id', 'community_id']);
         });
     }

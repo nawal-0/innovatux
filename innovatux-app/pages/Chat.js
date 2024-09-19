@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function GroupChat({ route }) {
+  const navigation = useNavigation();
   const groupName = route?.params?.groupName || 'General Chat';
   const currentUser = 'User1';  // Example current user
   const [message, setMessage] = useState('');
@@ -35,8 +37,13 @@ export default function GroupChat({ route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{groupName}</Text>
 
+      <TouchableOpacity style={{ rmarginTop: 10, alignItems: 'left' }} 
+      onPress={() => navigation.goBack()}>
+        <Text style={{ marginLeft: 10, color: '#4CAF50', fontSize: 16 }}>Back</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.header}>{groupName}</Text>
       <FlatList
         data={messages}
         renderItem={renderMessage}
@@ -55,6 +62,8 @@ export default function GroupChat({ route }) {
         <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
+
+
       </View>
     </View>
   );

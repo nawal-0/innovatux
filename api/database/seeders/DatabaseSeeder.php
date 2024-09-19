@@ -64,23 +64,23 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Community::create([
-            'name' => 'Testing',
-            'description' => 'Lmao'
+            'name' => 'Saver',
+            'description' => 'saving'
         ]);
         
         Community::create([
-            'name' => 'wow',
-            'description' => 'Lmao'
+            'name' => 'Liver Longer',
+            'description' => 'idk'
         ]);
         
         Community::create([
-            'name' => 'hahaha',
-            'description' => 'Lmao'
+            'name' => 'Faitful Recovery',
+            'description' => 'Issues'
         ]);
         
         Community::create([
-            'name' => 'Fan',
-            'description' => 'Lmao'
+            'name' => 'Drink?',
+            'description' => 'Alcoholics'
         ]);
     }
 }

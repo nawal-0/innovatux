@@ -59,7 +59,7 @@ class User extends Authenticatable
 
     public function communities(): BelongsToMany
     {
-        return $this->belongsToMany(Community::class, 'community_user')->withTimestamps();
-
+        return $this->belongsToMany(Community::class, 'community_user')
+                    ->withPivot('joined_at');
     }
 }

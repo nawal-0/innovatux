@@ -20,6 +20,7 @@ class Community extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'community_user')->withTimestamps();
+        return $this->belongsToMany(User::class, 'community_user')
+                    ->withPivot('joined_at'); //->withoutTimestamps();
     }
 }
