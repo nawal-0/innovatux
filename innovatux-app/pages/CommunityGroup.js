@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { useUser } from '../components/UserContext';
-import { getThings, joinCommunity, isUserInGroup } from '../api-functions'
+import { getThings, joinCommunity } from '../api-functions'
 
 
 export default function GroupSelection({ navigation }) {
@@ -15,19 +15,25 @@ export default function GroupSelection({ navigation }) {
       try {
         const com = await getThings("communities", user.token);
         setGroups(com);
-
-        const membershipStatuses = {};
-        for (const group of com) {
-          const isMember = await isUserInGroup(group.id, user.token);
-          console.log(isMember)
-          membershipStatuses[group.id] = isMember;
-        }
-        setUserGroups(membershipStatuses);
       } catch (error) {
         console.error('Error fetching communities or memberships:', error);
       }
     }
     fetchCommunities();
+  }, []);
+
+  useEffect(() => {
+    async function fetchMembership() {
+      try {
+        const membershipStatuses = await getThings("is-user-in-group", user.token);
+        console.log(membershipStatuses);
+        
+        setUserGroups(membershipStatuses);
+      } catch (error) {
+        console.error('Error fetching communities or memberships:', error);
+      }
+    }
+    fetchMembership();
   }, []);
 
   const handleJoin = async (id) => {
@@ -38,9 +44,6 @@ export default function GroupSelection({ navigation }) {
         console.log('Joining group with id:', id);
         const res = await joinCommunity(id, user.token);
         console.log(res);
-        // Update membership status to "joined"
-        //userGroups[id] = true;
-        //setUserGroups(userGroups);
         setUserGroups(prev => ({ ...prev, [id]: true }));
         // Navigate to the chat screen
         navigation.navigate('Chat', { groupId: id });

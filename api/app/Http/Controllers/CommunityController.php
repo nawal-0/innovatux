@@ -40,14 +40,15 @@ class CommunityController extends Controller
 
     public function isUserInGroup(Request $request)
     {
-    //$user = Auth::user(); //double check this later XD
-    $user = $request->user();
-    // Check if the user is already a member of the group
-    $isMember = $user->communities()->where('community_id', $request->community_id)->exists();
-
-    return response()->json(['is_member' => $isMember], 200);
+        $user = $request->user();
+        $communities = Community::all();
+        $membership = [];
+        foreach ($communities as $community) {
+            $isMember = $user->communities()->where('community_id', $community->id)->exists();
+            $membership[$community->id] = $isMember;
+        }
+        return response()->json($membership, 200);
     }
-
 
 }
 
