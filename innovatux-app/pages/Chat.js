@@ -3,8 +3,6 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'r
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../components/UserContext';
 import { postMessage, getThings } from '../api-functions';
-import EventSource from 'react-native-event-source';
-import { IP_ADDR } from "../ip-addr";
 
 export default function GroupChat({ route }) {
   const navigation = useNavigation();
