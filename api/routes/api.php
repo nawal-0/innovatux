@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CommunityController;
 
 Route::get('/users', [UserController::class, 'index']);
@@ -20,3 +21,5 @@ Route::post('/join', [CommunityController::class, 'join'])->middleware('auth:san
 
 Route::get('/is-user-in-group', [CommunityController::class, 'isUserInGroup'])->middleware('auth:sanctum');
 
+Route::post('/message', [MessageController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/messages/{community_id}', [MessageController::class, 'index'])->middleware('auth:sanctum');

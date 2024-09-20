@@ -1,4 +1,4 @@
-
+import EventSource from 'react-native-event-source';
 import { IP_ADDR } from "./ip-addr";
 
 const URL = `http://${IP_ADDR}:8000/api/`;
@@ -87,3 +87,28 @@ export const joinCommunity = async (community_id, token) => {
     const message = await response.json();
     return message;
 }
+
+export const postMessage = async (content, community_id, token) => {
+    const response = await fetch(`${URL}message`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content, community_id }),
+    });
+    const data = await response.json();
+    return data;
+}
+
+// export const getMessages = async (community_id, token) => {
+//     const eventSource = new EventSource(`${URL}messages/${community_id}`, {
+//         headers: {
+//             'Authorization': `Bearer ${token}`,
+//         },
+//     });
+//     eventSource.addEventListener('message', function (event) => {
+//         const data = JSON.parse(event.data);
+//         return data;
+//     }
+// }

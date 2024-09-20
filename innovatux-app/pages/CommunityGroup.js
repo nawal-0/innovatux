@@ -39,7 +39,7 @@ export default function GroupSelection({ navigation }) {
   const handleJoin = async (id) => {
     if (userGroups[id]) {
       // If the user is already in the group, navigate to the chat
-      navigation.navigate('Chat', { groupId: id });
+      navigation.navigate('Chat', { groupId: id, groupName: groups.find(group => group.id === id).name });  
     } else {
         console.log('Joining group with id:', id);
         const res = await joinCommunity(id, user.token);

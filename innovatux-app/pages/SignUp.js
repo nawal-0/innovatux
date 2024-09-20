@@ -65,7 +65,7 @@ export default function SignUp({navigation}) {
       });
       const response = await signup(first_name, last_name, username, email, password, age, gender);
       console.log(response);
-      const userInfo = { token: response.token, id: response.user.id, first_name: response.user.first_name };
+      const userInfo = { token: response.token, id: response.user.id, username: response.user.username };
       setUser(userInfo);
       navigation.navigate('Preferences');
     }

@@ -1,35 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useUser } from '../components/UserContext';
+import { postMessage, getThings } from '../api-functions';
+import EventSource from 'react-native-event-source';
+import { IP_ADDR } from "../ip-addr";
 
 export default function GroupChat({ route }) {
   const navigation = useNavigation();
-  const groupName = route?.params?.groupName || 'General Chat';
-  const currentUser = 'User1';  // Example current user
+  const { user } = useUser();
+  const groupName = route.params.groupName;
+  const groupId = route.params.groupId;
+  const currentUser = user.username;  // Example current user
   const [message, setMessage] = useState('');
+  const [isMessageSent, setIsMessageSent] = useState(false);
   const [messages, setMessages] = useState([
-    { id: '1', text: 'Welcome to the chat!', sender: 'system' },
-    { id: '2', text: 'Feel free to share your experiences.', sender: 'system' },
+    { id: '1', content: 'Welcome to the chat!', user_id: 'system' },
+    { id: '2', content: 'Feel free to share your experiences.', user_id: 'system' },
   ]);
 
-  const handleSendMessage = () => {
+  useEffect(() => {
+    const intervalID = setInterval(async() => {
+    
+      const messages = await getThings(`messages/${groupId}`, user.token);
+      setMessages(messages);
+
+    }, 1000);
+
+    return () => clearInterval(intervalID);
+
+  }, [isMessageSent]);
+
+
+  const handleSendMessage = async () => {
     if (message.trim()) {
-      setMessages([...messages, { id: Date.now().toString(), text: message, sender: currentUser }]);
+      const response = await postMessage(message, groupId, user.token);
+      console.log(response);
+      setIsMessageSent(!isMessageSent);
       setMessage('');
     }
   };
 
   const renderMessage = ({ item }) => {
-    const isSystemMessage = item.sender === 'system';
-    const isCurrentUser = item.sender === currentUser;
+    const isSystemMessage = item.user_id === 'system';
+    const isCurrentUser = item.user_id === user.id;
 
     return (
       <View style={[styles.messageContainer, isCurrentUser ? styles.currentUserMessage : styles.otherUserMessage]}>
         {!isSystemMessage && (
-          <Text style={styles.senderName}>{item.sender}</Text>
+          <Text style={styles.senderName}>{currentUser}</Text>
         )}
         <Text style={isSystemMessage ? styles.systemMessage : styles.messageText}>
-          {item.text}
+          {item.content}
         </Text>
       </View>
     );
