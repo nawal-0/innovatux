@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, TextInput, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { postLogin } from '../api-functions';
 import { useUser } from '../components/UserContext';
+import { globalStyles } from './Styles';
 
 function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -28,29 +29,32 @@ function Login({ navigation }) {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={styles.container}>
-          {/* Image at the top */}
-          <Image source={require('../assets/alcohol.png')} style={styles.image} />
+        {/* Image at the top */}
+        <View style={styles.imageContainer}>
+            <Image source={require('../assets/alcohol.png')} style={styles.image} />
+          </View>
+        <View style={[globalStyles.container, styles.container]}>
+          
 
           <Text style={styles.title}>LOGIN</Text>
 
           <TextInput
-            style={styles.input}
+            style={[globalStyles.input, styles.input]}
             placeholder="Username or Email"
             onChangeText={setEmail}
-            placeholderTextColor="#fff" // White text color for placeholder
+            //placeholderTextColor="#fff" // White text color for placeholder
           />
           <TextInput
-            style={styles.input}
+            style={[globalStyles.input, styles.input]}
             placeholder="Password"
             secureTextEntry
             onChangeText={setPassword}
-            placeholderTextColor="#fff" // White text color for placeholder
+            //placeholderTextColor="#fff" // White text color for placeholder
           />
           {error && <Text style={styles.userText}>{error}</Text>}
 
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginText}>Login</Text>
+          <TouchableOpacity style={globalStyles.button} onPress={handleLogin}>
+            <Text style={globalStyles.buttonText}>Login</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignUp')}>
@@ -68,14 +72,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center', // Center horizontally
     padding: 16,
-    backgroundColor: '#E1F9EB', // Background color
+    //backgroundColor: '#E1F9EB', // Background color
+  },
+  imageContainer: {
+    overflow: 'hidden', // Ensure that the overflow is hidden to show only the top half
+    width: '100%', // Set a width for the image
+    height: '30%', // Set a height for half-circle effect
+    justifyContent: 'flex-end',
+    borderTopLeftRadius: 0,
+
+    //borderBottomRightRadius: 100,
+    //borderBottomLeftRadius: 100
+
   },
   image: {
-    width: 150, // Adjust width as needed
-    height: 150, // Adjust height as needed
-    borderRadius: 75, // Half of the width/height to make it circular
-    resizeMode: 'contain', // Adjust how the image is resized
-    marginBottom: 20,
+    width: '100%',
+    height: '100%',
+    borderTopLeftRadius: 0,
+
+    borderBottomRightRadius: 100,
+    borderBottomLeftRadius: 100
+    //width: 150, // Adjust width as needed
+    //height: 150, // Adjust height as needed
+    //borderRadius: 75, // Half of the width/height to make it circular
+    //resizeMode: 'contain', // Adjust how the image is resized
+    //marginBottom: 20,
   },
   title: {
     fontSize: 32,
@@ -88,13 +109,13 @@ const styles = StyleSheet.create({
   input: {
     width: '100%', // Full width for input fields
     height: 40,
-    backgroundColor: '#A9DFBF', // Background color for input fields
-    borderColor: '#245C3B',
+    //backgroundColor: '#A9DFBF', // Background color for input fields
+    //borderColor: '#245C3B',
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 8,
     marginBottom: 16,
-    color: '#245C3B', // Text color for input fields
+    //color: '#245C3B', // Text color for input fields
   },
   loginButton: {
     width: '100%', // Full width for login button

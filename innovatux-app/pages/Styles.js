@@ -1,6 +1,14 @@
 import { StyleSheet } from 'react-native';
 
 export const globalStyles = StyleSheet.create({
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 5,
+    backgroundColor: 'white',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
@@ -86,5 +94,17 @@ export const globalStyles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
     alignItems: 'center',
+  },
+  button: {
+    width: '100%', // Full width for login button
+    padding: 10,
+    backgroundColor: '#245C3B', // Background color for login button
+    borderRadius: 4,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#E1F9EB', // Text color for login button
+    fontSize: 16,
   },
 });
