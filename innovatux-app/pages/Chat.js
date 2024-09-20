@@ -48,7 +48,7 @@ export default function GroupChat({ route }) {
     return (
       <View style={[styles.messageContainer, isCurrentUser ? styles.currentUserMessage : styles.otherUserMessage]}>
         {!isSystemMessage && (
-          <Text style={styles.senderName}>{currentUser}</Text>
+          <Text style={styles.senderName}>{item.user.username}</Text>
         )}
         <Text style={isSystemMessage ? styles.systemMessage : styles.messageText}>
           {item.content}

@@ -22,7 +22,7 @@ class MessageController extends Controller
 
     public function index($community_id)
     {
-        $messages = Message::where('community_id', $community_id)->get();
+        $messages = Message::where('community_id', $community_id)->with('user')->get();
         return response()->json($messages, 200);
     }
 
