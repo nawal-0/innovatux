@@ -20,33 +20,14 @@ class MessageController extends Controller
         return response()->json(['message' => 'Message posted'], 200);
     }
 
-    public function index($community_id)
+    public function index($community_id, Request $request)
     {
-        $messages = Message::where('community_id', $community_id)->with('user')->get();
+        $query = Message::where('community_id', $community_id);
+        if ($request->has('after')) {
+            $query->where('id', '>', $request->after);
+        }
+        $messages = $query->with('user')->get();
         return response()->json($messages, 200);
     }
-
-    public function streamMessages($community_id)
-    {
-        $response = response()->stream(function () use ($community_id) {
-            while (true) {
-                $messages = Message::where('community_id', $community_id)->where('posted_at', '>', now()->subSeconds(10))->get();
-
-                if ($messages->count() > 0) {
-                    echo "data: " . json_encode($messages) . "\n\n";
-                    ob_flush();
-                    flush();
-                }
-
-                sleep(3);
-
-            }
-
-           
-        }, 200, [
-            'Content-Type' => 'text/event-stream',
-            'Cache-Control' => 'no-cache',
-            'Connection' => 'keep-alive',
-        ]);
-    }
+    
 }

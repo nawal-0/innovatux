@@ -18,7 +18,7 @@ function Login({ navigation }) {
       if (response.message) {
         setError(response.message);
       } else {
-        const userInfo = { token: response.token, id: response.user.id, username: response.user.username };
+        const userInfo = { token: response.token, id: response.user.id };
         setUser(userInfo);
         navigation.navigate('Tabs');
       }

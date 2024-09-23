@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../components/UserContext';
 import { postMessage, getThings } from '../api-functions';
-import EventSource from 'react-native-event-source';
-import { IP_ADDR } from "../ip-addr";
 
 export default function GroupChat({ route }) {
   const navigation = useNavigation();
   const { user } = useUser();
   const groupName = route.params.groupName;
   const groupId = route.params.groupId;
-  const currentUser = user.username;  // Example current user
+
+  const chatListRef = useRef(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [lastMessageId, setLastMessageId] = useState(null);
+
+  
   const [message, setMessage] = useState('');
   const [isMessageSent, setIsMessageSent] = useState(false);
   const [messages, setMessages] = useState([
@@ -20,22 +23,34 @@ export default function GroupChat({ route }) {
   ]);
 
   useEffect(() => {
-    const intervalID = setInterval(async() => {
-    
-      const messages = await getThings(`messages/${groupId}`, user.token);
-      setMessages(messages);
+    const fetchMessages = async () => {
+      //const response = await getThings(`messages/${groupId}`, user.token);
+      const endpoint = lastMessageId ? `messages/${groupId}?after=${lastMessageId}` : `messages/${groupId}`;
+      const response = await getThings(endpoint, user.token);
 
-    }, 1000);
+      //setMessages(response);
+      if (response.length > 0 && response[response.length - 1].id !== lastMessageId) {
+        const lastMessage = response[response.length - 1];
+        
+        setLastMessageId(lastMessage.id);
+        setMessages((prevMessages) => [...prevMessages, ...response]);
+        
+      }
+      if (chatListRef.current && !isScrolled) {
+        chatListRef.current.scrollToEnd({ animated: true });
+      }
+    };
+    fetchMessages();
+    const intervalID = setInterval(fetchMessages, 1000);
 
     return () => clearInterval(intervalID);
+  }, [isMessageSent, lastMessageId]);
 
-  }, [isMessageSent]);
 
 
   const handleSendMessage = async () => {
     if (message.trim()) {
       const response = await postMessage(message, groupId, user.token);
-      console.log(response);
       setIsMessageSent(!isMessageSent);
       setMessage('');
     }
@@ -67,10 +82,13 @@ export default function GroupChat({ route }) {
 
       <Text style={styles.header}>{groupName}</Text>
       <FlatList
+        ref={chatListRef}
         data={messages}
         renderItem={renderMessage}
         keyExtractor={(item) => item.id}
         style={styles.chatArea}
+        onScrollBeginDrag={() => setIsScrolled(true)}
+        onScrollEndDrag={() => setIsScrolled(false)}
       />
 
       <View style={styles.inputContainer}>

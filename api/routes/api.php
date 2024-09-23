@@ -22,4 +22,4 @@ Route::post('/join', [CommunityController::class, 'join'])->middleware('auth:san
 Route::get('/is-user-in-group', [CommunityController::class, 'isUserInGroup'])->middleware('auth:sanctum');
 
 Route::post('/message', [MessageController::class, 'store'])->middleware('auth:sanctum');
-Route::get('/messages/{community_id}', [MessageController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/messages/{community_id}', [MessageController::class, 'index']);
