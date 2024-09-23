@@ -1,10 +1,10 @@
 // NEW CODE
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, TextInput, Alert } from 'react-native';
+import { Modal, Button, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, RefreshControl, TextInput, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import Post from '../components/Post';
-import { postFeed } from '../api-functions';
+import { postFeed, getThings } from '../api-functions';
 import { useUser } from '../components/UserContext';
 
 
@@ -12,6 +12,7 @@ function Feed({ navigation }) {
   const { width } = Dimensions.get('window');
   const [modalVisible, setModalVisible] = useState(false);
   const { user } = useUser();
+  const [refreshing, setRefreshing] = useState(false);
 
 
   // State for image, caption, and posts
@@ -29,6 +30,26 @@ function Feed({ navigation }) {
       }
     })();
   }, []);
+
+  // function to fetch posts from the API
+  const fetchPosts = async () => {
+    const data = await getThings('posts', user.token);
+    setPosts(data);
+  };
+
+  // fetch posts when the component mounts
+  useEffect(() => {
+    fetchPosts();
+  }
+  , []);
+
+  // Pull to refresh functionality
+  const onRefresh = async () => {
+    setRefreshing(true);
+    fetchPosts();
+    setRefreshing(false);
+  };
+
 
   // Open image picker for user to select an image
   const handleSelectImage = async () => {
@@ -53,7 +74,7 @@ function Feed({ navigation }) {
       const newPost = {
         id: response.id,
         username: response.user.username,
-        postImage: imageUri,
+        image_path: response.image_path,
         profileImage: require('../assets/icon.png'),
         caption: caption,
       };
@@ -126,7 +147,13 @@ function Feed({ navigation }) {
       </Modal>
           
           
-      <ScrollView style={styles.scroll}>
+      <ScrollView style={styles.scroll} 
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }>
 
           
 
@@ -145,7 +172,7 @@ function Feed({ navigation }) {
           <Post
             key={post.id}
             username={post.username}
-            postImage={post.postImage}
+            postImage={post.image_path}
             profileImage={post.profileImage}
             caption={post.caption}
           />
