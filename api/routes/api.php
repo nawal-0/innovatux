@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\PostController;
 
 Route::get('/users', [UserController::class, 'index']);
 
@@ -23,3 +24,6 @@ Route::get('/is-user-in-group', [CommunityController::class, 'isUserInGroup'])->
 
 Route::post('/message', [MessageController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/messages/{community_id}', [MessageController::class, 'index'])->middleware('auth:sanctum');
+
+Route::post('/posts', [PostController::class, 'feedstore'])->middleware('auth:sanctum');
+Route::get('/posts', [PostController::class, 'index'])->middleware('auth:sanctum');

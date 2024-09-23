@@ -1,4 +1,5 @@
 import { IP_ADDR } from "./ip-addr";
+import FormData from 'form-data';
 
 const URL = `http://${IP_ADDR}:8000/api/`;
 
@@ -99,3 +100,34 @@ export const postMessage = async (content, community_id, token) => {
     const data = await response.json();
     return data;
 }
+
+export const postFeed = async (caption, image, token) => {
+    const formData = new FormData();
+
+    formData.append('caption', caption);
+
+    // Get the filename and type from the imageUri
+    const imageName = image.split('/').pop();
+    const imageType = imageName.split('.').pop();
+
+  // Add the image file to the form data
+    formData.append('image', {
+        uri: image,
+        name: imageName,
+        type: `image/${imageType}`,  // Example: 'image/jpeg'
+    });
+    console.log(formData);
+
+    const response = await fetch(`${URL}posts`, {
+        method: 'POST',
+        headers: {
+            //'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+    });
+    const data = await response.json();
+    return data;
+}
+
+
