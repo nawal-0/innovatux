@@ -24,7 +24,7 @@ const [modalVisible, setModalVisible] = useState(false);
 const [date, setDate] = useState('');
 const [price, setPrice] = useState('');
 const [amount, setAmount] = useState('');
-const [volume, setVolume] = useState('200ml');
+//const [volume, setVolume] = useState('200ml');
 
 // Chart data
 const alcoholData = {
@@ -47,7 +47,7 @@ data: generateRandomData(7),
 
 // Handle form submission
 const handleSubmit = () => {
-console.log(`Date: ${date}, Price: ${price}, Amount: ${amount}, Volume: ${volume}`);
+console.log(`Date: ${date}, Price: ${price}, Amount: ${amount}`);
 alert('Alcohol log submitted successfully!');
 setModalVisible(false); // Close the modal after submission
 };
@@ -138,7 +138,7 @@ value={amount}
 onChangeText={setAmount}
 />
 
-<Text style={styles.label}>Volume</Text>
+{/* <Text style={styles.label}>Volume</Text>
 <Picker
 selectedValue={volume}
 style={styles.picker}
@@ -147,7 +147,7 @@ onValueChange={(itemValue) => setVolume(itemValue)}
 <Picker.Item label="200ml/7oz" value="200ml" />
 <Picker.Item label="500ml/17oz" value="500ml" />
 <Picker.Item label="1000ml/34oz" value="1000ml" />
-</Picker>
+</Picker> */}
 
 {/* Submit Button */}
 <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
