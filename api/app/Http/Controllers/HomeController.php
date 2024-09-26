@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Exception;
+//use Carbon\Carbon;
 use App\Models\Input;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,34 +23,48 @@ class HomeController extends Controller
         return response()->json(['message' => 'Input added',], 201);
     }
 
-    public function retrieval()
+    function getStartAndEndOfWeek()
     {
-        // Get the start and end of this week (Monday to;; Sunday)
-        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY)->format('Y-m-d');  // Monday
-        $endOfWeek = Carbon::now()->endOfWeek(Carbon::SUNDAY)->format('Y-m-d');      // Sunday
-
-        // Retrieve the orders grouped by day of the week
-        //$orders = Input::whereBetween('order_date', [$startOfWeek, $endOfWeek])->get();
-
-        $orders = $orders = DB::select(
-            'SELECT * FROM alcohol_input WHERE order_date BETWEEN ? AND ?',
-            [$startOfWeek, $endOfWeek]
-        );
+        $now = new DateTime();
         
+        // Get the start of the week (Monday)
+        $startOfWeek = clone $now->modify(('Monday' === $now->format('l')) ? 'this Monday' : 'last Monday');
+        
+        // Get the end of the week (Sunday)
+        $endOfWeek = clone $startOfWeek;
+        $endOfWeek->modify('next Sunday');
+
+        // Format as necessary
+        $startOfWeekFormatted = $startOfWeek->format('Y-m-d');
+        $endOfWeekFormatted = $endOfWeek->format('Y-m-d');
+
+        return [$startOfWeekFormatted, $endOfWeekFormatted];
+    }
+
+
+    public function retrieval(Request $request)
+    {
+        // Get the start and end of the week
+        list($startOfWeek, $endOfWeek) = $this->getStartAndEndOfWeek();
+
+        $orders = Input::where('user_id', $request->$user()->id)->whereBetween('order_date', [$startOfWeek, $endOfWeek])->groupBy('order_date')
+            ->selectRaw('order_date, sum(quantity) as quantity, sum(price) as price')
+            ->get();
 
         // Map the day numbers to actual days
-        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         $orderData = [];
         
         foreach ($orders as $order) {
+            // Map date to day of the week
+            $order->day = (new DateTime($order->order_date))->format('N');
+
             $orderData[] = [
-                //'day' => $daysOfWeek[$order->day - 1], // Map 1-7 to the correct day of the week
-                'total_quantity' => $order->total_quantity,
-                'total_price' => $order->total_price,
+                'day' => $daysOfWeek[$order->day - 1], // Map 1-7 to the correct day of the week
+                'total_quantity' => $order->quantity,
+                'total_price' => $order->price,
             ];
         }
-
-        //return response()->json($orderData, 200);
-        return response()->json($orders, 200);
+        return response()->json($orderData, 200);
     }
 }

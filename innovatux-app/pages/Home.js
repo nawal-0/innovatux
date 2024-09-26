@@ -40,25 +40,6 @@ useEffect(() => {
     fetchOrders();
 }, []);
 
-// Chart data
-const alcoholData = {
-labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-datasets: [
-{
-data: generateRandomData(7),
-},
-],
-};
-
-const savingsData = {
-labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-datasets: [
-{
-data: generateRandomData(7),
-},
-],
-};
-
 // Handle form submission
 const handleSubmit = async () => {
 const response = await postInput(date, price, amount, user.token);
@@ -66,6 +47,26 @@ console.log(response);
 alert('Alcohol log submitted successfully!');
 setModalVisible(false); // Close the modal after submission
 };
+
+// Chart data
+const alcoholData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+    {
+    data: generateRandomData(7),
+    },
+    ],
+    };
+    
+    const savingsData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+    {
+    data: generateRandomData(7),
+    },
+    ],
+    };
+    
 
 return (
 <View style={styles.container}>
