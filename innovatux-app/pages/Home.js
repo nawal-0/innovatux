@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { LineChart, BarChart } from 'react-native-chart-kit';
 import { Picker } from '@react-native-picker/picker';
-import { postInput } from '../api-functions';
+import { postInput, getThings } from '../api-functions';
 import { useUser } from '../components/UserContext';
 
 // Function to generate random data
@@ -27,7 +27,18 @@ const [date, setDate] = useState('');
 const [price, setPrice] = useState('');
 const [amount, setAmount] = useState('');
 //const [volume, setVolume] = useState('200ml');
+const [weeklyData, setWeeklyData] = useState([]);
 const { user } = useUser();
+
+    // Fetch weekly orders on component mount
+useEffect(() => {
+    async function fetchOrders() {
+        const data = await getThings("input", user.token);
+        console.log('data', data);
+        setWeeklyData(data);
+    }
+    fetchOrders();
+}, []);
 
 // Chart data
 const alcoholData = {
