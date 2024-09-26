@@ -70,15 +70,7 @@ function Feed({ navigation }) {
   const handleAddPost = async () => {
     if (imageUri && caption) {
       const response = await postFeed(caption, imageUri, user.token);
-      console.log(response);
-      const newPost = {
-        id: response.id,
-        username: response.user.username,
-        image_path: response.image_path,
-        profileImage: require('../assets/icon.png'),
-        caption: caption,
-      };
-      setPosts([newPost, ...posts]);  // Add the new post to the top of the list
+      setPosts([response, ...posts]);  // Add the new post to the top of the list
       setImageUri(null);  // Reset image selection
       setCaption('');     // Reset caption input
     } else {
@@ -171,7 +163,7 @@ function Feed({ navigation }) {
         {posts.map(post => (
           <Post
             key={post.id}
-            username={post.username}
+            username={post.user.username}
             postImage={post.image_path}
             profileImage={post.profileImage}
             caption={post.caption}

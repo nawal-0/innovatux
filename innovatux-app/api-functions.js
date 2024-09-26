@@ -116,12 +116,10 @@ export const postFeed = async (caption, image, token) => {
         name: imageName,
         type: `image/${imageType}`,  // Example: 'image/jpeg'
     });
-    console.log(formData);
 
     const response = await fetch(`${URL}posts`, {
         method: 'POST',
         headers: {
-            //'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`,
         },
         body: formData,

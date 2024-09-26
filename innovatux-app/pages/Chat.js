@@ -17,10 +17,11 @@ export default function GroupChat({ route }) {
   
   const [message, setMessage] = useState('');
   const [isMessageSent, setIsMessageSent] = useState(false);
-  const [messages, setMessages] = useState([
-    { id: '1', content: 'Welcome to the chat!', user_id: 'system' },
-    { id: '2', content: 'Feel free to share your experiences.', user_id: 'system' },
-  ]);
+  // const [messages, setMessages] = useState([
+  //   { id: '1', content: 'Welcome to the chat!', user_id: 'system' },
+  //   { id: '2', content: 'Feel free to share your experiences.', user_id: 'system' },
+  // ]);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const fetchMessages = async () => {
