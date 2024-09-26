@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('alcohol_input', function (Blueprint $table) {
             $table->id('id');
             $table->foreignId('user_id')->constrained('users');
-            $table->decimal('total', 8, 2);
+            $table->decimal('price', 8, 2);
             $table->integer('quantity');
+            $table->date('order_date')->default(now());
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Shop;
 use App\Models\User;
-use App\Models\Order;
+use App\Models\Input;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -55,10 +55,10 @@ class ShopController extends Controller
 
         $user = User::where('username', $form['username'])->first();
 
-        $order = new Order();
+        $order = new Input();
         $order->user_id = $user->id;
         $order->quantity = $totalQuantity;
-        $order->total = $totalPrice;
+        $order->price = $totalPrice;
         $order->save();
 
         session()->forget('cart');
