@@ -2,10 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CommunityController;
-use App\Http\Controllers\PostController;
 
 Route::get('/users', [UserController::class, 'index']);
 
@@ -28,3 +29,4 @@ Route::get('/messages/{community_id}', [MessageController::class, 'index'])->mid
 Route::post('/posts', [PostController::class, 'feedstore'])->middleware('auth:sanctum');
 Route::get('/posts', [PostController::class, 'index'])->middleware('auth:sanctum');
 
+Route::post('/input', [HomeController::class, 'input'])->middleware('auth:sanctum');

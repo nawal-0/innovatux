@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { LineChart, BarChart } from 'react-native-chart-kit';
 import { Picker } from '@react-native-picker/picker';
+import { postInput } from '../api-functions';
+import { useUser } from '../components/UserContext';
 
 // Function to generate random data
 const generateRandomData = (numPoints) => {
@@ -25,6 +27,7 @@ const [date, setDate] = useState('');
 const [price, setPrice] = useState('');
 const [amount, setAmount] = useState('');
 //const [volume, setVolume] = useState('200ml');
+const { user } = useUser();
 
 // Chart data
 const alcoholData = {
@@ -46,8 +49,9 @@ data: generateRandomData(7),
 };
 
 // Handle form submission
-const handleSubmit = () => {
-console.log(`Date: ${date}, Price: ${price}, Amount: ${amount}`);
+const handleSubmit = async () => {
+const response = await postInput(date, price, amount, user.token);
+console.log(response);
 alert('Alcohol log submitted successfully!');
 setModalVisible(false); // Close the modal after submission
 };

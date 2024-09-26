@@ -128,4 +128,17 @@ export const postFeed = async (caption, image, token) => {
     return data;
 }
 
+export const postInput = async (date, price, amount, token) => {
+    const response = await fetch(`${URL}input`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ date, price, amount }),
+    });
+    const data = await response.json();
+    return data;
+}
+
 
