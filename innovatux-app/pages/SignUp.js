@@ -40,12 +40,51 @@ export default function SignUp({navigation}) {
     }
     return true;
   };
+
   const handleSignUp = () => {
+    const validatePassword = (input) => {
+      const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+      if (!regex.test(input)) {
+        Alert.alert('Invalid Password', 'Password must be at least 6 characters long and include at least one letter and one number.');
+        return false;
+      }
+      return true;
+    };
+    
+  
+    const validateUsername = (input) => {
+      const regex = /^[a-z0-9._]+$/;
+      if (!regex.test(input)) {
+        Alert.alert('Invalid Username', 'Username must contain only lowercase letters, numbers, dots, and underscores, with no spaces.');
+        return false;
+      }
+      if (input.length < 5 || input.length > 20) {
+        Alert.alert('Invalid Username', 'Username must be between 5 and 20 characters long.');
+        return false;
+      }
+      if (input.includes('..') || input.includes('__')) {
+        Alert.alert('Invalid Username', 'Username cannot contain consecutive dots or underscores.');
+        return false;
+      }
+      if (input.startsWith('.') || input.startsWith('_') || input.endsWith('.') || input.endsWith('_')) {
+        Alert.alert('Invalid Username', 'Username cannot start or end with a dot or underscore.');
+        return false;
+      }
+      return true;
+    };
+  
     async function fetchSign() {
       if (!first_name || !last_name || !email || !username || !age || !gender || !password) {
         Alert.alert('Missing Information', 'Please fill out all the fields.');
         return;
       }
+  
+      // Validate Username
+      if (!validateUsername(username)) return;
+  
+      // Validate Password
+      if (!validatePassword(password)) return;
+  
       console.log({
         first_name,
         last_name,
@@ -55,12 +94,19 @@ export default function SignUp({navigation}) {
         gender,
         password
       });
-      const response = await signup(first_name, last_name, username, email, password, age, gender);
-      console.log(response);
-      const userInfo = { token: response.token, id: response.user.id };
-      setUser(userInfo);
-      navigation.navigate('Preferences');
+  
+      try {
+        const response = await signup(first_name, last_name, username, email, password, age, gender);
+        console.log(response);
+        const userInfo = { token: response.token, id: response.user.id };
+        setUser(userInfo);
+        navigation.navigate('Preferences');
+      } catch (error) {
+        Alert.alert('Sign Up Error', 'There was an issue signing up. Please try again.');
+        console.error(error);
+      }
     }
+  
     fetchSign();
   };
   return (
