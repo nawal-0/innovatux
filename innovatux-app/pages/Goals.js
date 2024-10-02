@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { addPreference } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { globalStyles } from './Styles';
 
 function Goals({ navigation }) {
 
@@ -45,9 +46,10 @@ function Goals({ navigation }) {
   };
   
   return (
+    <ScrollView>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={styles.container}>
-      <Text style={styles.title}>User Preferences</Text>
+    <View style={globalStyles.container}>
+      <Text style={globalStyles.title}>User Preferences</Text>
       
       <View style={styles.inputTitle}>
         <Text style={styles.subtitle}>Goals</Text>
@@ -62,8 +64,8 @@ function Goals({ navigation }) {
           onChangeValue={handleSetGoal}
           setItems={setGoalItems}
           placeholder="Select Goal"
-          style={styles.dropdown}
-          dropDownStyle={styles.dropdown}
+          style={globalStyles.dropdown}
+          dropDownStyle={globalStyles.dropdown}
         />
       
       <View style={styles.inputTitle}>
@@ -71,9 +73,9 @@ function Goals({ navigation }) {
       </View>
 
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Eg: 10 standard drinks per week"
-        placeholderTextColor="#fff" // White text color for placeholder
+        //placeholderTextColor="#fff" // White text color for placeholder
         keyboardType="numeric" // Ensure numeric keyboard for number input
         onChangeText={(text) => {
           // Only allow integer input
@@ -88,9 +90,9 @@ function Goals({ navigation }) {
       </View>
 
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Weekly Spending Limit"
-        placeholderTextColor="#fff" // White text color for placeholder
+        //placeholderTextColor="#fff" // White text color for placeholder
         keyboardType="numeric" // Ensure numeric keyboard for number input
         onChangeText={(text) => {
           // Only allow integer input
@@ -129,7 +131,7 @@ function Goals({ navigation }) {
     
     </View>
     </TouchableWithoutFeedback>
-    
+    </ScrollView>
   );
 }
 
