@@ -20,7 +20,7 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f9f9f9',
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     padding: 20,
     backgroundColor: '#f5f5f5',
   },

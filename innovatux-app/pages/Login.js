@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { ImageBackground, Text, View, TextInput, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { postLogin } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import { globalStyles } from './Styles';
@@ -28,10 +28,12 @@ function Login({ navigation }) {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* Image at the top */}
         <View style={styles.imageContainer}>
-            <Image source={require('../assets/alcohol.png')} style={styles.image} />
+            <Image source={require('../assets/alcohol2.png')} style={styles.image} />
           </View>
+
         <View style={globalStyles.container}>
           
+
           <Text style={globalStyles.title}>LOGIN</Text>
           <TextInput
             style={globalStyles.input}
@@ -69,18 +71,23 @@ const styles = StyleSheet.create({
   imageContainer: {
     overflow: 'hidden', // Ensure that the overflow is hidden to show only the top half
     width: '100%', // Set a width for the image
-    height: '30%', // Set a height for half-circle effect
-    justifyContent: 'flex-end',
-    borderTopLeftRadius: 0,
+    height: '40%', // Set a height for half-circle effect
+    // justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10
+    // borderTopLeftRadius: 0,
     //borderBottomRightRadius: 100,
     //borderBottomLeftRadius: 100
   },
   image: {
-    width: '100%',
+    width: '110%',
     height: '100%',
-    borderTopLeftRadius: 0,
-    borderBottomRightRadius: 100,
-    borderBottomLeftRadius: 100
+    // borderTopLeftRadius: 0,
+    borderBottomRightRadius: 200,
+    borderBottomLeftRadius: 200,
+    // borderTopLeftRadius: 190,
+    // borderTopRightRadius: 190,
+    // top: -90
     //width: 150, // Adjust width as needed
     //height: 150, // Adjust height as needed
     //borderRadius: 75, // Half of the width/height to make it circular
