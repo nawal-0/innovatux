@@ -47,13 +47,15 @@ class HomeController extends Controller
         // Get the start and end of the week
         list($startOfWeek, $endOfWeek) = $this->getStartAndEndOfWeek();
 
-        $orders = Input::where('user_id', $request->$user()->id)->whereBetween('order_date', [$startOfWeek, $endOfWeek])->groupBy('order_date')
+        $orders = Input::where('user_id', $request->user()->id)
+            ->whereBetween('order_date', [$startOfWeek, $endOfWeek])->groupBy('order_date')
             ->selectRaw('order_date, sum(quantity) as quantity, sum(price) as price')
             ->get();
 
         // Map the day numbers to actual days
         $daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         $orderData = [];
+        
         
         foreach ($orders as $order) {
             // Map date to day of the week
