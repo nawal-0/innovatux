@@ -4,6 +4,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 import { logout, getThings, addPreference, changePassword } from '../api-functions';
 import { useUser } from '../components/UserContext';
+import { globalStyles } from './Styles';
 
 export default function SettingsPage( { navigation } ) {
   const { user } = useUser();
@@ -108,9 +109,10 @@ export default function SettingsPage( { navigation } ) {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={globalStyles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <Text style={styles.title}>
+        <Text style={globalStyles.title}>
           <Text style={styles.icon}>⚙️</Text> Settings
         </Text>
       </View>
@@ -153,8 +155,8 @@ export default function SettingsPage( { navigation } ) {
         setValue={setGoal}
         setItems={setGoalItems}
         placeholder="Select a Goal"
-        style={styles.dropdown}
-        dropDownStyle={styles.dropdown} 
+        style={globalStyles.dropdown}
+        dropDownStyle={globalStyles.dropdown} 
       />
 
        {/* Options */}
@@ -191,8 +193,8 @@ export default function SettingsPage( { navigation } ) {
       </View>
 
       {/* Logout Button */}
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
+      <TouchableOpacity style={globalStyles.button} onPress={handleLogout}>
+        <Text style={globalStyles.buttonText}>Logout</Text>
       </TouchableOpacity>
 
       {/* Modals */}
@@ -279,7 +281,7 @@ export default function SettingsPage( { navigation } ) {
           </View>
         </View>
       </Modal>
-
+      </View>
     </ScrollView>
   );
 }

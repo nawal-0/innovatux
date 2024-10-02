@@ -3,13 +3,11 @@ import { Text, View, TextInput, StyleSheet, TouchableOpacity, Image, KeyboardAvo
 import { postLogin } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import { globalStyles } from './Styles';
-
 function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const { setUser } = useUser();
-
   const handleLogin = () => {
     async function fetchUsers() {
       console.log(email, password);
@@ -25,7 +23,6 @@ function Login({ navigation }) {
     }
     fetchUsers();
   };
-
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -35,9 +32,7 @@ function Login({ navigation }) {
           </View>
         <View style={globalStyles.container}>
           
-
           <Text style={globalStyles.title}>LOGIN</Text>
-
           <TextInput
             style={globalStyles.input}
             placeholder="Username or Email"
@@ -52,11 +47,9 @@ function Login({ navigation }) {
             //placeholderTextColor="#fff" // White text color for placeholder
           />
           {error && <Text style={styles.userText}>{error}</Text>}
-
           <TouchableOpacity style={globalStyles.button} onPress={handleLogin}>
             <Text style={globalStyles.buttonText}>Login</Text>
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.signupText}>Sign Up</Text>
           </TouchableOpacity>
@@ -65,7 +58,6 @@ function Login({ navigation }) {
     </KeyboardAvoidingView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -80,16 +72,13 @@ const styles = StyleSheet.create({
     height: '30%', // Set a height for half-circle effect
     justifyContent: 'flex-end',
     borderTopLeftRadius: 0,
-
     //borderBottomRightRadius: 100,
     //borderBottomLeftRadius: 100
-
   },
   image: {
     width: '100%',
     height: '100%',
     borderTopLeftRadius: 0,
-
     borderBottomRightRadius: 100,
     borderBottomLeftRadius: 100
     //width: 150, // Adjust width as needed
@@ -149,5 +138,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   }
 });
-
 export default Login;

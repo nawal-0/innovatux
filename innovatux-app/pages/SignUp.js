@@ -4,7 +4,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useUser } from '../components/UserContext';
 import { signup } from '../api-functions';
 import { globalStyles } from './Styles';
-
 export default function SignUp({navigation}) {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
@@ -13,7 +12,6 @@ export default function SignUp({navigation}) {
   const [age, setAge] = useState('');
   const [password, setPassword] = useState('');
   const { setUser } = useUser();
-
   // DropDownPicker state
   const [open, setOpen] = useState(false);
   const [gender, setGender] = useState(null);
@@ -22,33 +20,26 @@ export default function SignUp({navigation}) {
     { label: 'Female', value: 'Female' },
     { label: 'Other', value: 'Other' }
   ]);
-
   const validateUsername = (input) => {
     const regex = /^[a-z0-9._]+$/;
-
     if (!regex.test(input)) {
       Alert.alert('Invalid Username', 'Username must contain only lowercase letters, numbers, dots, and underscores, with no spaces.');
       return false;
     }
-
     if (input.length < 5 || input.length > 20) {
       Alert.alert('Invalid Username', 'Username must be between 5 and 20 characters long.');
       return false;
     }
-
     if (input.includes('..') || input.includes('__')) {
       Alert.alert('Invalid Username', 'Username cannot contain consecutive dots or underscores.');
       return false;
     }
-
     if (input.startsWith('.') || input.startsWith('_') || input.endsWith('.') || input.endsWith('_')) {
       Alert.alert('Invalid Username', 'Username cannot start or end with a dot or underscore.');
       return false;
     }
-
     return true;
   };
-
   const handleSignUp = () => {
     async function fetchSign() {
       if (!first_name || !last_name || !email || !username || !age || !gender || !password) {
@@ -72,7 +63,6 @@ export default function SignUp({navigation}) {
     }
     fetchSign();
   };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -84,7 +74,6 @@ export default function SignUp({navigation}) {
         renderItem={() => (
           <View style={globalStyles.container}>
             <Text style={globalStyles.title}>Sign Up</Text>
-
             {/* First Name */}
             <Text style={styles.label}>First Name</Text>
             <TextInput
@@ -93,7 +82,6 @@ export default function SignUp({navigation}) {
               value={first_name}
               onChangeText={setFirstName}
             />
-
             {/* Last Name */}
             <Text style={styles.label}>Last Name</Text>
             <TextInput
@@ -102,7 +90,6 @@ export default function SignUp({navigation}) {
               value={last_name}
               onChangeText={setLastName}
             />
-
             {/* Email */}
             <Text style={styles.label}>Email</Text>
             <TextInput
@@ -112,7 +99,6 @@ export default function SignUp({navigation}) {
               onChangeText={setEmail}
               keyboardType="email-address"
             />
-
             {/* Username */}
             <Text style={styles.label}>Username</Text>
             <TextInput
@@ -122,7 +108,6 @@ export default function SignUp({navigation}) {
               onChangeText={setUsername}
               onBlur={() => validateUsername(username)}
             />
-
             {/* Age */}
             <Text style={styles.label}>Age</Text>
             <TextInput
@@ -132,7 +117,6 @@ export default function SignUp({navigation}) {
               value={age}
               onChangeText={setAge}
             />
-
             {/* Gender Dropdown */}
             <Text style={styles.label}>Gender</Text>
             <DropDownPicker
@@ -146,7 +130,6 @@ export default function SignUp({navigation}) {
               style={globalStyles.dropdown}
               dropDownStyle={globalStyles.dropdown}
             />
-
             {/* Password */}
             <Text style={styles.label}>Password</Text>
             <TextInput
@@ -156,11 +139,9 @@ export default function SignUp({navigation}) {
               value={password}
               onChangeText={setPassword}
             />
-
             <TouchableOpacity style={globalStyles.button} onPress={handleSignUp}>
               <Text style={globalStyles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
-
             <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
               <Text style={styles.loginText}>Log In</Text>
             </TouchableOpacity>
@@ -171,7 +152,6 @@ export default function SignUp({navigation}) {
     </KeyboardAvoidingView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
