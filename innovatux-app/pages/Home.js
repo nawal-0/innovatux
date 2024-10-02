@@ -1,22 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, Modal, TextInput, RefreshControl, View } from 'react-native';
 import { LineChart, BarChart } from 'react-native-chart-kit';
 import { Picker } from '@react-native-picker/picker';
 import { postInput, getThings } from '../api-functions';
 import { useUser } from '../components/UserContext';
-
-// Function to generate random data
-// const generateRandomData = (numPoints) => {
-// let data = [];
-// let currentValue = 50; // Start with a base value
-
-// for (let i = 0; i < numPoints; i++) {
-// currentValue += Math.floor(Math.random() * 11) - 5; // Random change between -5 and +5
-// data.push(Math.max(currentValue, 0)); // Ensure no negative values
-// }
-
-// return data;
-// };
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -26,9 +13,8 @@ const [modalVisible, setModalVisible] = useState(false);
 const [date, setDate] = useState('');
 const [price, setPrice] = useState('');
 const [amount, setAmount] = useState('');
-//const [volume, setVolume] = useState('200ml');
-//const [weeklyData, setWeeklyData] = useState([]);
 const { user } = useUser();
+const [refreshing, setRefreshing] = useState(false);
 
 const [alcoholData, setAlcoholData] = useState({
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -40,38 +26,42 @@ const [savingsData, setSavingsData] = useState({
     datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
 });
 
-    // Fetch weekly orders on component mount
+    const fetchOrders = async () => {
+    const data = await getThings("input", user.token);
+    console.log('data', data);
+    const quantities = [0, 0, 0, 0, 0, 0, 0];
+    const prices = [0, 0, 0, 0, 0, 0, 0];
+
+    data.forEach(dayData => {
+        const dayIndex = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].indexOf(dayData.day);
+        if (dayIndex >= 0) {
+            quantities[dayIndex] = dayData.total_quantity;
+            prices[dayIndex] = dayData.total_price;
+        }
+    });
+
+    // Update chart data
+    setAlcoholData(prevData => ({
+        ...prevData,
+        datasets: [{ data: quantities }],
+    }));
+
+    setSavingsData(prevData => ({
+        ...prevData,
+        datasets: [{ data: prices }],
+    }));
+}
+
+// Fetch weekly orders on component mount
 useEffect(() => {
-    console.log("useEffect triggere");
-    async function fetchOrders() {
-        //console.log("fetch triggered");
-        const data = await getThings("input", user.token);
-        console.log('data', data);
-        //setWeeklyData(data);
-        const quantities = [0, 0, 0, 0, 0, 0, 0];
-        const prices = [0, 0, 0, 0, 0, 0, 0];
-
-        data.forEach(dayData => {
-            const dayIndex = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].indexOf(dayData.day);
-            if (dayIndex >= 0) {
-                quantities[dayIndex] = dayData.total_quantity;
-                prices[dayIndex] = dayData.total_price;
-            }
-        });
-
-        // Update chart data
-        setAlcoholData(prevData => ({
-            ...prevData,
-            datasets: [{ data: quantities }],
-        }));
-
-        setSavingsData(prevData => ({
-            ...prevData,
-            datasets: [{ data: prices }],
-        }));
-    }
     fetchOrders();
 }, []);
+
+const onRefresh = async () => {
+    setRefreshing(true);
+    fetchOrders();
+    setRefreshing(false);
+}
 
 // Handle form submission
 const handleSubmit = async () => {
@@ -82,7 +72,8 @@ setModalVisible(false); // Close the modal after submission
 };    
 
 return (
-<View style={styles.container}>
+<ScrollView style={styles.container}
+refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 <Text style={styles.title}>Home</Text>
 
 <Text style={styles.subtitle}>Alcohol Intake</Text>
@@ -179,7 +170,7 @@ onChangeText={setAmount}
 </View>
 </View>
 </Modal>
-</View>
+</ScrollView>
 );
 }
 

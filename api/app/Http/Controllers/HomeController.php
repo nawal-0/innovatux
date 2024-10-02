@@ -19,6 +19,7 @@ class HomeController extends Controller
         $input->price = $request->price;
         $input->order_date = $request->date;
         $input->save();
+
         return response()->json(['message' => 'Input added',], 201);
     }
 
@@ -43,19 +44,18 @@ class HomeController extends Controller
 
     public function retrieval(Request $request)
     {
-        //Log::info('Starting retrieval...');
         // Get the start and end of the week
         list($startOfWeek, $endOfWeek) = $this->getStartAndEndOfWeek();
 
         $orders = Input::where('user_id', $request->user()->id)
-            ->whereBetween('order_date', [$startOfWeek, $endOfWeek])
-            ->groupBy('order_date')
+            ->whereBetween('order_date', [$startOfWeek, $endOfWeek])->groupBy('order_date')
             ->selectRaw('order_date, sum(quantity) as quantity, sum(price) as price')
             ->get();
 
         // Map the day numbers to actual days
         $daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         $orderData = [];
+        
         
         foreach ($orders as $order) {
             // Map date to day of the week
