@@ -1,6 +1,13 @@
 import { StyleSheet } from 'react-native';
 
 export const globalStyles = StyleSheet.create({
+  dropdown: {
+    backgroundColor: '#ffffff',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 15,
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -12,17 +19,22 @@ export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5',
   },
   header: {
     alignItems: 'center',
     marginTop: 20,
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#2f4f4f',
-    flexDirection: 'row',
-    alignItems: 'center',
+    marginBottom: 24,
+    textAlign: 'center',
+    color: '#245C3B', // Colour for title
+    textTransform: 'uppercase', // Make the text uppercase
   },
   profileSection: {
     flexDirection: 'row',

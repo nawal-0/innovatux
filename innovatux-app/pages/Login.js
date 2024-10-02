@@ -33,19 +33,19 @@ function Login({ navigation }) {
         <View style={styles.imageContainer}>
             <Image source={require('../assets/alcohol.png')} style={styles.image} />
           </View>
-        <View style={[globalStyles.container, styles.container]}>
+        <View style={globalStyles.container}>
           
 
-          <Text style={styles.title}>LOGIN</Text>
+          <Text style={globalStyles.title}>LOGIN</Text>
 
           <TextInput
-            style={[globalStyles.input, styles.input]}
+            style={globalStyles.input}
             placeholder="Username or Email"
             onChangeText={setEmail}
             //placeholderTextColor="#fff" // White text color for placeholder
           />
           <TextInput
-            style={[globalStyles.input, styles.input]}
+            style={globalStyles.input}
             placeholder="Password"
             secureTextEntry
             onChangeText={setPassword}

@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingVi
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useUser } from '../components/UserContext';
 import { signup } from '../api-functions';
+import { globalStyles } from './Styles';
 
 export default function SignUp({navigation}) {
   const [first_name, setFirstName] = useState('');
@@ -81,13 +82,13 @@ export default function SignUp({navigation}) {
       <FlatList
         data={[{ key: 'form' }]}  // Dummy data to make FlatList work
         renderItem={() => (
-          <View style={styles.container}>
-            <Text style={styles.header}>Sign Up</Text>
+          <View style={globalStyles.container}>
+            <Text style={globalStyles.title}>Sign Up</Text>
 
             {/* First Name */}
             <Text style={styles.label}>First Name</Text>
             <TextInput
-              style={styles.input}
+              style={globalStyles.input}
               placeholder="First Name"
               value={first_name}
               onChangeText={setFirstName}
@@ -96,7 +97,7 @@ export default function SignUp({navigation}) {
             {/* Last Name */}
             <Text style={styles.label}>Last Name</Text>
             <TextInput
-              style={styles.input}
+              style={globalStyles.input}
               placeholder="Last Name"
               value={last_name}
               onChangeText={setLastName}
@@ -105,7 +106,7 @@ export default function SignUp({navigation}) {
             {/* Email */}
             <Text style={styles.label}>Email</Text>
             <TextInput
-              style={styles.input}
+              style={globalStyles.input}
               placeholder="Email"
               value={email}
               onChangeText={setEmail}
@@ -115,7 +116,7 @@ export default function SignUp({navigation}) {
             {/* Username */}
             <Text style={styles.label}>Username</Text>
             <TextInput
-              style={styles.input}
+              style={globalStyles.input}
               placeholder="Username"
               value={username}
               onChangeText={setUsername}
@@ -125,7 +126,7 @@ export default function SignUp({navigation}) {
             {/* Age */}
             <Text style={styles.label}>Age</Text>
             <TextInput
-              style={styles.input}
+              style={globalStyles.input}
               placeholder="Age"
               keyboardType="numeric"
               value={age}
@@ -142,22 +143,22 @@ export default function SignUp({navigation}) {
               setValue={setGender}
               setItems={setGenderItems}
               placeholder="Select Gender"
-              style={styles.dropdown}
-              dropDownStyle={styles.dropdown}
+              style={globalStyles.dropdown}
+              dropDownStyle={globalStyles.dropdown}
             />
 
             {/* Password */}
             <Text style={styles.label}>Password</Text>
             <TextInput
-              style={styles.input}
+              style={globalStyles.input}
               placeholder="Password"
               secureTextEntry={true}
               value={password}
               onChangeText={setPassword}
             />
 
-            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-              <Text style={styles.buttonText}>Sign Up</Text>
+            <TouchableOpacity style={globalStyles.button} onPress={handleSignUp}>
+              <Text style={globalStyles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>

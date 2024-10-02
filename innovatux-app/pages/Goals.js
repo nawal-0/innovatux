@@ -4,6 +4,7 @@ import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity, Keyboard, 
 import { addPreference } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { globalStyles } from './Styles';
 
 function Goals({ navigation }) {
 
@@ -47,8 +48,8 @@ function Goals({ navigation }) {
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={styles.container}>
-      <Text style={styles.title}>User Preferences</Text>
+    <View style={globalStyles.container}>
+      <Text style={globalStyles.title}>User Preferences</Text>
       
       <View style={styles.inputTitle}>
         <Text style={styles.subtitle}>Goals</Text>
@@ -63,8 +64,8 @@ function Goals({ navigation }) {
           onChangeValue={handleSetGoal}
           setItems={setGoalItems}
           placeholder="Select Goal"
-          style={styles.dropdown}
-          dropDownStyle={styles.dropdown}
+          style={globalStyles.dropdown}
+          dropDownStyle={globalStyles.dropdown}
         />
       
       <View style={styles.inputTitle}>
@@ -72,9 +73,9 @@ function Goals({ navigation }) {
       </View>
 
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Weekly Consumption Limit"
-        placeholderTextColor="#fff" // White text color for placeholder
+        //placeholderTextColor="#fff" // White text color for placeholder
         onChangeText={(text) => setPreferences({ ...preferences, consumption_threshold: text })}
       />
 
@@ -83,9 +84,9 @@ function Goals({ navigation }) {
       </View>
 
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Weekly Spending Limit"
-        placeholderTextColor="#fff" // White text color for placeholder
+        //placeholderTextColor="#fff" // White text color for placeholder
         onChangeText={(text) => setPreferences({ ...preferences, savings_threshold: text })}
       />
       
@@ -112,8 +113,8 @@ function Goals({ navigation }) {
         />
       </View>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handlePress}>
-        <Text style={styles.loginText}>Submit</Text>
+      <TouchableOpacity style={globalStyles.button} onPress={handlePress}>
+        <Text style={globalStyles.buttonText}>Submit</Text>
       </TouchableOpacity>
     
     </View>
