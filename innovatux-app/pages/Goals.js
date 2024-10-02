@@ -1,10 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { addPreference } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { globalStyles } from './Styles';
 
 function Goals({ navigation }) {
 
@@ -48,8 +46,8 @@ function Goals({ navigation }) {
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>User Preferences</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>User Preferences</Text>
       
       <View style={styles.inputTitle}>
         <Text style={styles.subtitle}>Goals</Text>
@@ -64,30 +62,42 @@ function Goals({ navigation }) {
           onChangeValue={handleSetGoal}
           setItems={setGoalItems}
           placeholder="Select Goal"
-          style={globalStyles.dropdown}
-          dropDownStyle={globalStyles.dropdown}
+          style={styles.dropdown}
+          dropDownStyle={styles.dropdown}
         />
       
       <View style={styles.inputTitle}>
-        <Text style={styles.subtitle}>Weekly Consumption Limit</Text>
+        <Text style={styles.subtitle}>Weekly Consumption Limit </Text>
       </View>
 
       <TextInput
-        style={globalStyles.input}
-        placeholder="Weekly Consumption Limit"
-        //placeholderTextColor="#fff" // White text color for placeholder
-        onChangeText={(text) => setPreferences({ ...preferences, consumption_threshold: text })}
+        style={styles.input}
+        placeholder="Eg: 10 standard drinks per week"
+        placeholderTextColor="#fff" // White text color for placeholder
+        keyboardType="numeric" // Ensure numeric keyboard for number input
+        onChangeText={(text) => {
+          // Only allow integer input
+          const parsed = text.replace(/[^0-9]/g, '');
+          setPreferences({ ...preferences, consumption_threshold: parsed });
+        }}
+        value={preferences.consumption_threshold}
       />
 
       <View style={styles.inputTitle}>
-        <Text style={styles.subtitle}>Weekly Spending Limit</Text>
+        <Text style={styles.subtitle}>Weekly Spending Limit ($)</Text>
       </View>
 
       <TextInput
-        style={globalStyles.input}
+        style={styles.input}
         placeholder="Weekly Spending Limit"
-        //placeholderTextColor="#fff" // White text color for placeholder
-        onChangeText={(text) => setPreferences({ ...preferences, savings_threshold: text })}
+        placeholderTextColor="#fff" // White text color for placeholder
+        keyboardType="numeric" // Ensure numeric keyboard for number input
+        onChangeText={(text) => {
+          // Only allow integer input
+          const parsed = text.replace(/[^0-9]/g, '');
+          setPreferences({ ...preferences, savings_threshold: parsed });
+        }}
+        value={preferences.savings_threshold}
       />
       
     
@@ -113,8 +123,8 @@ function Goals({ navigation }) {
         />
       </View>
 
-      <TouchableOpacity style={globalStyles.button} onPress={handlePress}>
-        <Text style={globalStyles.buttonText}>Submit</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handlePress}>
+        <Text style={styles.loginText}>Submit</Text>
       </TouchableOpacity>
     
     </View>
