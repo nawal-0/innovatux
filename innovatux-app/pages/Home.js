@@ -6,17 +6,17 @@ import { postInput, getThings } from '../api-functions';
 import { useUser } from '../components/UserContext';
 
 // Function to generate random data
-const generateRandomData = (numPoints) => {
-let data = [];
-let currentValue = 50; // Start with a base value
+// const generateRandomData = (numPoints) => {
+// let data = [];
+// let currentValue = 50; // Start with a base value
 
-for (let i = 0; i < numPoints; i++) {
-currentValue += Math.floor(Math.random() * 11) - 5; // Random change between -5 and +5
-data.push(Math.max(currentValue, 0)); // Ensure no negative values
-}
+// for (let i = 0; i < numPoints; i++) {
+// currentValue += Math.floor(Math.random() * 11) - 5; // Random change between -5 and +5
+// data.push(Math.max(currentValue, 0)); // Ensure no negative values
+// }
 
-return data;
-};
+// return data;
+// };
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -27,15 +27,48 @@ const [date, setDate] = useState('');
 const [price, setPrice] = useState('');
 const [amount, setAmount] = useState('');
 //const [volume, setVolume] = useState('200ml');
-const [weeklyData, setWeeklyData] = useState([]);
+//const [weeklyData, setWeeklyData] = useState([]);
 const { user } = useUser();
+
+const [alcoholData, setAlcoholData] = useState({
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
+});
+
+const [savingsData, setSavingsData] = useState({
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
+});
 
     // Fetch weekly orders on component mount
 useEffect(() => {
+    console.log("useEffect triggere");
     async function fetchOrders() {
+        //console.log("fetch triggered");
         const data = await getThings("input", user.token);
         console.log('data', data);
-        setWeeklyData(data);
+        //setWeeklyData(data);
+        const quantities = [0, 0, 0, 0, 0, 0, 0];
+        const prices = [0, 0, 0, 0, 0, 0, 0];
+
+        data.forEach(dayData => {
+            const dayIndex = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].indexOf(dayData.day);
+            if (dayIndex >= 0) {
+                quantities[dayIndex] = dayData.total_quantity;
+                prices[dayIndex] = dayData.total_price;
+            }
+        });
+
+        // Update chart data
+        setAlcoholData(prevData => ({
+            ...prevData,
+            datasets: [{ data: quantities }],
+        }));
+
+        setSavingsData(prevData => ({
+            ...prevData,
+            datasets: [{ data: prices }],
+        }));
     }
     fetchOrders();
 }, []);
@@ -46,27 +79,7 @@ const response = await postInput(date, price, amount, user.token);
 console.log(response);
 alert('Alcohol log submitted successfully!');
 setModalVisible(false); // Close the modal after submission
-};
-
-// Chart data
-const alcoholData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [
-    {
-    data: generateRandomData(7),
-    },
-    ],
-    };
-    
-    const savingsData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [
-    {
-    data: generateRandomData(7),
-    },
-    ],
-    };
-    
+};    
 
 return (
 <View style={styles.container}>
@@ -153,17 +166,6 @@ keyboardType="numeric"
 value={amount}
 onChangeText={setAmount}
 />
-
-{/* <Text style={styles.label}>Volume</Text>
-<Picker
-selectedValue={volume}
-style={styles.picker}
-onValueChange={(itemValue) => setVolume(itemValue)}
->
-<Picker.Item label="200ml/7oz" value="200ml" />
-<Picker.Item label="500ml/17oz" value="500ml" />
-<Picker.Item label="1000ml/34oz" value="1000ml" />
-</Picker> */}
 
 {/* Submit Button */}
 <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>

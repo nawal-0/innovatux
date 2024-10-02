@@ -43,6 +43,7 @@ export const getThings = async (item, token) => {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
+            //'Content-Type': 'application/json',
         },
     });
         const data = await response.json();
