@@ -4,6 +4,7 @@ import { LineChart, BarChart } from 'react-native-chart-kit';
 import { Picker } from '@react-native-picker/picker';
 import { postInput, getThings } from '../api-functions';
 import { useUser } from '../components/UserContext';
+import Notification from '../components/Notification';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -40,6 +41,8 @@ const [savingsData, setSavingsData] = useState({
         }
     });
 
+   
+
     // Update chart data
     setAlcoholData(prevData => ({
         ...prevData,
@@ -60,6 +63,10 @@ useEffect(() => {
 const onRefresh = async () => {
     setRefreshing(true);
     fetchOrders();
+    const response = await getThings("limit", user.token);
+    if (response.warning) {
+        alert(response.warning);
+    }
     setRefreshing(false);
 }
 
@@ -68,6 +75,9 @@ const handleSubmit = async () => {
 const response = await postInput(date, price, amount, user.token);
 console.log(response);
 alert('Alcohol log submitted successfully!');
+if (response.warning) {
+    alert(response.warning);
+}
 setModalVisible(false); // Close the modal after submission
 };    
 
@@ -75,7 +85,7 @@ return (
 <ScrollView style={styles.container}
 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 <Text style={styles.title}>Home</Text>
-
+{/* <Notification/> */}
 <Text style={styles.subtitle}>Alcohol Intake</Text>
 <LineChart
 data={alcoholData}
