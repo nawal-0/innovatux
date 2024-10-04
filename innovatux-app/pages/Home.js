@@ -99,12 +99,35 @@ setModalVisible(false); // Close the modal after submission
   const onDayPress = (day) => {
     setDate(day.dateString);
   };
+  const facts = [
+    "Honey never spoils.",
+    "Bananas are berries, but strawberries aren't.",
+    "A day on Venus is longer than a year on Venus.",
+    "ALCOHOL IKS BAD"
+  ];
+
+  const last_week = [
+    "Honey never spoils.",
+    "Bananas are berries, but strawberries aren't.",
+    "A day on Venus is longer than a year on Venus.",
+    "ALCOHOL IKS BAD"
+  ];
+
 
 return (
 <View style={globalStyles.container}>
 <ScrollView 
 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 <Text style={styles.title}>Home</Text>
+<Text style={styles.header}>Did You Know?</Text>
+      <View style={globalStyles.factsBox}>
+        {facts.map((fact, index) => (
+          <Text key={index} style={globalStyles.factText}>
+            {index + 1}. {fact}
+          </Text>
+        ))}
+      </View>
+
 {/* <Notification/> */}
 <Text style={styles.subtitle}>Alcohol Intake</Text>
 <LineChart

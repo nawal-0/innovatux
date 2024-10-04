@@ -118,4 +118,18 @@ export const globalStyles = StyleSheet.create({
     color: '#E1F9EB', // Text color for login button
     fontSize: 16,
   },
+  factsBox: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    backgroundColor: 'white',
+    width: '100%',
+    maxHeight: 200,
+    overflow: 'scroll', // Enable scrolling if necessary
+  },
+  factText: {
+    fontSize: 16,
+    marginVertical: 5,
+  },
 });
