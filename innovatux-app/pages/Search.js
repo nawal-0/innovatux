@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons'; // Ensure you have this package i
 // Sample data for followers and following
 const followersData = [
   { id: '1', name: 'Arif' },
-  { id: '2', name: 'Nawal' },
+  { id: '2', name: 'Sam' },
 ];
 
 const followingData = [
@@ -16,7 +16,7 @@ const followingData = [
 const allUsersData = [
   { id: '5', name: 'Rajanya' },
   { id: '6', name: 'Glenn' },
-  { id: '7', name: 'NewUser1' },
+  { id: '7', name: 'Nawal' },
 ];
 
 function SearchPage({ navigation }) {
