@@ -86,6 +86,7 @@ const onRefresh = async () => {
 
 // Handle form submission
 const handleSubmit = async () => {
+console.log('date', date);
 const response = await postInput(date, price, amount, user.token);
 console.log(response);
 alert('Alcohol log submitted successfully!');
@@ -95,10 +96,8 @@ if (response.warning) {
 setModalVisible(false); // Close the modal after submission
 };    
 
-const [selectedDate, setSelectedDate] = useState('');
-
   const onDayPress = (day) => {
-    setSelectedDate(day.dateString);
+    setDate(day.dateString);
   };
 
 return (
@@ -167,16 +166,9 @@ onRequestClose={() => setModalVisible(false)}
 <Calendar
         onDayPress={onDayPress}
         markedDates={{
-          [selectedDate]: { selected: true, marked: true, selectedColor: 'blue' },
+          [date]: { selected: true, marked: true, selectedColor: 'blue' },
         }}
-        // You can add additional props to customize the calendar
-      />
-{/* <TextInput
-style={styles.input}
-placeholder="YYYY-MM-DD"
-value={date}
-onChangeText={setDate}
-/> */}
+/>
 
 <Text style={styles.label}>Price</Text>
 <TextInput
