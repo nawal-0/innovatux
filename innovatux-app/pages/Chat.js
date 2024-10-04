@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../components/UserContext';
 import { postMessage, getThings } from '../api-functions';
@@ -14,7 +14,6 @@ export default function GroupChat({ route }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastMessageId, setLastMessageId] = useState(null);
 
-  
   const [message, setMessage] = useState('');
   const [isMessageSent, setIsMessageSent] = useState(false);
   // const [messages, setMessages] = useState([
@@ -47,8 +46,6 @@ export default function GroupChat({ route }) {
     return () => clearInterval(intervalID);
   }, [isMessageSent, lastMessageId]);
 
-
-
   const handleSendMessage = async () => {
     if (message.trim()) {
       const response = await postMessage(message, groupId, user.token);
@@ -74,14 +71,19 @@ export default function GroupChat({ route }) {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Adjust for keyboard on iOS and Android
+      keyboardVerticalOffset={90}  
+    >
 
-      <TouchableOpacity style={{ rmarginTop: 10, alignItems: 'left' }} 
+      <TouchableOpacity style={{ marginTop: 10, alignItems: 'left' }} 
       onPress={() => navigation.goBack()}>
         <Text style={{ marginLeft: 10, color: '#4CAF50', fontSize: 16 }}>Back</Text>
       </TouchableOpacity>
 
       <Text style={styles.header}>{groupName}</Text>
+
       <FlatList
         ref={chatListRef}
         data={messages}
@@ -103,10 +105,9 @@ export default function GroupChat({ route }) {
         <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
-
-
       </View>
-    </View>
+
+    </KeyboardAvoidingView>
   );
 }
 
