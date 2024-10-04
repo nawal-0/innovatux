@@ -1,12 +1,9 @@
-// NEW CODE
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, RefreshControl, TextInput, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';  // Import Ionicons for heart icons
 import * as ImagePicker from 'expo-image-picker';
-import Post from '../components/Post';
 import { postFeed, getThings } from '../api-functions';
 import { useUser } from '../components/UserContext';
-
 
 function Feed({ navigation }) {
   const { width } = Dimensions.get('window');
@@ -14,12 +11,11 @@ function Feed({ navigation }) {
   const { user } = useUser();
   const [refreshing, setRefreshing] = useState(false);
 
-
-  // State for image, caption, and posts
+  // State for image, caption, posts, and likes
   const [imageUri, setImageUri] = useState(null);
   const [caption, setCaption] = useState('');
   const [posts, setPosts] = useState([]);
-
+  const [likes, setLikes] = useState({});  // Track likes for each post
 
   // Request permission to access media library
   useEffect(() => {
@@ -31,17 +27,23 @@ function Feed({ navigation }) {
     })();
   }, []);
 
-  // function to fetch posts from the API
+  // Function to fetch posts from the API
   const fetchPosts = async () => {
     const data = await getThings('posts', user.token);
     setPosts(data);
+    
+    // Initialize likes state for each post
+    const initialLikes = {};
+    data.forEach((post) => {
+      initialLikes[post.id] = { count: post.likes || 0, liked: false };  // Keep track of like status
+    });
+    setLikes(initialLikes);
   };
 
-  // fetch posts when the component mounts
+  // Fetch posts when the component mounts
   useEffect(() => {
     fetchPosts();
-  }
-  , []);
+  }, []);
 
   // Pull to refresh functionality
   const onRefresh = async () => {
@@ -50,7 +52,6 @@ function Feed({ navigation }) {
     setRefreshing(false);
   };
 
-
   // Open image picker for user to select an image
   const handleSelectImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -58,118 +59,116 @@ function Feed({ navigation }) {
       quality: 1,
     });
 
-    // Check if the image was successfully picked
     if (result && !result.canceled && result.assets && result.assets.length > 0) {
-      setImageUri(result.assets[0].uri);  // Update the imageUri state
+      setImageUri(result.assets[0].uri);
     } else {
       Alert.alert('Cancelled', 'You cancelled the image picker.');
     }
   };
 
-  // // Add new post with image and caption
+  // Add new post with image and caption
   const handleAddPost = async () => {
     if (imageUri && caption) {
       const response = await postFeed(caption, imageUri, user.token);
-      setPosts([response, ...posts]);  // Add the new post to the top of the list
-      setImageUri(null);  // Reset image selection
-      setCaption('');     // Reset caption input
+      setPosts([response, ...posts]); // Add the new post to the top of the list
+      setImageUri(null); // Reset image selection
+      setCaption(''); // Reset caption input
     } else {
       Alert.alert('Incomplete', 'Please select an image and add a caption.');
     }
-
     setModalVisible(false);
-  
+  };
+
+  // Handle like button press for each post (toggle between liked and unliked)
+  const handleLike = (postId) => {
+    setLikes((prevLikes) => ({
+      ...prevLikes,
+      [postId]: {
+        count: prevLikes[postId].liked ? prevLikes[postId].count - 1 : prevLikes[postId].count + 1,  // Toggle like count
+        liked: !prevLikes[postId].liked,  // Toggle liked state
+      },
+    }));
   };
 
   return (
     <View style={styles.container}>
-      
-          {/* Add Post Section */}
-          {/* <Button title="+" onPress={() => setModalVisible(true)} /> */}
-          <TouchableOpacity style={styles.addPostButton} onPress={() => setModalVisible(true)}>
-            <Text style={styles.addPostButtonText}>Add Post</Text>
-          </TouchableOpacity>
+      {/* Add Post Section */}
+      <TouchableOpacity style={styles.addPostButton} onPress={() => setModalVisible(true)}>
+        <Text style={styles.addPostButtonText}>Add Post</Text>
+      </TouchableOpacity>
 
-
-          <Modal
+      <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        onRequestClose={() => setModalVisible(!modalVisible)}
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-
-          <TouchableOpacity
+            <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
             >
               <Text style={styles.closeText}>x</Text>
             </TouchableOpacity>
 
-          <View style={styles.addPostContainer}>
-          {/* Button to select image */}
-          <TouchableOpacity style={styles.selectImageButton} onPress={handleSelectImage}>
-            <Text style={styles.selectImageText}>Select Image</Text>
-          </TouchableOpacity>
+            <View style={styles.addPostContainer}>
+              {/* Button to select image */}
+              <TouchableOpacity style={styles.selectImageButton} onPress={handleSelectImage}>
+                <Text style={styles.selectImageText}>Select Image</Text>
+              </TouchableOpacity>
 
-          {/* Display the selected image */}
-          {imageUri && (
-            <Image source={{ uri: imageUri }} style={{ width: 100, height: 100, marginVertical: 10 }} />
-          )}
+              {/* Display the selected image */}
+              {imageUri && (
+                <Image source={{ uri: imageUri }} style={{ width: 100, height: 100, marginVertical: 10 }} />
+              )}
 
-          {/* Input for caption */}
-          <TextInput
-            style={styles.captionInput}
-            placeholder="Add a caption..."
-            value={caption}
-            onChangeText={setCaption}
-          />
+              {/* Input for caption */}
+              <TextInput
+                style={styles.captionInput}
+                placeholder="Add a caption..."
+                value={caption}
+                onChangeText={setCaption}
+              />
 
-          {/* Button to add post */}
-          <TouchableOpacity style={styles.addPostButton} onPress={handleAddPost}>
-            <Text style={styles.addPostButtonText}>Add Post</Text>
-          </TouchableOpacity>
-        </View>
-
+              {/* Button to add post */}
+              <TouchableOpacity style={styles.addPostButton} onPress={handleAddPost}>
+                <Text style={styles.addPostButtonText}>Add Post</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
-          
-          
-      <ScrollView style={styles.scroll} 
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />
-      }>
 
-          
-
-        {/* Map through posts and display them */}
-        {/* {posts.map(post => (
+      <ScrollView
+        style={styles.scroll}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {/* Map through posts and display them with likes */}
+        {posts.map((post) => (
           <View key={post.id} style={styles.postContainer}>
             <View style={styles.profileContainer}>
-              <Image style={styles.profileImage} source={post.profileImage} />
-              <Text>{post.username}</Text>
+              <Image style={styles.profileImage} source={{ uri: post.profileImage || 'https://example.com/default-avatar.png' }} />
+              <Text>{post.user.username}</Text>
             </View>
-            <Image style={[styles.postImage, { width: width * 0.9, height: width * 0.9 }]} source={{ uri: post.postImage }} />
+            <Image style={[styles.postImage, { width: width * 0.9, height: width * 0.9 }]} source={{ uri: post.image_path }} />
             <Text>{post.caption}</Text>
-          </View>
-        ))} */}
-        {posts.map(post => (
-          <Post
-            key={post.id}
-            username={post.user.username}
-            postImage={post.image_path}
-            profileImage={post.profileImage}
-            caption={post.caption}
-          />
-        ))}
 
+            {/* Likes section */}
+            <View style={styles.likeContainer}>
+              <TouchableOpacity onPress={() => handleLike(post.id)}>
+                <Ionicons
+                  name={likes[post.id]?.liked ? 'heart' : 'heart-outline'}  // Filled heart if liked, outline if not
+                  size={24}
+                  color={likes[post.id]?.liked ? 'red' : 'black'}  // Red color if liked
+                />
+              </TouchableOpacity>
+              <Text style={styles.likeText}>
+                {likes[post.id]?.count === 1 ? '1 like' : `${likes[post.id]?.count || 0} likes`}  {/* Show "1 like" for 1, "X likes" for more */}
+              </Text>
+            </View>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -177,7 +176,7 @@ function Feed({ navigation }) {
 
 const styles = StyleSheet.create({
   closeText: {
-    fontSize:30
+    fontSize: 30,
   },
   closeButton: {
     position: 'absolute',
@@ -198,13 +197,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scroll: {
-    paddingVertical: 50
+    paddingVertical: 50,
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    //padding: 16,
     backgroundColor: '#E1F9EB', // Background color
   },
   postContainer: {
@@ -229,12 +227,15 @@ const styles = StyleSheet.create({
     resizeMode: 'cover', // Cover image mode
     marginBottom: 10,
   },
-  // addPostContainer: {
-  //   flex: 1,
-  //   marginTop: 20,
-  //   width: '100%',
-  //   alignItems: 'center',
-  // },
+  likeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Aligns the likes section to the right
+    marginTop: 10, // Adds some space above the likes
+  },
+  likeText: {
+    marginLeft: 5, // Space between icon and text
+  },
   selectImageButton: {
     backgroundColor: '#245C3B',
     padding: 10,
@@ -255,6 +256,7 @@ const styles = StyleSheet.create({
   addPostButton: {
     marginTop: 30,
     backgroundColor: '#245C3B',
+
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
