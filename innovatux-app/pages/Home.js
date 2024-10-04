@@ -50,8 +50,6 @@ const [savingsData, setSavingsData] = useState({
         }
     });
 
-   
-
     // Update chart data
     setAlcoholData(prevData => ({
         ...prevData,
@@ -103,14 +101,14 @@ setModalVisible(false); // Close the modal after submission
     "Honey never spoils.",
     "Bananas are berries, but strawberries aren't.",
     "A day on Venus is longer than a year on Venus.",
-    "ALCOHOL IKS BAD"
+    "ALCOHOL IS BAD"
   ];
 
   const last_week = [
     "Honey never spoils.",
     "Bananas are berries, but strawberries aren't.",
     "A day on Venus is longer than a year on Venus.",
-    "ALCOHOL IKS BAD"
+    "ALCOHOL IS BAD"
   ];
 
 
@@ -262,7 +260,7 @@ marginVertical: 8,
 borderRadius: 16,
 },
 manualInputButton: {
-backgroundColor: '#4CAF50',
+backgroundColor: '#245C3B',
 padding: 12,
 borderRadius: 50,
 alignItems: 'center',

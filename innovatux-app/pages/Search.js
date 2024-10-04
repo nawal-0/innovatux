@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#EAF9F1',
+    backgroundColor: '#ffffff',
   },
   toggleContainer: {
     flexDirection: 'row',
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 10,
     borderRadius: 4,
-    borderColor: '#ddd',
+    borderColor: '#245C3B',
     borderWidth: 1,
     marginBottom: 16,
   },
@@ -167,11 +167,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: '#245C3B',
   },
   personName: {
     fontSize: 18,
-    color: '#333',
+    color: '#245C3B',
   },
   addButton: {
     backgroundColor: '#245C3B',

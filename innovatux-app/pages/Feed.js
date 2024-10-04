@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E1F9EB', // Background color
+    backgroundColor: '#ffffff', // Background color
   },
   postContainer: {
     backgroundColor: '#FFFFFF',

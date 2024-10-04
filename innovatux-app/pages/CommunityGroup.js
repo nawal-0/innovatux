@@ -93,7 +93,7 @@ export default function GroupSelection({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1F9EB', // Light green background
+    backgroundColor: '#ffffff', 
     padding: 16,
   },
   title: {
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#245C3B',
     padding: 10,
     borderRadius: 50,
     shadowColor: '#000',
