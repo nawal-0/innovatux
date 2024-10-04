@@ -32,3 +32,5 @@ Route::get('/posts', [PostController::class, 'index'])->middleware('auth:sanctum
 Route::post('/input', [HomeController::class, 'input'])->middleware('auth:sanctum');
 Route::get('/input', [HomeController::class, 'retrieval'])->middleware('auth:sanctum');
 Route::get('/limit', [HomeController::class, 'checkLimit'])->middleware('auth:sanctum');
+
+Route::get('/lastweek', [HomeController::class, 'getLastWeek'])->middleware('auth:sanctum');
