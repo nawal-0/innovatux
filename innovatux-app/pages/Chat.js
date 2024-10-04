@@ -13,38 +13,37 @@ export default function GroupChat({ route }) {
   const chatListRef = useRef(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastMessageId, setLastMessageId] = useState(null);
+  const [atBottom, setAtBottom] = useState(true);  // Track if user is precisely at the bottom
 
   const [message, setMessage] = useState('');
   const [isMessageSent, setIsMessageSent] = useState(false);
-  // const [messages, setMessages] = useState([
-  //   { id: '1', content: 'Welcome to the chat!', user_id: 'system' },
-  //   { id: '2', content: 'Feel free to share your experiences.', user_id: 'system' },
-  // ]);
-  const [messages, setMessages] = useState([]);
+
+  const [messages, setMessages] = useState([
+    { id: 'system-welcome', content: 'Welcome to the chat!', user_id: 'system' }
+  ]);
 
   useEffect(() => {
     const fetchMessages = async () => {
-      //const response = await getThings(`messages/${groupId}`, user.token);
       const endpoint = lastMessageId ? `messages/${groupId}?after=${lastMessageId}` : `messages/${groupId}`;
       const response = await getThings(endpoint, user.token);
 
-      //setMessages(response);
       if (response.length > 0 && response[response.length - 1].id !== lastMessageId) {
         const lastMessage = response[response.length - 1];
-        
         setLastMessageId(lastMessage.id);
         setMessages((prevMessages) => [...prevMessages, ...response]);
-        
       }
-      if (chatListRef.current && !isScrolled) {
+
+      // Auto-scroll only if the user is at the bottom
+      if (chatListRef.current && atBottom) {
         chatListRef.current.scrollToEnd({ animated: true });
       }
     };
+
     fetchMessages();
     const intervalID = setInterval(fetchMessages, 1000);
 
     return () => clearInterval(intervalID);
-  }, [isMessageSent, lastMessageId]);
+  }, [isMessageSent, lastMessageId, atBottom]);  // Add `atBottom` as a dependency
 
   const handleSendMessage = async () => {
     if (message.trim()) {
@@ -52,6 +51,15 @@ export default function GroupChat({ route }) {
       setIsMessageSent(!isMessageSent);
       setMessage('');
     }
+  };
+
+  // Adjust threshold to detect when user is at the bottom
+  const handleScroll = (event) => {
+    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
+
+    // Adjust threshold to be more flexible and avoid small miscalculations
+    const isAtBottom = contentOffset.y + layoutMeasurement.height >= contentSize.height - 20; 
+    setAtBottom(isAtBottom);
   };
 
   const renderMessage = ({ item }) => {
@@ -73,12 +81,10 @@ export default function GroupChat({ route }) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Adjust for keyboard on iOS and Android
-      keyboardVerticalOffset={90}  
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={90}
     >
-
-      <TouchableOpacity style={{ marginTop: 10, alignItems: 'left' }} 
-      onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={{ marginTop: 10, alignItems: 'left' }} onPress={() => navigation.goBack()}>
         <Text style={{ marginLeft: 10, color: '#4CAF50', fontSize: 16 }}>Back</Text>
       </TouchableOpacity>
 
@@ -90,6 +96,7 @@ export default function GroupChat({ route }) {
         renderItem={renderMessage}
         keyExtractor={(item) => item.id}
         style={styles.chatArea}
+        onScroll={handleScroll}  
         onScrollBeginDrag={() => setIsScrolled(true)}
         onScrollEndDrag={() => setIsScrolled(false)}
       />
@@ -106,7 +113,6 @@ export default function GroupChat({ route }) {
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       </View>
-
     </KeyboardAvoidingView>
   );
 }

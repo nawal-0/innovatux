@@ -20,6 +20,12 @@ const [amount, setAmount] = useState('');
 const { user } = useUser();
 const [refreshing, setRefreshing] = useState(false);
 
+const [lastWeek, setLastWeek] = useState({
+    total_price: 0,
+    total_quantity: 0,
+}
+);
+
 const [alcoholData, setAlcoholData] = useState({
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
@@ -61,6 +67,8 @@ const [savingsData, setSavingsData] = useState({
 // Fetch weekly orders on component mount
 useEffect(() => {
     fetchOrders();
+    const lastWeeks = getThings("lastweek", user.token);
+    setLastWeek(lastWeeks);
 }, []);
 
 const onRefresh = async () => {
@@ -70,6 +78,9 @@ const onRefresh = async () => {
     if (response.warning) {
         alert(response.warning);
     }
+    const lastWeeks = await getThings("lastweek", user.token);
+    console.log('lastWeeks', lastWeeks);
+    setLastWeek(lastWeeks);
     setRefreshing(false);
 }
 

@@ -81,9 +81,13 @@ class HomeController extends Controller
         return response()->json(['message' => 'You are within the consumption and price threshold'], 201);
     }
 
-    function getStartAndEndOfWeek()
+    function getStartAndEndOfWeek($offsetWeeks = 0)
     {
         $now = new DateTime();
+
+        if ($offsetWeeks) {
+            $now->modify("$offsetWeeks week");
+        }
         
         // Get the start of the week (Monday)
         $startOfWeek = clone $now->modify(('Monday' === $now->format('l')) ? 'this Monday' : 'last Monday');
@@ -126,5 +130,19 @@ class HomeController extends Controller
             ];
         }
         return response()->json($orderData, 200);
+    }
+
+    public function getLastWeek(Request $request) {
+        list($startOfWeek, $endOfWeek) = $this->getStartAndEndOfWeek(-1);
+
+        $orders = Input::where('user_id', $request->user()->id)
+        ->whereBetween('order_date', [$startOfWeek, $endOfWeek])
+        ->selectRaw('sum(quantity) as total_quantity, sum(price) as total_price')
+        ->first(); 
+
+        $totalQuantity = $orders->total_quantity ?? 0;
+        $totalPrice = $orders->total_price ?? 0;
+
+        return response()->json(['total_quantity' => $totalQuantity, 'total_price' => $totalPrice], 200);
     }
 }
