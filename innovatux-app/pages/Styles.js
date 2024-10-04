@@ -21,8 +21,7 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     flexGrow: 1,
     justifyContent: 'flex-start',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
+    padding: 16,
   },
   header: {
     alignItems: 'center',
