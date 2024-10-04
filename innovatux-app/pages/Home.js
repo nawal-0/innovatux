@@ -5,6 +5,9 @@ import { Picker } from '@react-native-picker/picker';
 import { postInput, getThings } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import Notification from '../components/Notification';
+import { globalStyles } from './Styles';
+import { Calendar } from 'react-native-calendars';
+
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -92,8 +95,15 @@ if (response.warning) {
 setModalVisible(false); // Close the modal after submission
 };    
 
+const [selectedDate, setSelectedDate] = useState('');
+
+  const onDayPress = (day) => {
+    setSelectedDate(day.dateString);
+  };
+
 return (
-<ScrollView style={styles.container}
+<View style={globalStyles.container}>
+<ScrollView 
 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 <Text style={styles.title}>Home</Text>
 {/* <Notification/> */}
@@ -154,12 +164,19 @@ onRequestClose={() => setModalVisible(false)}
 <Text style={styles.modalTitle}>Manual Alcohol Log Input</Text>
 
 <Text style={styles.label}>Date</Text>
-<TextInput
+<Calendar
+        onDayPress={onDayPress}
+        markedDates={{
+          [selectedDate]: { selected: true, marked: true, selectedColor: 'blue' },
+        }}
+        // You can add additional props to customize the calendar
+      />
+{/* <TextInput
 style={styles.input}
 placeholder="YYYY-MM-DD"
 value={date}
 onChangeText={setDate}
-/>
+/> */}
 
 <Text style={styles.label}>Price</Text>
 <TextInput
@@ -192,6 +209,7 @@ onChangeText={setAmount}
 </View>
 </Modal>
 </ScrollView>
+</View>
 );
 }
 
