@@ -149,6 +149,16 @@ borderRadius: 16,
 style={styles.chart}
 />
 
+<Text style={styles.header}>Weekly Savings</Text>
+      <View style={globalStyles.factsBox}>
+        {facts.map((last_week, index) => (
+          <Text key={index} style={globalStyles.factText}>
+            {index + 1}. {last_week}
+          </Text>
+        ))}
+      </View>
+
+
 <Text style={styles.subtitle}>Savings</Text>
 <BarChart
 data={savingsData}
