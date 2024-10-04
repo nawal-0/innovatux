@@ -173,7 +173,7 @@ export default function SettingsPage( { navigation } ) {
       <View style={styles.switchRow}>
         <Text style={styles.optionLabel}>Push Notifications</Text>
         <Switch
-          trackColor={{ false: '#ddd', true: '#4CAF50' }}  // green toggle when enabled
+          trackColor={{ false: '#ddd', true: '#245C3B' }}  // green toggle when enabled
           thumbColor={userSettings.notification ? '#fff' : '#f4f3f4'}
           onValueChange={togglePushNotifications}
           value={userSettings.notification}
@@ -184,7 +184,7 @@ export default function SettingsPage( { navigation } ) {
       <View style={styles.switchRow}>
         <Text style={styles.optionLabel}>Public</Text>
         <Switch
-          trackColor={{ false: '#ddd', true: '#4CAF50' }}  // green toggle when enabled
+          trackColor={{ false: '#ddd', true: '#245C3B' }}  // green toggle when enabled
           thumbColor={userSettings.public ? '#fff' : '#f4f3f4'}
           onValueChange={togglePublic}
           value={userSettings.public}
