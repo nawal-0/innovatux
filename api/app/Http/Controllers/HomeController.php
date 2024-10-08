@@ -19,10 +19,8 @@ class HomeController extends Controller
         $input->quantity = $request->amount;
         $input->price = $request->price;
         
-        if ($request->order_date) {
-            $input->order_date = $request->order_date;
-        } else {
-            $input->order_date = now()->toDateString();
+        if ($request->date) {
+            $input->order_date = $request->date;
         }
         $input->save();
 

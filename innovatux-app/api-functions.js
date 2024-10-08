@@ -142,4 +142,17 @@ export const postInput = async (date, price, amount, token) => {
     return data;
 }
 
+export const followUser = async (user_id, token) => {
+    const response = await fetch(`${URL}follow`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ user_id }),
+    });
+    const message = await response.json();
+    return message;
+}
+
 

@@ -8,35 +8,34 @@ import Notification from '../components/Notification';
 import { globalStyles } from './Styles';
 import { Calendar } from 'react-native-calendars';
 
-
 const screenWidth = Dimensions.get('window').width;
 
 export default function Home() {
-// States for manual input modal
-const [modalVisible, setModalVisible] = useState(false);
-const [date, setDate] = useState('');
-const [price, setPrice] = useState('');
-const [amount, setAmount] = useState('');
-const { user } = useUser();
-const [refreshing, setRefreshing] = useState(false);
+  // States for manual input modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [date, setDate] = useState('');
+  const [price, setPrice] = useState('');
+  const [amount, setAmount] = useState('');
+  const { user } = useUser();
+  const [refreshing, setRefreshing] = useState(false);
 
-const [lastWeek, setLastWeek] = useState({
-    total_price: 0,
-    total_quantity: 0,
-}
-);
+  const [lastWeek, setLastWeek] = useState({
+      total_price: 0,
+      total_quantity: 0,
+  }
+  );
 
-const [alcoholData, setAlcoholData] = useState({
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
-});
+  const [alcoholData, setAlcoholData] = useState({
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
+  });
 
-const [savingsData, setSavingsData] = useState({
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
-});
+  const [savingsData, setSavingsData] = useState({
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
+  });
 
-    const fetchOrders = async () => {
+  const fetchOrders = async () => {
     const data = await getThings("input", user.token);
     console.log('data', data);
     const quantities = [0, 0, 0, 0, 0, 0, 0];
@@ -48,7 +47,7 @@ const [savingsData, setSavingsData] = useState({
             quantities[dayIndex] = dayData.total_quantity;
             prices[dayIndex] = dayData.total_price;
         }
-    });
+  });
 
     // Update chart data
     setAlcoholData(prevData => ({
@@ -63,13 +62,16 @@ const [savingsData, setSavingsData] = useState({
 }
 
 // Fetch weekly orders on component mount
-useEffect(() => {
-    fetchOrders();
-    const lastWeeks = getThings("lastweek", user.token);
-    setLastWeek(lastWeeks);
-}, []);
+  useEffect(() => {
+    const loadContent = async () => {
+      fetchOrders();
+      const lastWeeks = await getThings("lastweek", user.token);
+      setLastWeek(lastWeeks);
+    }
+    loadContent();
+  }, []);
 
-const onRefresh = async () => {
+  const onRefresh = async () => {
     setRefreshing(true);
     fetchOrders();
     const response = await getThings("limit", user.token);
@@ -77,26 +79,26 @@ const onRefresh = async () => {
         alert(response.warning);
     }
     const lastWeeks = await getThings("lastweek", user.token);
-    console.log('lastWeeks', lastWeeks);
     setLastWeek(lastWeeks);
     setRefreshing(false);
-}
+  }
 
 // Handle form submission
-const handleSubmit = async () => {
-console.log('date', date);
-const response = await postInput(date, price, amount, user.token);
-console.log(response);
-alert('Alcohol log submitted successfully!');
-if (response.warning) {
-    alert(response.warning);
-}
-setModalVisible(false); // Close the modal after submission
-};    
+  const handleSubmit = async () => {
+    console.log('date', date);
+    const response = await postInput(date, price, amount, user.token);
+    console.log(response);
+    alert('Alcohol log submitted successfully!');
+    if (response.warning) {
+        alert(response.warning);
+    }
+    setModalVisible(false); // Close the modal after submission
+  };    
 
   const onDayPress = (day) => {
     setDate(day.dateString);
   };
+
   const facts = [
     "Honey never spoils.",
     "Bananas are berries, but strawberries aren't.",
@@ -104,20 +106,61 @@ setModalVisible(false); // Close the modal after submission
     "ALCOHOL IS BAD"
   ];
 
-  const last_week = [
-    "Honey never spoils.",
-    "Bananas are berries, but strawberries aren't.",
-    "A day on Venus is longer than a year on Venus.",
-    "ALCOHOL IS BAD"
-  ];
+  return (
+    <View style={globalStyles.container}>
+    <ScrollView 
+    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+    <Text style={styles.title}>Home</Text>
 
+    {/* <Notification/> */}
 
-return (
-<View style={globalStyles.container}>
-<ScrollView 
-refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
-<Text style={styles.title}>Home</Text>
-<Text style={styles.header}>Did You Know?</Text>
+    <Text style={styles.subtitle}>Alcohol Intake</Text>
+    <LineChart
+      data={alcoholData}
+      width={screenWidth - 32}
+      height={220}
+      yAxisLabel=""
+      chartConfig={{
+      backgroundColor: '#359A5E',
+      backgroundGradientFrom: '#b4e197',
+      backgroundGradientTo: '#6db36e',
+      decimalPlaces: 2,
+      color: (opacity = 1) => `rgba(0, 100, 0, ${opacity})`, // Dark green for the lines
+      labelColor: (opacity = 1) => `rgba(85, 107, 47, ${opacity})`, // Olive green for text
+      style: {
+      borderRadius: 16,
+      },
+      }}
+      style={styles.chart}
+    />
+
+    <Text style={styles.subtitle}>Savings</Text>
+    <BarChart
+      data={savingsData}
+      width={screenWidth - 32}
+      height={220}
+      yAxisLabel="$"
+      chartConfig={{
+      backgroundColor: '#245C3B',
+      backgroundGradientFrom: '#c4e7c6',
+      backgroundGradientTo: '#8dcf91',
+      decimalPlaces: 2,
+      color: (opacity = 1) => `rgba(53, 154, 94, ${opacity})`,
+      labelColor: (opacity = 1) => `rgba(37, 105, 60, ${opacity})`,
+      style: {
+      borderRadius: 16,
+      },
+      }}
+      style={styles.chart}
+    />
+
+    <Text style={styles.subtitle}>Previous Weeks' Info</Text>
+      <View style={globalStyles.factsBox}>
+          <Text style={globalStyles.factText}>Consumed: {lastWeek.total_quantity} standard drinks</Text>
+          <Text style={globalStyles.factText}>Spent: ${lastWeek.total_price}</Text>
+      </View>
+
+    <Text style={styles.subtitle}>Did You Know?</Text>
       <View style={globalStyles.factsBox}>
         {facts.map((fact, index) => (
           <Text key={index} style={globalStyles.factText}>
@@ -125,57 +168,6 @@ refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
           </Text>
         ))}
       </View>
-
-{/* <Notification/> */}
-<Text style={styles.subtitle}>Alcohol Intake</Text>
-<LineChart
-data={alcoholData}
-width={screenWidth - 32}
-height={220}
-yAxisLabel=""
-chartConfig={{
-backgroundColor: '#359A5E',
-backgroundGradientFrom: '#b4e197',
-backgroundGradientTo: '#6db36e',
-decimalPlaces: 2,
-color: (opacity = 1) => `rgba(0, 100, 0, ${opacity})`, // Dark green for the lines
-labelColor: (opacity = 1) => `rgba(85, 107, 47, ${opacity})`, // Olive green for text
-style: {
-borderRadius: 16,
-},
-}}
-style={styles.chart}
-/>
-
-<Text style={styles.header}>Weekly Savings</Text>
-      <View style={globalStyles.factsBox}>
-        {facts.map((last_week, index) => (
-          <Text key={index} style={globalStyles.factText}>
-            {index + 1}. {last_week}
-          </Text>
-        ))}
-      </View>
-
-
-<Text style={styles.subtitle}>Savings</Text>
-<BarChart
-data={savingsData}
-width={screenWidth - 32}
-height={220}
-yAxisLabel="$"
-chartConfig={{
-backgroundColor: '#245C3B',
-backgroundGradientFrom: '#c4e7c6',
-backgroundGradientTo: '#8dcf91',
-decimalPlaces: 2,
-color: (opacity = 1) => `rgba(53, 154, 94, ${opacity})`,
-labelColor: (opacity = 1) => `rgba(37, 105, 60, ${opacity})`,
-style: {
-borderRadius: 16,
-},
-}}
-style={styles.chart}
-/>
 
 {/* Manual Input Button */}
 <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.manualInputButton}>

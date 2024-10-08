@@ -1,28 +1,46 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Ensure you have this package installed
-
-// Sample data for followers and following
-const followersData = [
-  { id: '1', name: 'Arif' },
-  { id: '2', name: 'Sam' },
-];
-
-const followingData = [
-  { id: '3', name: 'Samudi' },
-  { id: '4', name: 'Noam' },
-];
-
-const allUsersData = [
-  { id: '5', name: 'Rajanya' },
-  { id: '6', name: 'Glenn' },
-  { id: '7', name: 'Nawal' },
-];
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { getThings, followUser } from '../api-functions';
+import { useUser } from '../components/UserContext';
 
 function SearchPage({ navigation }) {
   const [activeTab, setActiveTab] = useState('followers'); // Toggle between followers, following, and search
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState(followersData); // Default to followers
+  const [refreshing, setRefreshing] = useState(false);
+  const { user } = useUser();
+
+  const [allUsersData, setAllUsersData] = useState([]);
+  const [followersData, setFollowersData] = useState([]);
+  const [followingData, setFollowingData] = useState([]);
+
+  useEffect(() => {
+    // Fetch all users
+    const load = async () => {
+      const allUsers = await getThings('users', user.token);
+      setAllUsersData(allUsers);
+    };
+    load();
+  }, []);
+
+  useEffect(() => {
+    // Fetch all of the current users' followers
+    const load = async () => {
+      const followers = await getThings('followers', user.token);
+      setFollowersData(followers);
+    };
+    load();
+  }, []);
+
+  useEffect(() => {
+    // Fetch all users following the current user
+    const load = async () => {
+      const following = await getThings('following', user.token);
+      setFollowingData(following);
+    };
+    load();
+  }, []);
 
   // Handle tab switch between Followers, Following, and Search
   const handleTabSwitch = (tab) => {
@@ -49,19 +67,38 @@ function SearchPage({ navigation }) {
     }
 
     const filtered = data.filter(person =>
-      person.name.toLowerCase().includes(text.toLowerCase())
+      person.first_name.toLowerCase().includes(text.toLowerCase())
     );
     setFilteredData(filtered);
+  };
+
+  const handleFollow = async (person) => {
+    const response = await followUser(person.id, user.token);
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    if (activeTab === 'followers') {
+      const followers = await getThings('followers', user.token);
+      setFollowersData(followers);
+    } else if (activeTab === 'following') {
+      const following = await getThings('following', user.token);
+      setFollowingData(following);
+    } else if (activeTab === 'search') {
+      const allUsers = await getThings('users', user.token);
+      setAllUsersData(allUsers);
+    }
+    setRefreshing(false);
   };
 
   // Render each person (follower, following, or search result)
   const renderItem = ({ item }) => (
     <View style={styles.personItem}>
-      <Text style={styles.personName}>{item.name}</Text>
+      <Text style={styles.personName}>{item.first_name} {item.last_name}</Text>
       {activeTab === 'search' && (
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => console.log(`Follow ${item.name}`)}
+          onPress={() => handleFollow(item)}
         >
           <Text style={styles.addButtonText}>Follow</Text>
         </TouchableOpacity>
@@ -112,6 +149,12 @@ function SearchPage({ navigation }) {
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+          />
+        }
       />
     </View>
   );

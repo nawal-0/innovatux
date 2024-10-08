@@ -81,6 +81,34 @@ class UserController extends Controller
         }
     }
 
+    public function follow(Request $request) {
+        $user = $request->user();
+        $user->following()->attach($request->user_id);
+        return response()->json(['message' => 'User followed'], 201);
+    }
+
+    public function unfollow(Request $request) {
+        $user = $request->user();
+        $user->following()->detach($request->user_id);
+        return response()->json(['message' => 'User unfollowed'], 200);
+    }
+
+    public function getFollowers(Request $request) {
+        $user = $request->user();
+        return response()->json($user->followers()->get(), 200);
+        
+    }
+
+    public function getFollowing(Request $request) {
+        $user = $request->user();
+        return response()->json($user->following()->get(), 200);
+
+    }
+
+    public function index() {
+        return response()->json(User::all(), 200);
+    }
+
 
 }
 

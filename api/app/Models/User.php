@@ -62,4 +62,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Community::class, 'community_user')
                     ->withPivot('joined_at');
     }
+
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friendlist', 'friends_id', 'user_id');
+    }
+
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friendlist', 'user_id', 'friends_id');
+    }
 }
