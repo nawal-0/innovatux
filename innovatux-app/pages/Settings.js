@@ -33,6 +33,7 @@ export default function SettingsPage({ navigation }) {
     async function fetchSettings() {
       const settings = await getThings('settings', user.token);
       setUserSettings(settings);
+      setGoal(settings.goal);
       setcWeeklyLimit(settings.consumption_threshold.toString());
       setsWeeklyLimit(settings.savings_threshold.toString());
     }
@@ -85,6 +86,15 @@ export default function SettingsPage({ navigation }) {
     }
     fetchLogout();
   };
+  const handleGoalChange = async (value) => {
+    // Update local settings
+    const updatedSettings = { ...userSettings, goal: value };
+    setUserSettings(updatedSettings);
+    setGoal(value); // Update the goal state
+  
+    // Send the updated settings to the backend
+    await addPreference(updatedSettings, user.token);
+  };
 
   return (
     <FlatList
@@ -119,6 +129,10 @@ export default function SettingsPage({ navigation }) {
               <Text style={styles.infoLabel}>Email</Text>
               <Text style={styles.infoValue}>{userInfo.email}</Text>
             </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Goal</Text>
+              <Text style={styles.infoValue}>{userSettings.goal}</Text>
+            </View>
           </View>
 
           {/* DropDownPicker */}
@@ -130,8 +144,9 @@ export default function SettingsPage({ navigation }) {
             setOpen={setOpen}
             setValue={setGoal}
             setItems={setGoalItems}
-            placeholder="Select a Goal"
+            placeholder="Change your Goal"
             style={globalStyles.dropdown}
+            onChangeValue={handleGoalChange}
           />
 
           {/* Options */}

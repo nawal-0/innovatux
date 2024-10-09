@@ -144,7 +144,7 @@ function Feed({ navigation }) {
         {posts.map((post) => (
           <View key={post.id} style={styles.postContainer}>
             <View style={styles.profileContainer}>
-              <Image style={styles.profileImage} source={{ uri: post.profileImage || 'https://example.com/default-avatar.png' }} />
+              <Image style={styles.profileImage} source={{ uri: post.profileImage || 'https://via.placeholder.com/50' }} />
               <Text>{post.user.username}</Text>
             </View>
             <Image style={[styles.postImage, { width: width * 0.9, height: width * 0.9 }]} source={{ uri: post.image_path }} />
