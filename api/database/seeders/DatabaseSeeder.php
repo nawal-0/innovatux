@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\Settings;
 use App\Models\Community;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Seeders\FactsTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
