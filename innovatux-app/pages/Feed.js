@@ -141,7 +141,11 @@ function Feed({ navigation }) {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {/* Map through posts and display them with likes */}
-        {posts.map((post) => (
+        {posts.length === 0 ? (
+  <View style={styles.noPostsContainer}>
+    <Text style={styles.noPostsText}>There are no posts</Text>
+  </View>
+) : (posts.map((post) => (
           <View key={post.id} style={styles.postContainer}>
             <View style={styles.profileContainer}>
               <Image style={styles.profileImage} source={{ uri: post.profileImage || 'https://via.placeholder.com/50' }} />
@@ -164,13 +168,16 @@ function Feed({ navigation }) {
               </Text>
             </View>
           </View>
-        ))}
+        )))}
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  noPostsContainer: {
+    alignItems: 'center'
+  },
   closeText: {
     fontSize: 30,
   },
