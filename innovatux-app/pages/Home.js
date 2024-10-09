@@ -17,6 +17,7 @@ export default function Home() {
   const [price, setPrice] = useState('');
   const [amount, setAmount] = useState('');
   const [facts, setFacts] = useState([]);
+  const [currentFact, setCurrentFact] = useState({});
   const { user } = useUser();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -75,6 +76,8 @@ export default function Home() {
     const loadFacts = async () => {
       const response = await getThings("facts", user.token);
       setFacts(response);
+      const randomIndex = Math.floor(Math.random() * response.length);
+      setCurrentFact(response[randomIndex]);
     }
     loadFacts();
   }, []);
@@ -88,6 +91,10 @@ export default function Home() {
     }
     const lastWeeks = await getThings("lastweek", user.token);
     setLastWeek(lastWeeks);
+
+    const randomIndex = Math.floor(Math.random() * facts.length);
+    setCurrentFact(facts[randomIndex]);
+
     setRefreshing(false);
   }
 
@@ -161,11 +168,10 @@ export default function Home() {
 
     <Text style={styles.subtitle}>Did You Know?</Text>
       <View style={globalStyles.factsBox}>
-        {facts.map((fact, index) => (
-          <Text key={index} style={globalStyles.factText}>
-            {index + 1}. {fact.fact}
-          </Text>
-        ))}
+        
+          <Text style={globalStyles.factText}> {currentFact.title} </Text>
+          <Text style={globalStyles.factText}>{currentFact.fact} </Text>
+        
       </View>
 
 {/* Manual Input Button */}
