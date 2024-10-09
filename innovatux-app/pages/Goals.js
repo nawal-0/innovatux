@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Switch, TouchableOpacity, Keyboard, TouchableWithoutFeedback, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 import { addPreference } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -14,124 +14,126 @@ function Goals({ navigation }) {
     notification: true,
     public: true,
   });
-  
+
   const toggleNotificationSwitch = () => setPreferences({ ...preferences, notification: !preferences.notification });
   const togglePublicSwitch = () => setPreferences({ ...preferences, public: !preferences.public });
   const { user } = useUser();
 
   const handlePress = async () => {
-    // Add preferences to databas
     const response = await addPreference(preferences, user.token);
     console.log(response);
     navigation.navigate('Tabs');
   }
 
-  // DropDownPicker state
   const [open, setOpen] = useState(false);
   const [goal, setGoal] = useState(null);
   const [goalItems, setGoalItems] = useState([
     { label: 'Money', value: 'Money' },
     { label: 'Energy', value: 'Energy' },
     { label: 'Health', value: 'Health' },
-    { label: 'Religous', value: 'Religous' }
+    { label: 'Religious', value: 'Religious' }
   ]);
 
-  // Function to handle setting the selected goal in preferences
   const handleSetGoal = (callbackValue) => {
-    setGoal(callbackValue); // Update the selected value in dropdown
+    setGoal(callbackValue);
     setPreferences((prevPreferences) => ({
       ...prevPreferences,
-      goal: callbackValue, // Update goal in preferences state
+      goal: callbackValue,
     }));
   };
-  
+
   return (
-    <ScrollView>
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>User Preferences</Text>
-      
-      <View style={styles.inputTitle}>
-        <Text style={styles.subtitle}>Goals</Text>
-      </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <FlatList
+          data={[]} // You can pass an empty array if you don't have any list items
+          ListHeaderComponent={
+            <View style={globalStyles.container}>
+              <Text style={globalStyles.title}>User Preferences</Text>
+              
+              <View style={[styles.inputTitle, { zIndex: open ? 1000 : 1 }]}>
+                <Text style={styles.subtitle}>Goals</Text>
+              </View>
 
-        <DropDownPicker
-          open={open}
-          value={goal}
-          items={goalItems}
-          setOpen={setOpen}
-          setValue={setGoal}
-          onChangeValue={handleSetGoal}
-          setItems={setGoalItems}
-          placeholder="Select Goal"
-          style={globalStyles.dropdown}
-          dropDownStyle={globalStyles.dropdown}
+              <View style={{ zIndex: open ? 1000 : 1 }}>
+                <DropDownPicker
+                  open={open}
+                  value={goal}
+                  items={goalItems}
+                  setOpen={setOpen}
+                  setValue={setGoal}
+                  onChangeValue={handleSetGoal}
+                  setItems={setGoalItems}
+                  placeholder="Select Goal"
+                  style={globalStyles.dropdown}
+                  dropDownContainerStyle={{ zIndex: open ? 1000 : 1 }}
+                />
+              </View>
+              
+              <View style={styles.inputTitle}>
+                <Text style={styles.subtitle}>Weekly Consumption Limit </Text>
+              </View>
+
+              <TextInput
+                style={globalStyles.input}
+                placeholder="Eg: 10 standard drinks per week"
+                keyboardType="numeric"
+                onChangeText={(text) => {
+                  const parsed = text.replace(/[^0-9]/g, '');
+                  setPreferences({ ...preferences, consumption_threshold: parsed });
+                }}
+                value={preferences.consumption_threshold}
+              />
+
+              <View style={styles.inputTitle}>
+                <Text style={styles.subtitle}>Weekly Spending Limit ($)</Text>
+              </View>
+
+              <TextInput
+                style={globalStyles.input}
+                placeholder="Weekly Spending Limit"
+                keyboardType="numeric"
+                onChangeText={(text) => {
+                  const parsed = text.replace(/[^0-9]/g, '');
+                  setPreferences({ ...preferences, savings_threshold: parsed });
+                }}
+                value={preferences.savings_threshold}
+              />
+
+              <View style={styles.toggleContainer}>
+                <Text style={styles.subtitle}>Push Notifications</Text>
+                <Switch
+                  style={styles.toggle}
+                  trackColor={{ false: '#767577', true: '#245C3B' }}
+                  thumbColor={preferences.notification ? '#fff' : '#f4f3f4'}
+                  onValueChange={toggleNotificationSwitch}
+                  value={preferences.notification}
+                />
+              </View>
+
+              <View style={styles.toggleContainer}>
+                <Text style={styles.subtitle}>Public</Text>
+                <Switch
+                  style={styles.toggle}
+                  trackColor={{ false: '#767577', true: '#245C3B' }}
+                  thumbColor={preferences.public ? '#fff' : '#f4f3f4'}
+                  onValueChange={togglePublicSwitch}
+                  value={preferences.public}
+                />
+              </View>
+
+              <TouchableOpacity style={styles.loginButton} onPress={handlePress}>
+                <Text style={styles.loginText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          }
+          keyExtractor={(item, index) => index.toString()}
         />
-      
-      <View style={styles.inputTitle}>
-        <Text style={styles.subtitle}>Weekly Consumption Limit </Text>
-      </View>
-
-      <TextInput
-        style={globalStyles.input}
-        placeholder="Eg: 10 standard drinks per week"
-        //placeholderTextColor="#fff" // White text color for placeholder
-        keyboardType="numeric" // Ensure numeric keyboard for number input
-        onChangeText={(text) => {
-          // Only allow integer input
-          const parsed = text.replace(/[^0-9]/g, '');
-          setPreferences({ ...preferences, consumption_threshold: parsed });
-        }}
-        value={preferences.consumption_threshold}
-      />
-
-      <View style={styles.inputTitle}>
-        <Text style={styles.subtitle}>Weekly Spending Limit ($)</Text>
-      </View>
-
-      <TextInput
-        style={globalStyles.input}
-        placeholder="Weekly Spending Limit"
-        //placeholderTextColor="#fff" // White text color for placeholder
-        keyboardType="numeric" // Ensure numeric keyboard for number input
-        onChangeText={(text) => {
-          // Only allow integer input
-          const parsed = text.replace(/[^0-9]/g, '');
-          setPreferences({ ...preferences, savings_threshold: parsed });
-        }}
-        value={preferences.savings_threshold}
-      />
-      
-    
-      <View style={styles.toggleContainer}>
-        <Text style={styles.subtitle}>Push Notifications</Text>
-        <Switch
-          style={styles.toggle}
-          trackColor={{ false: '#767577', true: '#245C3B' }}
-          thumbColor={preferences.notification ? '#fff' : '#f4f3f4'}
-          onValueChange={toggleNotificationSwitch}
-          value={preferences.notification}
-        />
-      </View>
-
-      <View style={styles.toggleContainer}>
-        <Text style={styles.subtitle}>Public</Text>
-        <Switch
-          style={styles.toggle}
-          trackColor={{ false: '#767577', true: '#245C3B' }}
-          thumbColor={preferences.public ? '#fff' : '#f4f3f4'}
-          onValueChange={togglePublicSwitch}
-          value={preferences.public}
-        />
-      </View>
-
-      <TouchableOpacity style={styles.loginButton} onPress={handlePress}>
-        <Text style={styles.loginText}>Submit</Text>
-      </TouchableOpacity>
-    
-    </View>
-    </TouchableWithoutFeedback>
-    </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
