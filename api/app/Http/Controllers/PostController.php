@@ -23,7 +23,7 @@ class PostController extends Controller
         
     }
 
-    public function index()
+    public function getPosts(Request $request)
     {
         $posts = Post::with('user')->latest()->get();
         return response()->json($posts, 200);

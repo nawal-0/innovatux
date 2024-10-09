@@ -16,7 +16,6 @@ function Feed({ navigation }) {
   const [imageUri, setImageUri] = useState(null);
   const [caption, setCaption] = useState('');
   const [posts, setPosts] = useState([]);
-  const [likes, setLikes] = useState({});  // Track likes for each post
 
   // Request permission to access media library
   useEffect(() => {
@@ -32,13 +31,6 @@ function Feed({ navigation }) {
   const fetchPosts = async () => {
     const data = await getThings('posts', user.token);
     setPosts(data);
-    
-    // Initialize likes state for each post
-    const initialLikes = {};
-    data.forEach((post) => {
-      initialLikes[post.id] = { count: post.likes || 0, liked: false };  // Keep track of like status
-    });
-    setLikes(initialLikes);
   };
 
   // Fetch posts when the component mounts
@@ -83,18 +75,15 @@ function Feed({ navigation }) {
   // Handle like button press for each post (toggle between liked and unliked)
   const handleLike = async (post) => {
     const response = await likePost(post, user.token);
-    console.log(response);
-    setLikes((prevLikes) => {
-      const previous = prevLikes[post.id] || { count: 0, liked: false };
-
-      return {
-        ...prevLikes,
-        [post.id]: {
-          count: prevLikes[post.id].liked ? prevLikes[post.id].count - 1 : prevLikes[post.id].count + 1,  // Toggle like count
-          liked: !prevLikes[post.id].liked,  // Toggle liked state
-        },
-      };
-    });
+    setPosts(posts.map((p) => {
+      if (p.id === post.id) {
+        return { ...p, likes_count: response.likes_count, is_liked: response.is_liked };
+        
+      }
+      return p;
+    }
+    ));
+    
   };
 
   return (
@@ -165,13 +154,13 @@ function Feed({ navigation }) {
             <View style={styles.likeContainer}>
               <TouchableOpacity onPress={() => handleLike(post)}>
                 <Ionicons
-                  name={likes[post.id]?.liked ? 'heart' : 'heart-outline'}  // Filled heart if liked, outline if not
+                  name={post.is_liked ? 'heart' : 'heart-outline'}  // Filled heart if liked, outline if not
                   size={24}
-                  color={likes[post.id]?.liked ? 'red' : 'black'}  // Red color if liked
+                  color={post.is_liked ? 'red' : 'black'}  // Red color if liked
                 />
               </TouchableOpacity>
               <Text style={styles.likeText}>
-                {likes[post.id]?.count === 1 ? '1 like' : `${likes[post.id]?.count || 0} likes`}  {/* Show "1 like" for 1, "X likes" for more */}
+                {post.likes_count === 1 ? '1 like' : `${post.likes_count || 0} likes`}  {/* Show "1 like" for 1, "X likes" for more */}
               </Text>
             </View>
           </View>

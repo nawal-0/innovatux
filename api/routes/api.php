@@ -27,7 +27,7 @@ Route::post('/message', [MessageController::class, 'store'])->middleware('auth:s
 Route::get('/messages/{community_id}', [MessageController::class, 'index'])->middleware('auth:sanctum');
 
 Route::post('/posts', [PostController::class, 'feedstore'])->middleware('auth:sanctum');
-Route::get('/posts', [PostController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/posts', [PostController::class, 'getPosts'])->middleware('auth:sanctum');
 
 Route::post('/input', [HomeController::class, 'input'])->middleware('auth:sanctum');
 Route::get('/input', [HomeController::class, 'retrieval'])->middleware('auth:sanctum');
