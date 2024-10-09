@@ -119,11 +119,11 @@ export const globalStyles = StyleSheet.create({
     fontSize: 16,
   },
   factsBox: {
-    borderColor: 'gray',
+    borderColor: '#e8e7dc',
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#e8e7dc',
     width: '100%',
     maxHeight: 200,
     overflow: 'scroll', // Enable scrolling if necessary

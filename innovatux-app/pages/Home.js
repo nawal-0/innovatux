@@ -128,8 +128,8 @@ export default function Home() {
       yAxisLabel=""
       chartConfig={{
       backgroundColor: '#359A5E',
-      backgroundGradientFrom: '#b4e197',
-      backgroundGradientTo: '#6db36e',
+      backgroundGradientFrom: '#e8e7dc',
+      backgroundGradientTo: '#e8e7dc',
       decimalPlaces: 2,
       color: (opacity = 1) => `rgba(0, 100, 0, ${opacity})`, // Dark green for the lines
       labelColor: (opacity = 1) => `rgba(85, 107, 47, ${opacity})`, // Olive green for text
@@ -148,8 +148,8 @@ export default function Home() {
       yAxisLabel="$"
       chartConfig={{
       backgroundColor: '#245C3B',
-      backgroundGradientFrom: '#c4e7c6',
-      backgroundGradientTo: '#8dcf91',
+      backgroundGradientFrom: '#e8e7dc',
+      backgroundGradientTo: '#e8e7dc',
       decimalPlaces: 2,
       color: (opacity = 1) => `rgba(53, 154, 94, ${opacity})`,
       labelColor: (opacity = 1) => `rgba(37, 105, 60, ${opacity})`,
