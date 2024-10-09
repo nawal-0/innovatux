@@ -95,6 +95,14 @@ export default function Home() {
     const randomIndex = Math.floor(Math.random() * facts.length);
     setCurrentFact(facts[randomIndex]);
 
+    const loadFacts = async () => {
+      const response = await getThings("facts", user.token);
+      setFacts(response);
+      const randomIndex = Math.floor(Math.random() * response.length);
+      setCurrentFact(response[randomIndex]);
+    }
+    loadFacts();
+    
     setRefreshing(false);
   }
 

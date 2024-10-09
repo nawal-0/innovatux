@@ -11,7 +11,6 @@ class Community extends Model
     use HasFactory;
 
     protected $table = 'communities';
-    // protected $primaryKey = 'drink_id';
 
     protected $fillable = [
         'name',
@@ -21,6 +20,6 @@ class Community extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'community_user')
-                    ->withPivot('joined_at'); //->withoutTimestamps();
+                    ->withPivot('joined_at');
     }
 }

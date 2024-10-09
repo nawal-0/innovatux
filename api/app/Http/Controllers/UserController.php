@@ -29,16 +29,6 @@ class UserController extends Controller
     }
 
     public function signup(Request $request) {
-        // $request->validate([
-        //     'first_name' => 'required',
-        //     'last_name' => 'required',
-        //     'email' => 'required|email|unique:users',
-        //     'username' => 'required|unique:users',
-        //     'age' => 'required',
-        //     'gender' => 'required',
-        //     'password' => 'required'
-        // ]);
-
         $request['password'] = bcrypt($request->password);
         $user = User::create($request->all());
         $token = $user->createToken('token')->plainTextToken;
@@ -56,10 +46,6 @@ class UserController extends Controller
     }
 
     public function createPreference(Request $request) {
-        // $settings = $request->user()->settings()->create($request->all());
-        // return response()->json($settings, 201);
-
-
         try {
             $settings = $request->user()->settings()->updateOrCreate(
                 ['user_id' => $request->user()->id], // check if user already has settings
