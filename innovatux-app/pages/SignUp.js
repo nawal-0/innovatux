@@ -21,13 +21,13 @@ export default function SignUp({navigation}) {
     { label: 'Other', value: 'Other' }
   ]);
   const validateUsername = (input) => {
-    const regex = /^[a-z0-9._]+$/;
+    const regex = /^[A-Za-z0-9._]+$/;
     if (!regex.test(input)) {
-      Alert.alert('Invalid Username', 'Username must contain only lowercase letters, numbers, dots, and underscores, with no spaces.');
+      Alert.alert('Invalid Username', 'Username must not contain special characters or spaces.');
       return false;
     }
-    if (input.length < 5 || input.length > 20) {
-      Alert.alert('Invalid Username', 'Username must be between 5 and 20 characters long.');
+    if (input.length < 3 || input.length > 20) {
+      Alert.alert('Invalid Username', 'Username must be between 3 and 20 characters long.');
       return false;
     }
     if (input.includes('..') || input.includes('__')) {
@@ -51,27 +51,6 @@ export default function SignUp({navigation}) {
       return true;
     };
     
-  
-    const validateUsername = (input) => {
-      const regex = /^[a-z0-9._]+$/;
-      if (!regex.test(input)) {
-        Alert.alert('Invalid Username', 'Username must contain only lowercase letters, numbers, dots, and underscores, with no spaces.');
-        return false;
-      }
-      if (input.length < 5 || input.length > 20) {
-        Alert.alert('Invalid Username', 'Username must be between 5 and 20 characters long.');
-        return false;
-      }
-      if (input.includes('..') || input.includes('__')) {
-        Alert.alert('Invalid Username', 'Username cannot contain consecutive dots or underscores.');
-        return false;
-      }
-      if (input.startsWith('.') || input.startsWith('_') || input.endsWith('.') || input.endsWith('_')) {
-        Alert.alert('Invalid Username', 'Username cannot start or end with a dot or underscore.');
-        return false;
-      }
-      return true;
-    };
   
     async function fetchSign() {
       if (!first_name || !last_name || !email || !username || !age || !gender || !password) {

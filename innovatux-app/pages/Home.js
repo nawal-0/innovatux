@@ -169,7 +169,7 @@ export default function Home() {
     <Text style={styles.subtitle}>Did You Know?</Text>
       <View style={globalStyles.factsBox}>
         
-          <Text style={globalStyles.factText}> {currentFact.title} </Text>
+          <Text style={globalStyles.factText}>{currentFact.title} </Text>
           <Text style={globalStyles.factText}>{currentFact.fact} </Text>
         
       </View>
