@@ -33,7 +33,7 @@ export const globalStyles = StyleSheet.create({
     marginBottom: 24,
     textAlign: 'center',
     color: '#245C3B', // Colour for title
-    textTransform: 'uppercase', // Make the text uppercase
+    //textTransform: 'uppercase', // Make the text uppercase
   },
   profileSection: {
     flexDirection: 'row',
