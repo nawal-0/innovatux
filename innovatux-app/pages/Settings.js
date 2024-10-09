@@ -93,9 +93,7 @@ export default function SettingsPage({ navigation }) {
         <View style={globalStyles.container}>
           {/* Header Section */}
           <View style={styles.header}>
-            <Text style={globalStyles.title}>
-              <Text style={styles.icon}>⚙️</Text> Settings
-            </Text>
+            <Text style={globalStyles.title}>Settings</Text>
           </View>
 
           {/* Profile Section */}
