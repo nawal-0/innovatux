@@ -40,3 +40,5 @@ Route::get('/followers', [UserController::class, 'getFollowers'])->middleware('a
 Route::get('/following', [UserController::class, 'getFollowing'])->middleware('auth:sanctum');
 Route::get('/users', [UserController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/facts', [UserController::class, 'getFacts'])->middleware('auth:sanctum');
+
+Route::post('/like', [PostController::class, 'likePost'])->middleware('auth:sanctum');

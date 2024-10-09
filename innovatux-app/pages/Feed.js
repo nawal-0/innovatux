@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, RefreshControl, TextInput, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';  // Import Ionicons for heart icons
 import * as ImagePicker from 'expo-image-picker';
-import { postFeed, getThings } from '../api-functions';
+import { postFeed, getThings, likePost } from '../api-functions';
 import { useUser } from '../components/UserContext';
 
 function Feed({ navigation }) {
@@ -80,15 +80,17 @@ function Feed({ navigation }) {
   };
 
   // Handle like button press for each post (toggle between liked and unliked)
-  const handleLike = (postId) => {
+  const handleLike = async (post) => {
+    const response = await likePost(post, user.token);
+    console.log(response);
     setLikes((prevLikes) => {
-      const previous = prevLikes[postId] || { count: 0, liked: false };
+      const previous = prevLikes[post.id] || { count: 0, liked: false };
 
       return {
         ...prevLikes,
-        [postId]: {
-          count: prevLikes[postId].liked ? prevLikes[postId].count - 1 : prevLikes[postId].count + 1,  // Toggle like count
-          liked: !prevLikes[postId].liked,  // Toggle liked state
+        [post.id]: {
+          count: prevLikes[post.id].liked ? prevLikes[post.id].count - 1 : prevLikes[post.id].count + 1,  // Toggle like count
+          liked: !prevLikes[post.id].liked,  // Toggle liked state
         },
       };
     });
@@ -160,7 +162,7 @@ function Feed({ navigation }) {
 
             {/* Likes section */}
             <View style={styles.likeContainer}>
-              <TouchableOpacity onPress={() => handleLike(post.id)}>
+              <TouchableOpacity onPress={() => handleLike(post)}>
                 <Ionicons
                   name={likes[post.id]?.liked ? 'heart' : 'heart-outline'}  // Filled heart if liked, outline if not
                   size={24}

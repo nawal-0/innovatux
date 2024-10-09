@@ -168,4 +168,18 @@ export const unfollowUser = async (user_id, token) => {
     return message;
 }
 
+export const likePost = async (post, token) => {
+    const response = await fetch(`${URL}like`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ post_id: post.id }),
+    });
+    const message = await response.json();
+    return message;
+}
+
+
 
