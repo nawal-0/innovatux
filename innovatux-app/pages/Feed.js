@@ -81,13 +81,17 @@ function Feed({ navigation }) {
 
   // Handle like button press for each post (toggle between liked and unliked)
   const handleLike = (postId) => {
-    setLikes((prevLikes) => ({
-      ...prevLikes,
-      [postId]: {
-        count: prevLikes[postId].liked ? prevLikes[postId].count - 1 : prevLikes[postId].count + 1,  // Toggle like count
-        liked: !prevLikes[postId].liked,  // Toggle liked state
-      },
-    }));
+    setLikes((prevLikes) => {
+      const previous = prevLikes[postId] || { count: 0, liked: false };
+
+      return {
+        ...prevLikes,
+        [postId]: {
+          count: prevLikes[postId].liked ? prevLikes[postId].count - 1 : prevLikes[postId].count + 1,  // Toggle like count
+          liked: !prevLikes[postId].liked,  // Toggle liked state
+        },
+      };
+    });
   };
 
   return (
