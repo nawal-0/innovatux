@@ -161,6 +161,17 @@ function SearchPage({ navigation }) {
       </View>
 
       {/* List of Followers, Following, or Search Results */}
+      {filteredData && filteredData.length === 0 ? (
+        <View style={{alignItems: 'center'}}>
+        <Text>
+          {activeTab === 'followers'
+            ? 'No followers'
+            : activeTab === 'following'
+            ? 'No following'
+            : 'No users found'}
+        </Text>
+        </View>
+      ) : (
       <FlatList
         data={filteredData}
         renderItem={renderItem}
@@ -173,6 +184,7 @@ function SearchPage({ navigation }) {
           />
         }
       />
+      )}
     </View>
   );
 }
