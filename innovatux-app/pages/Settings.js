@@ -187,6 +187,89 @@ export default function SettingsPage({ navigation }) {
 
           {/* Modals for Password Change and Limits */}
           {/* ... Your existing modal components ... */}
+          <Modal
+        transparent={true}
+        visible={passwordModalVisible}
+        animationType="slide"
+        onRequestClose={() => setPasswordModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Change Password</Text>
+
+            <TextInput
+              style={styles.modalInput}
+              secureTextEntry
+              placeholder="Enter old password"
+              value={oldPassword}
+              onChangeText={setOldPassword}
+              placeholderTextColor="#808080"
+            />
+
+            <TextInput
+              style={styles.modalInput}
+              secureTextEntry
+              placeholder="Enter new password"
+              value={newPassword}
+              onChangeText={setNewPassword}
+              placeholderTextColor="#808080"
+            />
+
+            <TextInput
+              style={styles.modalInput}
+              secureTextEntry
+              placeholder="Confirm new password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholderTextColor="#808080"
+            />
+
+            <TouchableOpacity style={styles.submitButton} onPress={handlePasswordChange}>
+              <Text style={styles.submitButtonText}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setPasswordModalVisible(false)}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+          
+      <Modal
+        transparent={true}
+        visible={limitModalVisible}
+        animationType="slide"
+        onRequestClose={() => setLimitModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Set Weekly Limit</Text>
+            <TextInput
+              style={styles.modalInput}
+              keyboardType="numeric"
+              value={weeklycLimit}
+              onChangeText={setcWeeklyLimit}
+              placeholderTextColor="#808080"
+            />
+            <TextInput
+              style={styles.modalInput}
+              keyboardType="numeric"
+              value={weeklysLimit}
+              onChangeText={setsWeeklyLimit}
+              placeholderTextColor="#808080"
+            />
+            <TouchableOpacity style={styles.submitButton} onPress={handleLimitChange}>
+              <Text style={styles.submitButtonText}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => {
+              setLimitModalVisible(false);
+              setcWeeklyLimit(userSettings.consumption_threshold.toString()); // reset to original value
+              setsWeeklyLimit(userSettings.savings_threshold.toString());     // if changes were made
+            }}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
         </View>
       )}
       keyExtractor={(item, index) => index.toString()}
