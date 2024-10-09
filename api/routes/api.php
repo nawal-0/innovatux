@@ -35,6 +35,7 @@ Route::get('/limit', [HomeController::class, 'checkLimit'])->middleware('auth:sa
 Route::get('/lastweek', [HomeController::class, 'getLastWeek'])->middleware('auth:sanctum');
 
 Route::post('/follow', [UserController::class, 'follow'])->middleware('auth:sanctum');
+Route::post('/unfollow', [UserController::class, 'unfollow'])->middleware('auth:sanctum');
 Route::get('/followers', [UserController::class, 'getFollowers'])->middleware('auth:sanctum');
 Route::get('/following', [UserController::class, 'getFollowing'])->middleware('auth:sanctum');
 Route::get('/users', [UserController::class, 'index'])->middleware('auth:sanctum');

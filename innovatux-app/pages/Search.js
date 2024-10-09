@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { getThings, followUser } from '../api-functions';
+import { getThings, followUser, unfollowUser } from '../api-functions';
 import { useUser } from '../components/UserContext';
 
 function SearchPage({ navigation }) {
@@ -72,8 +72,16 @@ function SearchPage({ navigation }) {
     setFilteredData(filtered);
   };
 
-  const handleFollow = async (person) => {
-    const response = await followUser(person.id, user.token);
+  const handleFollow = async (person, button) => {
+    if (button === 'Follow') {
+      const response = await followUser(person.id, user.token);
+      setFollowingData([...followingData, person]);
+    } else {
+      const response = await unfollowUser(person.id, user.token);
+      const updatedFollowing = followingData.filter(user => user.id !== person.id);
+      setFollowingData(updatedFollowing);
+    }
+
   };
 
   const handleRefresh = async () => {
@@ -81,30 +89,39 @@ function SearchPage({ navigation }) {
     if (activeTab === 'followers') {
       const followers = await getThings('followers', user.token);
       setFollowersData(followers);
+      setFilteredData(followers);
     } else if (activeTab === 'following') {
       const following = await getThings('following', user.token);
       setFollowingData(following);
+      setFilteredData(following);
     } else if (activeTab === 'search') {
       const allUsers = await getThings('users', user.token);
       setAllUsersData(allUsers);
+      setFilteredData(allUsers);
     }
     setRefreshing(false);
   };
 
   // Render each person (follower, following, or search result)
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }) => {
+    const isMe = item.id === user.id;
+    const isFollowing = followingData.some(user => user.id === item.id);
+
+    return (
     <View style={styles.personItem}>
       <Text style={styles.personName}>{item.first_name} {item.last_name}</Text>
-      {activeTab === 'search' && (
+      {!isMe && (
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => handleFollow(item)}
+          onPress={() => handleFollow(item, isFollowing ? 'Unfollow' : 'Follow' )}
         >
-          <Text style={styles.addButtonText}>Follow</Text>
+          <Text style={styles.addButtonText}>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
         </TouchableOpacity>
-      )}
+        )
+      }
     </View>
   );
+};
 
   return (
     <View style={styles.container}>

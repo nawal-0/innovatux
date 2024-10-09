@@ -155,4 +155,17 @@ export const followUser = async (user_id, token) => {
     return message;
 }
 
+export const unfollowUser = async (user_id, token) => {
+    const response = await fetch(`${URL}unfollow`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ user_id }),
+    });
+    const message = await response.json();
+    return message;
+}
+
 
