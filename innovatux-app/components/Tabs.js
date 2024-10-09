@@ -36,9 +36,9 @@ function Tabs() {
           if (route.name === 'Home') {
             iconName = 'home';
           } else if (route.name === 'Feed') {
-            iconName = 'list';
+            iconName = 'play';
           } else if (route.name === 'Community') {
-            iconName = 'search';
+            iconName = 'people';
           } else if (route.name === 'Search') {
             iconName = 'search';
           } else if (route.name === 'Settings') {

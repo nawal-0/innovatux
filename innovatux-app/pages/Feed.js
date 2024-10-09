@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';  // Import Ionicons for heart ico
 import * as ImagePicker from 'expo-image-picker';
 import { postFeed, getThings, likePost } from '../api-functions';
 import { useUser } from '../components/UserContext';
+import { globalStyles } from './Styles';
 
 function Feed({ navigation }) {
   const { width } = Dimensions.get('window');
@@ -97,7 +98,7 @@ function Feed({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       {/* Add Post Section */}
       <TouchableOpacity style={styles.addPostButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.addPostButtonText}>Add Post</Text>
@@ -212,9 +213,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff', // Background color
   },
   postContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#e8e7dc',
     borderRadius: 20,
-    marginBottom: 20,
+    marginBottom: 50,
     padding: 10,
   },
   profileContainer: {
@@ -231,6 +232,8 @@ const styles = StyleSheet.create({
   postImage: {
     borderRadius: 10,
     resizeMode: 'cover', // Cover image mode
+    position: 'relative',
+    alignItems: 'center',
     marginBottom: 10,
   },
   likeContainer: {
