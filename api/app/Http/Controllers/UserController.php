@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\Fact;
 use App\Models\User;
 use Illuminate\Http\Request;
 use IIluminate\Support\Facades\Auth;
@@ -103,6 +104,14 @@ class UserController extends Controller
         $user = $request->user();
         return response()->json($user->following()->get(), 200);
 
+    }
+
+    public function getFacts(Request $request) {
+        $user = $request->user();
+        $settings = $user->settings()->first();
+        $goal = $settings->goal;
+        $facts = Fact::where('goal', $goal)->get();
+        return response()->json($facts, 200);
     }
 
     public function index() {

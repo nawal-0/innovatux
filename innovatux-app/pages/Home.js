@@ -16,6 +16,7 @@ export default function Home() {
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [amount, setAmount] = useState('');
+  const [facts, setFacts] = useState([]);
   const { user } = useUser();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -37,7 +38,6 @@ export default function Home() {
 
   const fetchOrders = async () => {
     const data = await getThings("input", user.token);
-    console.log('data', data);
     const quantities = [0, 0, 0, 0, 0, 0, 0];
     const prices = [0, 0, 0, 0, 0, 0, 0];
 
@@ -71,6 +71,14 @@ export default function Home() {
     loadContent();
   }, []);
 
+  useEffect(() => {
+    const loadFacts = async () => {
+      const response = await getThings("facts", user.token);
+      setFacts(response);
+    }
+    loadFacts();
+  }, []);
+
   const onRefresh = async () => {
     setRefreshing(true);
     fetchOrders();
@@ -85,9 +93,7 @@ export default function Home() {
 
 // Handle form submission
   const handleSubmit = async () => {
-    console.log('date', date);
     const response = await postInput(date, price, amount, user.token);
-    console.log(response);
     alert('Alcohol log submitted successfully!');
     if (response.warning) {
         alert(response.warning);
@@ -98,13 +104,6 @@ export default function Home() {
   const onDayPress = (day) => {
     setDate(day.dateString);
   };
-
-  const facts = [
-    "Honey never spoils.",
-    "Bananas are berries, but strawberries aren't.",
-    "A day on Venus is longer than a year on Venus.",
-    "ALCOHOL IS BAD"
-  ];
 
   return (
     <View style={globalStyles.container}>
@@ -164,7 +163,7 @@ export default function Home() {
       <View style={globalStyles.factsBox}>
         {facts.map((fact, index) => (
           <Text key={index} style={globalStyles.factText}>
-            {index + 1}. {fact}
+            {index + 1}. {fact.fact}
           </Text>
         ))}
       </View>
