@@ -11,7 +11,7 @@ import { useUser } from '../components/UserContext';
 function SearchPage({ navigation }) {
   const [activeTab, setActiveTab] = useState('followers'); // Toggle between followers, following, and search
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredData, setFilteredData] = useState(followersData); // Default to followers
+  const [filteredData, setFilteredData] = useState([]); // Initialize as empty array
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useUser();
 
@@ -29,7 +29,7 @@ function SearchPage({ navigation }) {
   }, []);
 
   useEffect(() => {
-    // Fetch all of the current users' followers
+    // Fetch all of the current user's followers
     const load = async () => {
       const followers = await getThings('followers', user.token);
       setFollowersData(followers);
@@ -38,13 +38,24 @@ function SearchPage({ navigation }) {
   }, []);
 
   useEffect(() => {
-    // Fetch all users following the current user
+    // Fetch all users the current user is following
     const load = async () => {
       const following = await getThings('following', user.token);
       setFollowingData(following);
     };
     load();
   }, []);
+
+  // **New useEffect to update filteredData**
+  useEffect(() => {
+    if (activeTab === 'followers') {
+      setFilteredData(followersData);
+    } else if (activeTab === 'following') {
+      setFilteredData(followingData);
+    } else if (activeTab === 'search') {
+      setFilteredData(allUsersData);
+    }
+  }, [activeTab, followersData, followingData, allUsersData]);
 
   /**
    * Handles switching between tabs (followers, following, search)
@@ -54,13 +65,7 @@ function SearchPage({ navigation }) {
    */
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
-    if (tab === 'followers') {
-      setFilteredData(followersData);
-    } else if (tab === 'following') {
-      setFilteredData(followingData);
-    } else if (tab === 'search') {
-      setFilteredData(allUsersData); // Search shows all users by default
-    }
+    // No need to update filteredData here since the new useEffect handles it
   };
 
   /**
@@ -110,15 +115,12 @@ function SearchPage({ navigation }) {
     if (activeTab === 'followers') {
       const followers = await getThings('followers', user.token);
       setFollowersData(followers);
-      setFilteredData(followers);
     } else if (activeTab === 'following') {
       const following = await getThings('following', user.token);
       setFollowingData(following);
-      setFilteredData(following);
     } else if (activeTab === 'search') {
       const allUsers = await getThings('users', user.token);
       setAllUsersData(allUsers);
-      setFilteredData(allUsers);
     }
     setRefreshing(false);
   };
@@ -129,20 +131,19 @@ function SearchPage({ navigation }) {
     const isFollowing = followingData.some(user => user.id === item.id);
 
     return (
-    <View style={styles.personItem}>
-      <Text style={styles.personName}>{item.first_name} {item.last_name}</Text>
-      {!isMe && (
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => handleFollow(item, isFollowing ? 'Unfollow' : 'Follow' )}
-        >
-          <Text style={styles.addButtonText}>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
-        </TouchableOpacity>
-        )
-      }
-    </View>
-  );
-};
+      <View style={styles.personItem}>
+        <Text style={styles.personName}>{item.first_name} {item.last_name}</Text>
+        {!isMe && (
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => handleFollow(item, isFollowing ? 'Unfollow' : 'Follow' )}
+          >
+            <Text style={styles.addButtonText}>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -184,29 +185,29 @@ function SearchPage({ navigation }) {
       {/* List of Followers, Following, or Search Results */}
       {filteredData && filteredData.length === 0 ? (
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
-        <View style={{alignItems: 'center'}}>
-        <Text>
-          {activeTab === 'followers'
-            ? 'No followers'
-            : activeTab === 'following'
-            ? 'No following'
-            : 'No users found'}
-        </Text>
-        </View>
+          <View style={{alignItems: 'center', marginTop: 20}}>
+            <Text>
+              {activeTab === 'followers'
+                ? 'No followers'
+                : activeTab === 'following'
+                ? 'No following'
+                : 'No users found'}
+            </Text>
+          </View>
         </ScrollView>
       ) : (
-      <FlatList
-        data={filteredData}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-          />
-        }
-      />
+        <FlatList
+          data={filteredData}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.listContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+            />
+          }
+        />
       )}
     </View>
   );
