@@ -4,6 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateCommunityUserTable
+ *
+ * This migration creates the pivot table 'community_user' 
+ * to establish a many-to-many relationship between the 'users' 
+ * and 'communities' tables. It includes foreign keys to both tables,
+ * a timestamp for when the user joined the community, 
+ * and sets a primary key.
+ *
+ */
 return new class extends Migration
 {
     /**
@@ -15,7 +25,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('community_id')->constrained()->onDelete('cascade');
             $table->timestamp('joined_at')->useCurrent();
-            //$table->timestamps();
             $table->primary(['user_id', 'community_id']);
         });
     }

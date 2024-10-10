@@ -6,6 +6,15 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Class Settings
+ *
+ * Represents user-specific settings within the application.
+ * This model stores settings related to the user's goals,
+ * consumption and savings thresholds, notification preferences,
+ * and privacy settings.
+ *
+ */
 class Settings extends Model
 {
     use HasFactory;
@@ -19,6 +28,14 @@ class Settings extends Model
         'public',
     ];  
 
+    /**
+    * Get the user that owns the settings.
+    *
+    * Defines an inverse one-to-one relationship 
+    * between Settings and User models.
+    *
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
     public function user()
     {
         return $this->belongsTo(User::class);

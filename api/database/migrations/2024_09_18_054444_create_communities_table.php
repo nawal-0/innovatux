@@ -4,6 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateCommunitiesTable
+ *
+ * This migration creates the 'communities' table, 
+ * which stores information about different communities
+ * within the application. Each community has a 
+ * unique name, a description, and timestamp columns.
+ *
+ */
 return new class extends Migration
 {
     /**

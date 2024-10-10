@@ -4,6 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateFactsTable
+ *
+ * This migration creates the 'facts' table, 
+ * which stores facts associated with specific goals.
+ * Each fact includes a goal category, 
+ * a title, and the fact content.
+ *
+ */
 return new class extends Migration
 {
     /**

@@ -9,8 +9,22 @@ use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class HomeController
+ *
+ * This controller handles user inputs related to consumption and spending,
+ * checks against user-defined thresholds, retrieves data for reporting,
+ * and provides methods to calculate weekly data.
+ *
+ */
 class HomeController extends Controller
 {
+    /**
+     * Handles the input of user data.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function input(Request $request)
     {
         $input = new Input();
@@ -35,6 +49,8 @@ class HomeController extends Controller
         $totalPrice = $orders->total_price ?? 0;
 
         $settings = Settings::where('user_id', $request->user()->id)->first();
+
+        // Check if notifications are enabled, then return the necessay alert
         if ($settings->notification) {
             if ($settings->consumption_threshold < $totalQuantity && $settings->savings_threshold < $totalPrice) {
                 return response()->json(['message' => 'Input added', 'warning' => 'You have exceeded the consumption and price threshold'], 201);
@@ -46,14 +62,20 @@ class HomeController extends Controller
                 return response()->json(['message' => 'Input added', 'warning' => 'You have exceeded the price threshold'], 201);
             }
         }
-
         return response()->json(['message' => 'Input added',], 201);
     }
 
+    /**
+     * Checks if the user is within their consumption and price thresholds.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function checkLimit(Request $request)
     {
         list($startOfWeek, $endOfWeek) = $this->getStartAndEndOfWeek();
 
+         // Retrieve total quantity and price for the current week
         $orders = Input::where('user_id', $request->user()->id)
         ->whereBetween('order_date', [$startOfWeek, $endOfWeek])
         ->selectRaw('sum(quantity) as total_quantity, sum(price) as total_price')
@@ -74,10 +96,15 @@ class HomeController extends Controller
                 return response()->json(['warning' => 'You have exceeded the price threshold'], 201);
             }
         }
-
         return response()->json(['message' => 'You are within the consumption and price threshold'], 201);
     }
 
+    /**
+     * Gets the start and end dates of the week.
+     *
+     * @param int $offsetWeeks Number of weeks to offset from the current week
+     * @return array An array containing the formatted start and end dates
+     */
     function getStartAndEndOfWeek($offsetWeeks = 0)
     {
         $now = new DateTime();
@@ -100,7 +127,12 @@ class HomeController extends Controller
         return [$startOfWeekFormatted, $endOfWeekFormatted];
     }
 
-
+    /**
+     * Retrieves user input data for the current week, grouped by day.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function retrieval(Request $request)
     {
         // Get the start and end of the week
@@ -117,11 +149,14 @@ class HomeController extends Controller
         
         
         foreach ($orders as $order) {
-            // Map date to day of the week
+            /** 
+             * Map date to day of the week
+             * ChatGPT: Map the dates to day 
+             */ 
             $order->day = (new DateTime($order->order_date))->format('N');
 
             $orderData[] = [
-                'day' => $daysOfWeek[$order->day - 1], // Map 1-7 to the correct day of the week
+                'day' => $daysOfWeek[$order->day - 1],
                 'total_quantity' => $order->quantity,
                 'total_price' => $order->price,
             ];
@@ -129,6 +164,12 @@ class HomeController extends Controller
         return response()->json($orderData, 200);
     }
 
+    /**
+     * Retrieves total quantity and price for the previous week.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getLastWeek(Request $request) {
         list($startOfWeek, $endOfWeek) = $this->getStartAndEndOfWeek(-1);
 
@@ -137,6 +178,7 @@ class HomeController extends Controller
         ->selectRaw('sum(quantity) as total_quantity, sum(price) as total_price')
         ->first(); 
 
+        // Set total quantity and price, defaulting to 0 if null
         $totalQuantity = $orders->total_quantity ?? 0;
         $totalPrice = $orders->total_price ?? 0;
 

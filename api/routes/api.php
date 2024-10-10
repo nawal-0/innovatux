@@ -8,8 +8,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CommunityController;
 
+/**
+ * User Authentication and Profile Routes
+ */
 Route::get('/users', [UserController::class, 'index']);
-
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/signup', [UserController::class, 'signup']);
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
@@ -18,27 +20,41 @@ Route::post('/add/preferences', [UserController::class, 'createPreference'])->mi
 Route::get('/user', [UserController::class, 'getUser'])->middleware('auth:sanctum');
 Route::post('/change/password', [UserController::class, 'changePassword'])->middleware('auth:sanctum');
 
+/**
+ * Community Routes
+ */
 Route::get('/communities', [CommunityController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/join', [CommunityController::class, 'join'])->middleware('auth:sanctum');
-
 Route::get('/is-user-in-group', [CommunityController::class, 'isUserInGroup'])->middleware('auth:sanctum');
 
+/**
+ * Messaging Routes
+ */
 Route::post('/message', [MessageController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/messages/{community_id}', [MessageController::class, 'index'])->middleware('auth:sanctum');
 
+
+/**
+ * Post and Feed Routes
+ */
 Route::post('/posts', [PostController::class, 'feedstore'])->middleware('auth:sanctum');
 Route::get('/posts', [PostController::class, 'getPosts'])->middleware('auth:sanctum');
+Route::post('/like', [PostController::class, 'likePost'])->middleware('auth:sanctum');
 
+/**
+ * User Input and Tracking Routes
+ */
 Route::post('/input', [HomeController::class, 'input'])->middleware('auth:sanctum');
 Route::get('/input', [HomeController::class, 'retrieval'])->middleware('auth:sanctum');
 Route::get('/limit', [HomeController::class, 'checkLimit'])->middleware('auth:sanctum');
 Route::get('/lastweek', [HomeController::class, 'getLastWeek'])->middleware('auth:sanctum');
 
+/**
+ * Social Interaction Routes
+ */
 Route::post('/follow', [UserController::class, 'follow'])->middleware('auth:sanctum');
 Route::post('/unfollow', [UserController::class, 'unfollow'])->middleware('auth:sanctum');
 Route::get('/followers', [UserController::class, 'getFollowers'])->middleware('auth:sanctum');
 Route::get('/following', [UserController::class, 'getFollowing'])->middleware('auth:sanctum');
 Route::get('/users', [UserController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/facts', [UserController::class, 'getFacts'])->middleware('auth:sanctum');
-
-Route::post('/like', [PostController::class, 'likePost'])->middleware('auth:sanctum');

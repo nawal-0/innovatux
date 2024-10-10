@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Shop;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
 use App\Models\Settings;
 use App\Models\Community;
@@ -27,7 +26,6 @@ class DatabaseSeeder extends Seeder
             'gender' => 'M',
             'username' => '123',
             'remember_token' => '1234567890'
-
         ]);
 
         Settings::create([

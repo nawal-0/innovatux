@@ -4,6 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePostsTable
+ *
+ * This migration creates the 'posts' table, 
+ * which stores posts made by users.
+ * Each post contains a caption, an image path, 
+ * and keeps track of the number of likes.
+ * It also establishes a foreign key r
+ * elationship with the 'users' table.
+ *
+ * ChatGPT: How to store image in database?
+ */
 return new class extends Migration
 {
     /**

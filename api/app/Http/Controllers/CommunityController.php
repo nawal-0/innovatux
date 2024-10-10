@@ -8,17 +8,34 @@ use App\Models\Community;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class CommunityController
+ *
+ * This controller manages community-related operations,
+ * including listing communities, allowing users to join communities,
+ * and checking if a user is a member of specific communities.
+ *
+ */
 class CommunityController extends Controller
 {
+    /**
+     * Display a listing of all communities.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request) {
         $communities = Community::all();
         return response()->json($communities, 200);
     }
 
+    /**
+     * Allow a user to join a community.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function join(Request $request) {
-
-        try {
-        //echo($request);
         $user = $request->user();
         $community = Community::find($request->community_id);
         if ($community) {
@@ -32,12 +49,14 @@ class CommunityController extends Controller
         } else {
             return response()->json(['message' => 'Community not found'], 404);
         }
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
     }
 
+    /**
+     * Check if the authenticated user is a member of each community.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function isUserInGroup(Request $request)
     {
         $user = $request->user();
@@ -49,6 +68,4 @@ class CommunityController extends Controller
         }
         return response()->json($membership, 200);
     }
-
 }
-

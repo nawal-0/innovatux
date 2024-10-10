@@ -2,6 +2,8 @@ import { IP_ADDR } from "./ip-addr";
 import FormData from 'form-data';
 
 const URL = `http://${IP_ADDR}:8000/api/`;
+//const URL = `http://${IP_ADDR}/api/`;
+
 
 export const postLogin = async (email, password) => {
     const response = await fetch(`${URL}login`, {
@@ -110,7 +112,7 @@ export const postFeed = async (caption, image, token) => {
     const imageName = image.split('/').pop();
     const imageType = imageName.split('.').pop();
 
-  // Add the image file to the form data
+    // Add the image file to the form data
     formData.append('image', {
         uri: image,
         name: imageName,
@@ -179,6 +181,3 @@ export const likePost = async (post, token) => {
     const message = await response.json();
     return message;
 }
-
-
-

@@ -4,6 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateAlcoholInputTable
+ *
+ * This migration creates the 'alcohol_input' table, 
+ * which records user inputs related to alcohol consumption.
+ * Each record stores the user's ID, the price spent, 
+ * the quantity consumed, and the date of the consumption.
+ *
+ */
 return new class extends Migration
 {
     /**

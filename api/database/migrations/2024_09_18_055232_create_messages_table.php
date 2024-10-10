@@ -4,6 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateMessagesTable
+ *
+ * This migration creates the 'messages' table, which 
+ * stores messages sent by users within communities.
+ * Each message is associated with a user and a community, 
+ * includes the content of the message,
+ * and timestamps for when it was posted and updated.
+ *
+ */
 return new class extends Migration
 {
     /**

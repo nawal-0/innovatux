@@ -4,6 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateSettingsTable
+ *
+ * This migration creates the 'settings' table, 
+ * which stores user-specific settings.
+ * The table includes foreign key references to 
+ * the 'users' table and contains fields for the user's goal, 
+ * consumption and savings thresholds, notification preference,
+ *  and visibility setting.
+ *
+ */
 return new class extends Migration
 {
     /**

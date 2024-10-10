@@ -6,6 +6,14 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class FactsTableSeeder
+ *
+ * Seeds the 'facts' table with predefined facts related to different goals.
+ * This seeder populates the database with facts that can be used within the application
+ * to provide users with informative or motivational content based on their selected goals.
+ *
+ */
 class FactsTableSeeder extends Seeder
 {
     /**

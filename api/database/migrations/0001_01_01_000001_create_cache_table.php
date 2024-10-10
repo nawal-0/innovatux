@@ -4,6 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateCacheTables
+ *
+ * This migration creates the 'cache' and 'cache_locks' tables.
+ * These tables are used by Laravel's caching system when the
+ * database driver is selected as the cache store.
+ *
+ */
 return new class extends Migration
 {
     /**

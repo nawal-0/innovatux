@@ -4,6 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateUsersAndRelatedTables
+ *
+ * This migration creates the 'users', 
+ * 'password_reset_tokens', and 'sessions' tables.
+ * It defines the schema for user authentication, 
+ * password resets, and session management.
+ *
+ * @package Database\Migrations
+ */
 return new class extends Migration
 {
     /**

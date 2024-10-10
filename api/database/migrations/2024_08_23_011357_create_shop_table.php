@@ -4,6 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateShopTable
+ *
+ * This migration creates the 'shop' table, 
+ * which stores items available for purchase.
+ * Each item represents a drink with a name, 
+ * image, and price.
+ *
+ */
 return new class extends Migration
 {
     /**
