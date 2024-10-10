@@ -4,6 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { getThings, followUser, unfollowUser } from '../api-functions';
 import { useUser } from '../components/UserContext';
 
+/**
+ * SearchPage Component
+ * This component provides functionality to view followers, following, and search for users.
+ */
 function SearchPage({ navigation }) {
   const [activeTab, setActiveTab] = useState('followers'); // Toggle between followers, following, and search
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,7 +46,12 @@ function SearchPage({ navigation }) {
     load();
   }, []);
 
-  // Handle tab switch between Followers, Following, and Search
+  /**
+   * Handles switching between tabs (followers, following, search)
+   * 
+   * @param {string} tab - The name of the tab to switch to
+   * @returns {void}
+   */
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
     if (tab === 'followers') {
@@ -54,7 +63,12 @@ function SearchPage({ navigation }) {
     }
   };
 
-  // Handle search functionality
+  /**
+   * Handles searching for users based on search term
+   * 
+   * @param {string} text - The search input value
+   * @returns {void}
+   */
   const handleSearch = (text) => {
     setSearchTerm(text);
     let data;
@@ -72,6 +86,13 @@ function SearchPage({ navigation }) {
     setFilteredData(filtered);
   };
 
+  /**
+   * Handles follow/unfollow action for a person
+   * 
+   * @param {object} person - The person to follow or unfollow
+   * @param {string} button - The button type ('Follow' or 'Unfollow')
+   * @returns {void}
+   */
   const handleFollow = async (person, button) => {
     if (button === 'Follow') {
       const response = await followUser(person.id, user.token);
@@ -81,9 +102,9 @@ function SearchPage({ navigation }) {
       const updatedFollowing = followingData.filter(user => user.id !== person.id);
       setFollowingData(updatedFollowing);
     }
-
   };
 
+  // Handles refreshing the data for the current active tab
   const handleRefresh = async () => {
     setRefreshing(true);
     if (activeTab === 'followers') {

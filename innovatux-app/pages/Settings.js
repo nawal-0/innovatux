@@ -6,6 +6,10 @@ import { logout, getThings, addPreference, changePassword } from '../api-functio
 import { useUser } from '../components/UserContext';
 import { globalStyles } from './Styles';
 
+/**
+ * SettingsPage Component
+ * This component provides functionality to view and update user settings, preferences, and profile information.
+ */
 export default function SettingsPage({ navigation }) {
   const { user } = useUser();
   const [userSettings, setUserSettings] = useState({});
@@ -46,19 +50,21 @@ export default function SettingsPage({ navigation }) {
     fetchUser();
   }, []);
 
+  // Toggle push notifications on/off and update user settings.
   const togglePushNotifications = async () => {
     const updatedSettings = { ...userSettings, notification: !userSettings.notification };
     setUserSettings(updatedSettings);
     await addPreference(updatedSettings, user.token);
   };
 
+  // Toggle public profile visibility on/off and update user settings.
   const togglePublic = async () => {
     const updatedSettings = { ...userSettings, public: !userSettings.public };
     setUserSettings(updatedSettings);
     await addPreference(updatedSettings, user.token);
   };
 
-  // Function to handle form submission
+  // Function to handle form submission for changing the user password.
   const handlePasswordChange = async () => {
     if (newPassword !== confirmPassword) {
       alert('New passwords do not match!');
@@ -69,6 +75,7 @@ export default function SettingsPage({ navigation }) {
     setPasswordModalVisible(false);
   };
 
+  // Handle form submission for setting the weekly consumption and savings limit.
   const handleLimitChange = async () => {
     const updatedSettings = { ...userSettings, consumption_threshold: weeklycLimit, savings_threshold: weeklysLimit };
     setUserSettings(updatedSettings);
@@ -76,6 +83,10 @@ export default function SettingsPage({ navigation }) {
     setLimitModalVisible(false);
   };
 
+  /**
+   * Handle user logout and navigate back to the login screen.
+   * @returns {void}
+   */
   const handleLogout = () => {
     async function fetchLogout() {
       const response = await logout(user.token);
@@ -86,6 +97,12 @@ export default function SettingsPage({ navigation }) {
     }
     fetchLogout();
   };
+
+  /**
+   * Handle goal change and update the backend with the new value.
+   * @param {string} value - The new goal value
+   * @returns {Promise<void>}
+   */
   const handleGoalChange = async (value) => {
     // Update local settings
     const updatedSettings = { ...userSettings, goal: value };

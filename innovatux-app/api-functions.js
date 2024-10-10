@@ -1,10 +1,19 @@
 import { IP_ADDR } from "./ip-addr";
 import FormData from 'form-data';
 
+//To toggle between testing locally and online server
 const URL = `http://${IP_ADDR}:8000/api/`;
 //const URL = `http://${IP_ADDR}/api/`;
 
+//User Authentication Functions
 
+/**
+ * Logs in a user with the provided email and password.
+ *
+ * @param {string} email - The user's email address.
+ * @param {string} password - The user's password.
+ * @returns {Promise<Object>} The response data from the server.
+ */
 export const postLogin = async (email, password) => {
     const response = await fetch(`${URL}login`, {
         method: 'POST',
@@ -17,6 +26,18 @@ export const postLogin = async (email, password) => {
     return data;
 }
 
+/**
+ * Signs up a new user with the provided details.
+ *
+ * @param {string} first_name - user's first name.
+ * @param {string} last_name - user's last name.
+ * @param {string} username - desired username.
+ * @param {string} email - user's email address.
+ * @param {string} password - user's password.
+ * @param {number} age - user's age.
+ * @param {string} gender - user's gender.
+ * @returns {Promise<Object>} The response data from the server.
+ */
 export const signup = async (first_name, last_name, username, email, password, age, gender) => {
     const response = await fetch(`${URL}signup`, {
         method: 'POST',
@@ -29,6 +50,12 @@ export const signup = async (first_name, last_name, username, email, password, a
     return data;
 }
 
+/**
+ * Logs out the authenticated user.
+ *
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response message from the server.
+ */
 export const logout = async (token) => {
     const response = await fetch(`${URL}logout`, {
         method: 'POST',
@@ -40,6 +67,14 @@ export const logout = async (token) => {
     return message;
 }
 
+// Data Retrieval Functions
+/**
+ * Retrieves items from the server based on the specified endpoint.
+ *
+ * @param {string} item - The endpoint to fetch data from.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The data retrieved from the server.
+ */
 export const getThings = async (item, token) => {
     const response = await fetch(`${URL}${item}`, {
         method: 'GET',
@@ -51,6 +86,15 @@ export const getThings = async (item, token) => {
         return data;
 }
 
+// User Settings and Preferences
+
+/**
+ * Adds or updates user preferences.
+ *
+ * @param {Object} preferences - An object containing user preferences.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response data from the server.
+ */
 export const addPreference = async (preferences, token) => {
     const response = await fetch(`${URL}add/preferences`, {
         method: 'POST',
@@ -64,6 +108,14 @@ export const addPreference = async (preferences, token) => {
     return data;
 }
 
+/**
+ * Changes the user's password.
+ *
+ * @param {string} old_password - The user's current password.
+ * @param {string} new_password - The new password to set.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response message from the server.
+ */
 export const changePassword = async (old_password, new_password, token) => {
     const response = await fetch(`${URL}change/password`, {
         method: 'POST',
@@ -77,6 +129,15 @@ export const changePassword = async (old_password, new_password, token) => {
     return message;
 }
 
+// Community Functions
+
+/**
+ * Allows the user to join a community.
+ *
+ * @param {number} community_id - The ID of the community to join.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response message from the server.
+ */
 export const joinCommunity = async (community_id, token) => {
     const response = await fetch(`${URL}join`, {
         method: 'POST',
@@ -90,6 +151,14 @@ export const joinCommunity = async (community_id, token) => {
     return message;
 }
 
+/**
+ * Posts a message to a community.
+ *
+ * @param {string} content - The content of the message.
+ * @param {number} community_id - The ID of the community.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response data from the server.
+ */
 export const postMessage = async (content, community_id, token) => {
     const response = await fetch(`${URL}message`, {
         method: 'POST',
@@ -103,12 +172,23 @@ export const postMessage = async (content, community_id, token) => {
     return data;
 }
 
+// Feed and Posts Functions
+
+/**
+ * Creates a new post in the user's feed.
+ *
+ * @param {string} caption - The caption for the post.
+ * @param {string} image - The URI of the image to upload.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response data from the server.
+ */
 export const postFeed = async (caption, image, token) => {
     const formData = new FormData();
 
     formData.append('caption', caption);
 
     // Get the filename and type from the imageUri
+    // ChatGPT: How to retrieve the image path from database
     const imageName = image.split('/').pop();
     const imageType = imageName.split('.').pop();
 
@@ -130,6 +210,17 @@ export const postFeed = async (caption, image, token) => {
     return data;
 }
 
+// User Input and Tracking
+
+/**
+ * Submits alcohol consumption data.
+ *
+ * @param {string} date - The date of consumption.
+ * @param {number} price - The price spent on alcohol.
+ * @param {number} amount - The quantity of alcohol consumed.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response data from the server.
+ */
 export const postInput = async (date, price, amount, token) => {
     const response = await fetch(`${URL}input`, {
         method: 'POST',
@@ -143,6 +234,14 @@ export const postInput = async (date, price, amount, token) => {
     return data;
 }
 
+// Social Interaction Functions
+/**
+ * Follows a user.
+ *
+ * @param {number} user_id - The ID of the user to follow.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response message from the server.
+ */
 export const followUser = async (user_id, token) => {
     const response = await fetch(`${URL}follow`, {
         method: 'POST',
@@ -156,6 +255,13 @@ export const followUser = async (user_id, token) => {
     return message;
 }
 
+/**
+ * Unfollows a user.
+ *
+ * @param {number} user_id - The ID of the user to unfollow.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response message from the server.
+ */
 export const unfollowUser = async (user_id, token) => {
     const response = await fetch(`${URL}unfollow`, {
         method: 'POST',
@@ -169,6 +275,13 @@ export const unfollowUser = async (user_id, token) => {
     return message;
 }
 
+/**
+ * Likes a post.
+ *
+ * @param {Object} post - The post object containing at least an 'id' property.
+ * @param {string} token - The user's authentication token.
+ * @returns {Promise<Object>} The response message from the server.
+ */
 export const likePost = async (post, token) => {
     const response = await fetch(`${URL}like`, {
         method: 'POST',

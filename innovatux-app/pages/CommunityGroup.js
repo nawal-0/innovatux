@@ -3,13 +3,17 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 
 import { useUser } from '../components/UserContext';
 import { getThings, joinCommunity } from '../api-functions'
 
-
+/**
+ * GroupSelection Component
+ * This component displays community groups and allows the user to join or view a group.
+ */
 export default function GroupSelection({ navigation }) {
   const { user } = useUser();
   const [searchText, setSearchText] = useState('');
   const [groups, setGroups] = useState([]);
   const [userGroups, setUserGroups] = useState({});
 
+   // useEffect hook to fetch all community groups when the component is mounted
   useEffect(() => {
     async function fetchCommunities() {
       try {
@@ -22,6 +26,7 @@ export default function GroupSelection({ navigation }) {
     fetchCommunities();
   }, []);
 
+ // useEffect to fetch user's membership statuses in different communities
   useEffect(() => {
     async function fetchMembership() {
       try {
@@ -36,6 +41,12 @@ export default function GroupSelection({ navigation }) {
     fetchMembership();
   }, []);
 
+  /**
+   * Handle joining a community or navigating to the group chat.
+   * 
+   * @param {string} id - The ID of the community to join or view
+   * @returns {Promise<void>}
+   */
   const handleJoin = async (id) => {
     if (userGroups[id]) {
       // If the user is already in the group, navigate to the chat
@@ -90,6 +101,7 @@ export default function GroupSelection({ navigation }) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

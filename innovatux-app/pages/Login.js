@@ -3,11 +3,26 @@ import { ImageBackground, Text, View, TextInput, StyleSheet, TouchableOpacity, I
 import { postLogin } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import { globalStyles } from './Styles';
+
+/**
+ * Login Component
+ * This component renders the login screen for the application.
+ * Allows users to enter their email and password to authenticate.
+ */
 function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const { setUser } = useUser();
+
+  /**
+   * handleLogin function
+   * This function handles the login process by calling the `postLogin` API.
+   * If the response is successful, it sets the user information in the user context.
+   * If there's an error, it displays the error message.
+   * 
+   * @returns {void}
+   */
   const handleLogin = () => {
     async function fetchUsers() {
       console.log(email, password);
@@ -23,6 +38,7 @@ function Login({ navigation }) {
     }
     fetchUsers();
   };
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -39,14 +55,12 @@ function Login({ navigation }) {
             style={globalStyles.input}
             placeholder="Username or Email"
             onChangeText={setEmail}
-            //placeholderTextColor="#fff" // White text color for placeholder
           />
           <TextInput
             style={globalStyles.input}
             placeholder="Password"
             secureTextEntry
             onChangeText={setPassword}
-            //placeholderTextColor="#fff" // White text color for placeholder
           />
           {error && <Text style={styles.userText}>{error}</Text>}
           <TouchableOpacity style={globalStyles.button} onPress={handleLogin}>
@@ -60,39 +74,27 @@ function Login({ navigation }) {
     </KeyboardAvoidingView>
   );
 }
+
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center', // Center horizontally
     padding: 16,
-    //backgroundColor: '#E1F9EB', // Background color
   },
   imageContainer: {
     overflow: 'hidden', // Ensure that the overflow is hidden to show only the top half
     width: '100%', // Set a width for the image
     height: '40%', // Set a height for half-circle effect
-    // justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10
-    // borderTopLeftRadius: 0,
-    //borderBottomRightRadius: 100,
-    //borderBottomLeftRadius: 100
   },
   image: {
     width: '110%',
     height: '100%',
-    // borderTopLeftRadius: 0,
     borderBottomRightRadius: 200,
     borderBottomLeftRadius: 200,
-    // borderTopLeftRadius: 190,
-    // borderTopRightRadius: 190,
-    // top: -90
-    //width: 150, // Adjust width as needed
-    //height: 150, // Adjust height as needed
-    //borderRadius: 75, // Half of the width/height to make it circular
-    //resizeMode: 'contain', // Adjust how the image is resized
-    //marginBottom: 20,
   },
   title: {
     fontSize: 32,
@@ -105,13 +107,10 @@ const styles = StyleSheet.create({
   input: {
     width: '100%', // Full width for input fields
     height: 40,
-    //backgroundColor: '#A9DFBF', // Background color for input fields
-    //borderColor: '#245C3B',
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 8,
     marginBottom: 16,
-    //color: '#245C3B', // Text color for input fields
   },
   loginButton: {
     width: '100%', // Full width for login button

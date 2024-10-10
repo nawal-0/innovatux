@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+// Global style sheets
 export const globalStyles = StyleSheet.create({
   dropdown: {
     backgroundColor: '#ffffff',

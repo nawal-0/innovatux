@@ -10,6 +10,11 @@ import { Calendar } from 'react-native-calendars';
 
 const screenWidth = Dimensions.get('window').width;
 
+/**
+ * Home Component
+ * This component displays the user's alcohol consumption statistics, 
+ * savings, and health-related facts.
+ */
 export default function Home() {
   // States for manual input modal
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,6 +42,11 @@ export default function Home() {
       datasets: [{ data: [0, 0, 0, 0, 0, 0, 0] }],
   });
 
+  /**
+   * Fetches the weekly alcohol input data and updates the state for chart display.
+   * 
+   * ChatGPT: How to map the dates to day from backend to frontend
+   */
   const fetchOrders = async () => {
     const data = await getThings("input", user.token);
     const quantities = [0, 0, 0, 0, 0, 0, 0];
@@ -72,6 +82,9 @@ export default function Home() {
     loadContent();
   }, []);
 
+    /**
+   * useEffect that loads random facts related to the user's goal.
+   */
   useEffect(() => {
     const loadFacts = async () => {
       const response = await getThings("facts", user.token);
@@ -82,6 +95,9 @@ export default function Home() {
     loadFacts();
   }, []);
 
+  /**
+   * Refresh function to re-fetch weekly orders, facts, and check consumption limits.
+   */
   const onRefresh = async () => {
     setRefreshing(true);
     fetchOrders();
@@ -116,6 +132,11 @@ export default function Home() {
     setModalVisible(false); // Close the modal after submission
   };    
 
+  /**
+   * Handles date selection for manual input.
+   * 
+   * @param {Object} day - selected date object from the calendar
+   */
   const onDayPress = (day) => {
     setDate(day.dateString);
   };

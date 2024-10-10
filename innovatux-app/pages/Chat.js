@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../components/UserContext';
 import { postMessage, getThings } from '../api-functions';
 
+// GroupChat component handles the chat functionalities for a specific group chat
 export default function GroupChat({ route }) {
   const navigation = useNavigation();
   const { user } = useUser();
@@ -22,6 +23,7 @@ export default function GroupChat({ route }) {
     { id: 'system-welcome', content: 'Welcome to the chat!', user_id: 'system' }
   ]);
 
+  // Function to fetch messages from the serve
   useEffect(() => {
     const fetchMessages = async () => {
       const endpoint = lastMessageId ? `messages/${groupId}?after=${lastMessageId}` : `messages/${groupId}`;
@@ -45,6 +47,7 @@ export default function GroupChat({ route }) {
     return () => clearInterval(intervalID);
   }, [isMessageSent, lastMessageId, atBottom]);  // Add `atBottom` as a dependency
 
+   // Function to handle message sending
   const handleSendMessage = async () => {
     if (message.trim()) {
       const response = await postMessage(message, groupId, user.token);
@@ -62,6 +65,7 @@ export default function GroupChat({ route }) {
     setAtBottom(isAtBottom);
   };
 
+  // Render each message in the chat
   const renderMessage = ({ item }) => {
     const isSystemMessage = item.user_id === 'system';
     const isCurrentUser = item.user_id === user.id;
@@ -117,6 +121,7 @@ export default function GroupChat({ route }) {
   );
 }
 
+//Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

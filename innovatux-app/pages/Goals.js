@@ -5,6 +5,9 @@ import { useUser } from '../components/UserContext';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { globalStyles } from './Styles';
 
+/**
+ * Component that allows users to set their goals and preferences.
+ */
 function Goals({ navigation }) {
 
   const [preferences, setPreferences] = useState({
@@ -19,6 +22,11 @@ function Goals({ navigation }) {
   const togglePublicSwitch = () => setPreferences({ ...preferences, public: !preferences.public });
   const { user } = useUser();
 
+  /**
+   * Handle the form submission.
+   * Saves the preferences by calling the `addPreference` API function.
+   * @returns {void}
+   */
   const handlePress = async () => {
     const response = await addPreference(preferences, user.token);
     console.log(response);
@@ -34,6 +42,11 @@ function Goals({ navigation }) {
     { label: 'Religious', value: 'Religious' }
   ]);
 
+  /**
+   * Handle the goal selection from the dropdown.
+   * @param {string} callbackValue - The value selected from the dropdown.
+   * @returns {void}
+   */
   const handleSetGoal = (callbackValue) => {
     setGoal(callbackValue);
     setPreferences((prevPreferences) => ({

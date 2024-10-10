@@ -4,6 +4,12 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useUser } from '../components/UserContext';
 import { signup } from '../api-functions';
 import { globalStyles } from './Styles';
+
+/**
+ * SignUp Component
+ * This component provides the functionality for users to sign up for the application.
+ * It includes form fields for first name, last name, email, username, age, gender, and password.
+ */
 export default function SignUp({navigation}) {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
@@ -12,6 +18,7 @@ export default function SignUp({navigation}) {
   const [age, setAge] = useState('');
   const [password, setPassword] = useState('');
   const { setUser } = useUser();
+
   // DropDownPicker state
   const [open, setOpen] = useState(false);
   const [gender, setGender] = useState(null);
@@ -20,6 +27,13 @@ export default function SignUp({navigation}) {
     { label: 'Female', value: 'Female' },
     { label: 'Other', value: 'Other' }
   ]);
+
+  /**
+   * Validate the provided username based on several rules, including allowed characters, length, and specific sequences.
+   * 
+   * @param {string} input - The username to validate.
+   * @returns {boolean} True if the username is valid, otherwise false.
+   */
   const validateUsername = (input) => {
     const regex = /^[A-Za-z0-9._]+$/;
     if (!regex.test(input)) {
@@ -41,6 +55,10 @@ export default function SignUp({navigation}) {
     return true;
   };
 
+  /**
+   * Handle the sign-up process by validating inputs and calling the signup API.
+   * It checks if all fields are filled, validates the username and password, and makes the signup request.
+   */
   const handleSignUp = () => {
     const validatePassword = (input) => {
       const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
@@ -51,7 +69,6 @@ export default function SignUp({navigation}) {
       return true;
     };
     
-  
     async function fetchSign() {
       if (!first_name || !last_name || !email || !username || !age || !gender || !password) {
         Alert.alert('Missing Information', 'Please fill out all the fields.');
@@ -85,7 +102,6 @@ export default function SignUp({navigation}) {
         console.error(error);
       }
     }
-  
     fetchSign();
   };
   return (
@@ -177,6 +193,7 @@ export default function SignUp({navigation}) {
     </KeyboardAvoidingView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,

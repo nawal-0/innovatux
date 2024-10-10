@@ -6,6 +6,9 @@ import { postFeed, getThings, likePost } from '../api-functions';
 import { useUser } from '../components/UserContext';
 import { globalStyles } from './Styles';
 
+/**
+ * Component to display and interact with a feed of posts.
+ */
 function Feed({ navigation }) {
   const { width } = Dimensions.get('window');
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,7 +30,10 @@ function Feed({ navigation }) {
     })();
   }, []);
 
-  // Function to fetch posts from the API
+  /**
+   * Fetch posts from the server.
+   * @returns {Promise<void>}
+   */
   const fetchPosts = async () => {
     const data = await getThings('posts', user.token);
     setPosts(data);
@@ -38,14 +44,21 @@ function Feed({ navigation }) {
     fetchPosts();
   }, []);
 
-  // Pull to refresh functionality
+  /**
+   * Handle pull to refresh functionality.
+   * @returns {Promise<void>}
+   */
   const onRefresh = async () => {
     setRefreshing(true);
     fetchPosts();
     setRefreshing(false);
   };
 
-  // Open image picker for user to select an image
+  /**
+   * Handle selecting an image from the device.
+   * @returns {Promise<void>}
+   * 
+   */
   const handleSelectImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -72,18 +85,22 @@ function Feed({ navigation }) {
     setModalVisible(false);
   };
 
-  // Handle like button press for each post (toggle between liked and unliked)
+  /**
+   * Handle liking a post.
+   * Toggles the like status of a post and updates the like count.
+   * 
+   * @param {Object} post - The post object to like/unlike
+   * @returns {Promise<void>}
+   */
   const handleLike = async (post) => {
     const response = await likePost(post, user.token);
     setPosts(posts.map((p) => {
       if (p.id === post.id) {
         return { ...p, likes_count: response.likes_count, is_liked: response.is_liked };
-        
       }
       return p;
     }
-    ));
-    
+    )); 
   };
 
   return (
