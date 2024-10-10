@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, TextInput, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getThings, followUser, unfollowUser } from '../api-functions';
 import { useUser } from '../components/UserContext';
@@ -183,6 +183,7 @@ function SearchPage({ navigation }) {
 
       {/* List of Followers, Following, or Search Results */}
       {filteredData && filteredData.length === 0 ? (
+        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
         <View style={{alignItems: 'center'}}>
         <Text>
           {activeTab === 'followers'
@@ -192,6 +193,7 @@ function SearchPage({ navigation }) {
             : 'No users found'}
         </Text>
         </View>
+        </ScrollView>
       ) : (
       <FlatList
         data={filteredData}
