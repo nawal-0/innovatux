@@ -82,7 +82,7 @@ export default function Home() {
     loadContent();
   }, []);
 
-    /**
+  /**
    * useEffect that loads random facts related to the user's goal.
    */
   useEffect(() => {

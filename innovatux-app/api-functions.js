@@ -2,13 +2,13 @@ import { IP_ADDR } from "./ip-addr";
 import FormData from 'form-data';
 
 //To toggle between testing locally and online server
-const URL = `http://${IP_ADDR}:8000/api/`;
-//const URL = `http://${IP_ADDR}/api/`;
+const URL = `http://${IP_ADDR}:8000/api/`; // To test and run locally
+//const URL = `http://170.64.199.247/api/`; // To test and run on cloud server
 
 //User Authentication Functions
 
 /**
- * Logs in a user with the provided email and password.
+ * Logs in user with the provided email and password.
  *
  * @param {string} email - The user's email address.
  * @param {string} password - The user's password.

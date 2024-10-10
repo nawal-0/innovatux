@@ -75,7 +75,7 @@ class HomeController extends Controller
     {
         list($startOfWeek, $endOfWeek) = $this->getStartAndEndOfWeek();
 
-         // Retrieve total quantity and price for the current week
+        // Retrieve total quantity and price for the current week
         $orders = Input::where('user_id', $request->user()->id)
         ->whereBetween('order_date', [$startOfWeek, $endOfWeek])
         ->selectRaw('sum(quantity) as total_quantity, sum(price) as total_price')
