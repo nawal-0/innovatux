@@ -7,7 +7,7 @@ use App\Models\Fact;
 use App\Models\User;
 use Illuminate\Http\Request;
 use IIluminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Validator;
 
 /**
  * Class UserController
