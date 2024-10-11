@@ -93,6 +93,10 @@ export default function SignUp({navigation}) {
   
       try {
         const response = await signup(first_name, last_name, username, email, password, age, gender);
+        if (response.errors) {
+          Alert.alert('Sign Up Error', response.errors);
+          return;
+        }
         console.log(response);
         const userInfo = { token: response.token, id: response.user.id };
         setUser(userInfo);

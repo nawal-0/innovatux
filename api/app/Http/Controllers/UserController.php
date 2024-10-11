@@ -7,6 +7,7 @@ use App\Models\Fact;
 use App\Models\User;
 use Illuminate\Http\Request;
 use IIluminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class UserController
@@ -58,6 +59,19 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function signup(Request $request) {
+        $rules = [
+            'email' => 'required|email|unique:users,email',
+            'username' => 'required|unique:users,username',
+        ];
+    
+        $validator = Validator::make($request->all(), $rules);
+    
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
         $request['password'] = bcrypt($request->password);
         $user = User::create($request->all());
         $token = $user->createToken('token')->plainTextToken;
