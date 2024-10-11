@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use IIluminate\Support\Facades\Auth;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class UserController

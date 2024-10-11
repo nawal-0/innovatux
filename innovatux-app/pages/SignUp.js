@@ -94,7 +94,9 @@ export default function SignUp({navigation}) {
       try {
         const response = await signup(first_name, last_name, username, email, password, age, gender);
         if (response.errors) {
-          Alert.alert('Sign Up Error', response.errors);
+          const firstErrorKey = Object.keys(response.errors)[0];
+          const firstErrorMessage = response.errors[firstErrorKey][0]; 
+          Alert.alert('Sign Up Error', firstErrorMessage);
           return;
         }
         console.log(response);
