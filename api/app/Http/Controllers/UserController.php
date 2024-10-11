@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Fact;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use IIluminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
 
@@ -61,8 +62,8 @@ class UserController extends Controller
     public function signup(Request $request) {
         try {
         $rules = [
-            'email' => 'required|email|unique:users,email',
-            'username' => 'required|unique:users,username',
+            'email' => ['required', 'email', Rule::unique('users')],
+            'username' => ['required', Rule::unique('users')],
         ];
     
         $validator = Validator::make($request->all(), $rules);
