@@ -188,7 +188,12 @@ export const postFeed = async (caption, image, token) => {
     formData.append('caption', caption);
 
     // Get the filename and type from the imageUri
-    // ChatGPT: How to retrieve the image path from database
+    /**
+     * The code snippet (1. Retrieving Image) below has been sourced 
+     * from https://chat.openai.com/ with the query 
+     * "How to retrieve the image path from database". 
+     * The code snippet appears in its original form
+     */
     const imageName = image.split('/').pop();
     const imageType = imageName.split('.').pop();
 
@@ -198,6 +203,7 @@ export const postFeed = async (caption, image, token) => {
         name: imageName,
         type: `image/${imageType}`,  // Example: 'image/jpeg'
     });
+    // End of code snippet (1. Retrieving Image)
 
     const response = await fetch(`${URL}posts`, {
         method: 'POST',

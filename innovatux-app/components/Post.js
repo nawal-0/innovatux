@@ -1,38 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-//import * as ImagePicker from 'expo-image-picker';
 
+/**
+ * Post Component
+ * 
+ * This renders a single post in the feed, displaying the user's profile image, username,
+ * post image, caption, and interaction buttons such as the like button.
+ * 
+ * @component
+ * @param {object} props - The properties passed to the component.
+ * @param {string} props.id - The unique identifier for the post.
+ * @param {string} props.username - The username of the person who created the post.
+ * @param {string} props.postImage - The URI of the image associated with the post.
+ * @param {object} props.profileImage - The source object for the user's profile image.
+ * @param {string} props.caption - The caption or description of the post.
+ * @returns {React.Element} The rendered Post component.
+ */
 function Post({ id, username, postImage, profileImage, caption }) {
   
   const { width, height } = Dimensions.get('window');
   
   return ( 
-      // <View style={[styles.postContainer]}> 
-      //   <View style={styles.profileContainer}>
-      //     <View style={styles.profileImageContainer}>
-      //       <Image style={styles.profileImage} source={profileImage}/>
-      //     </View>
-      
-      //     <View style={styles.infoContainer}>
-      //       <Text>{username}</Text>
-      //     </View>
-      //   </View>
-      //     <View style={styles.postImageContainer}> 
-      //       <Image style={[styles.postImage, {width: width * 0.9, height: width * 0.9}]} source={{uri: postImage}}/>
-          
-      //           <View style={styles.interactionContainer}>
-      //           <TouchableOpacity style={styles.likeContainer}>
-      //           <Ionicons size={40} name='heart' color='red'/>
-      //           </TouchableOpacity>
-                
-      //           <View style={styles.likeCounter}>
-      //           <Text styles={styles.likesText}>100 Likes</Text>
-                
-      //           </View>
-      //           </View>
-      //     </View>
-      // </View>
       <View key={id} style={styles.postContainer}>
             <View style={styles.profileContainer}>
               <Image style={styles.profileImage} source={profileImage} />
@@ -62,7 +51,6 @@ function Post({ id, username, postImage, profileImage, caption }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
     alignItems: 'center', // Center horizontally
     padding: 16,
     backgroundColor: '#E1F9EB', // Background color
@@ -71,15 +59,10 @@ const styles = StyleSheet.create({
     padding: 10
   },
   postContainer: {
-    //width: '100%',
-    //height: 400,
-    //aspectRatio: 1,
     justifyContent: 'flex-start',
     backgroundColor: '#FFFFFF',
-    //paddingBottom: 10,
     borderRadius: 20,
     position: 'relative', 
-    //padding: 10
     marginBottom: 20
   },
   profileContainer: {
@@ -111,21 +94,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // Adjust how the image is resized
     marginBottom: 20,
   },
-  // postImageContainer: {
-  //   overflow: 'hidden',
-  //   borderBottomLeftRadius: 20,
-  //   borderBottomRightRadius: 20
-  // },
   postImage: {
-    //width: 340, // Adjust width as needed
-    //height: 340, // Adjust height as needed
-    //aspectRatio: 1,
     position: 'relative',
-    //borderRadius: 20,
-    //justifyContent: 'center',
     alignItems: 'center',
     resizeMode: 'cover', // Adjust how the image is resized
-    //marginBottom: 10
   },
   interactionContainer: {
     flexDirection: 'column',
@@ -139,10 +111,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  // likeCounter: {
-  //   width: 80,
-  //   height: 30
-  // },
   likesText: {
     color: 'white',
     width: 80,

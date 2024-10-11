@@ -45,7 +45,10 @@ export default function Home() {
   /**
    * Fetches the weekly alcohol input data and updates the state for chart display.
    * 
-   * ChatGPT: How to map the dates to day from backend to frontend
+   * The code snippet (1. Loop for mapping dates) below has 
+   * been sourced from https://chat.openai.com/ with the query 
+   * "GET dates from backend and map it to frontend". 
+   * The code snippet appears in its original form
    */
   const fetchOrders = async () => {
     const data = await getThings("input", user.token);
@@ -59,6 +62,7 @@ export default function Home() {
             prices[dayIndex] = dayData.total_price;
         }
   });
+  // End of code snippet (1. Loop for mapping dates)
 
     // Update chart data
     setAlcoholData(prevData => ({
@@ -169,7 +173,7 @@ export default function Home() {
       style={styles.chart}
     />
 
-    <Text style={styles.subtitle}>Savings</Text>
+    <Text style={styles.subtitle}>Spendings</Text>
     <BarChart
       data={savingsData}
       width={screenWidth - 32}

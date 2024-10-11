@@ -8,6 +8,12 @@ use App\Models\Settings;
 use App\Models\Community;
 use Illuminate\Database\Seeder;
 
+/**
+ * Class DatabaseSeeder
+ *
+ * Seeds the a default user with predefined settings and images for order shop.
+ *
+ */
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -68,7 +74,7 @@ class DatabaseSeeder extends Seeder
         
         Community::create([
             'name' => 'Liver Longer',
-            'description' => 'idk'
+            'description' => 'Healthy Living'
         ]);
         
         Community::create([

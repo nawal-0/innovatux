@@ -151,7 +151,10 @@ class HomeController extends Controller
         foreach ($orders as $order) {
             /** 
              * Map date to day of the week
-             * ChatGPT: Map the dates to day 
+             * 
+             * The code snippet (1. $order->day = new(DateTime())) below has been 
+             * adapted from https://chat.openai.com/ with the query "Mapping dates to day". 
+             * We mapped the days to monday instead of the default sunday.
              */ 
             $order->day = (new DateTime($order->order_date))->format('N');
 
@@ -160,6 +163,7 @@ class HomeController extends Controller
                 'total_quantity' => $order->quantity,
                 'total_price' => $order->price,
             ];
+            //End of code snippet (1. $order->day = new(DateTime()))
         }
         return response()->json($orderData, 200);
     }

@@ -14,6 +14,14 @@ import GroupChat from '../pages/Chat';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+/**
+ * CommunityPageStack Component
+ * 
+ * This component defines a stack navigator for the Community section of the app.
+ * It includes screens for selecting a community group and the corresponding group chat.
+ * 
+ * @returns {React.Element} A Stack Navigator containing CommunityGroup and Chat screens.
+ */
 function CommunityPageStack() {
   return (
       <Stack.Navigator screenOptions={{
@@ -25,6 +33,14 @@ function CommunityPageStack() {
   );
 }
 
+/**
+ * Tabs Component
+ * 
+ * This component defines the bottom tab navigator for the application.
+ * It includes tabs for Home, Feed, Community, Search, and Settings.
+ * 
+ * @returns {React.Element} A Bottom Tab Navigator containing multiple tabs.
+ */
 function Tabs() {
   return (
     <Tab.Navigator

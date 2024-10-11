@@ -4,22 +4,28 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { useUser } from "./UserContext";
 
+/**
+ * Notification Component
+ * 
+ * This component handles the registration for push notifications and sets up listeners
+ * to handle incoming notifications and user interactions with notifications.
+ * It leverages Expo's Notifications API to manage push notifications within the app.
+ * 
+ */
 export default function Notification() {
     const { user } = useUser();
-    // const [expoPushToken, setExpoPushToken] = useState("");
-    // const [notification, setNotification] = useState(false);
     const notificationListener = useRef();
     const responseListener = useRef();
     
     useEffect(() => {
         registerForPushNotificationsAsync().then((token) => console.log(token));
-    
+
         notificationListener.current = Notifications.addNotificationReceivedListener(
         (notification) => {
             console.log(notification);
         }
         );
-    
+
         responseListener.current = Notifications.addNotificationResponseReceivedListener(
         (response) => {
             console.log(response);
@@ -35,6 +41,13 @@ export default function Notification() {
     return null;
 }
 
+/**
+ * Registers the device for push notifications and retrieves the Expo push token.
+ * Configures notification channels for Android devices.
+ * 
+ * @returns {Promise<string | undefined>} Returns the Expo push token
+ * if registration is successful, otherwise undefined.
+ */
 async function registerForPushNotificationsAsync() {
     let token;
     if (Constants.isDevice) {

@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Schema;
  * It also establishes a foreign key r
  * elationship with the 'users' table.
  *
- * ChatGPT: How to store image in database?
  */
 return new class extends Migration
 {
@@ -27,7 +26,15 @@ return new class extends Migration
             $table->id('id');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('caption');
+
+            /** The code snippet (1. Storing Image) below has been sourced 
+            * from https://chat.openai.com/ with the query 
+            * "How to store image in mySQL". 
+            * The code snippet appears in its original form
+            */
             $table->string('image_path');
+            // End of code snippet (1. Storing Image)
+            
             $table->integer('likes_count')->default(0);
             $table->timestamps();
         });

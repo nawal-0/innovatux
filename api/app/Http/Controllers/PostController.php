@@ -26,7 +26,12 @@ class PostController extends Controller
     {
         $user = $request->user();
 
-        //ChatGPT: How to store image?
+        /**
+         * The code snippet (1. Storing Image) below has been sourced 
+         * from https://chat.openai.com/ with the query 
+         * "How to store image in mySQL". 
+         * The code snippet appears in its original form
+         */
         $imagePath = $request->file('image')->store('posts', 'public');
 
         $post = new Post();
@@ -34,6 +39,8 @@ class PostController extends Controller
 
         // Store the full path of the image
         $post->image_path = asset('storage/' . $imagePath);
+        // End of code snippet (1. Storing Image)
+        
         $post->caption = $request->caption; 
         $post->save();
         $post->load('user');

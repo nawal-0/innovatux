@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
  * The table includes foreign key references to 
  * the 'users' table and contains fields for the user's goal, 
  * consumption and savings thresholds, notification preference,
- *  and visibility setting.
+ * and visibility setting.
  *
  */
 return new class extends Migration

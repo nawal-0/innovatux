@@ -11,7 +11,7 @@ import { useUser } from '../components/UserContext';
 function SearchPage({ navigation }) {
   const [activeTab, setActiveTab] = useState('followers'); // Toggle between followers, following, and search
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredData, setFilteredData] = useState([]); // Initialize as empty array
+  const [filteredData, setFilteredData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useUser();
 
@@ -65,7 +65,6 @@ function SearchPage({ navigation }) {
    */
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
-    // No need to update filteredData here since the new useEffect handles it
   };
 
   /**
