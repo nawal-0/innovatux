@@ -59,6 +59,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function signup(Request $request) {
+        try {
         $rules = [
             'email' => 'required|email|unique:users,email',
             'username' => 'required|unique:users,username',
@@ -79,6 +80,9 @@ class UserController extends Controller
         return response()->json([
             'user' => $user,
             'token' => $token], 201);
+        } catch (Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);
+        }
     }
 
     /**
