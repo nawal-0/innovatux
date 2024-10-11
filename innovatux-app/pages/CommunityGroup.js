@@ -92,11 +92,6 @@ export default function GroupSelection({ navigation }) {
           </View>
         ))}
       </ScrollView>
-
-      {/* Profile Icon */}
-      <TouchableOpacity style={styles.profileButton}>
-        <Text style={styles.profileButtonText}>Profile</Text>
-      </TouchableOpacity>
     </View>
   );
 }
