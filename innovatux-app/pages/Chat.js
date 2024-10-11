@@ -32,7 +32,15 @@ export default function GroupChat({ route }) {
       if (response.length > 0 && response[response.length - 1].id !== lastMessageId) {
         const lastMessage = response[response.length - 1];
         setLastMessageId(lastMessage.id);
-        setMessages((prevMessages) => [...prevMessages, ...response]);
+
+        setMessages((prevMessages) => {
+          // Create a set of existing message IDs
+          const existingIds = new Set(prevMessages.map((msg) => msg.id));
+          // Filter out messages that already exist
+          const newMessages = response.filter((msg) => !existingIds.has(msg.id));
+          // Append only new messages
+          return [...prevMessages, ...newMessages];
+        });
       }
 
       // Auto-scroll only if the user is at the bottom
