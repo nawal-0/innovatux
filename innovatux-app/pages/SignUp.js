@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, FlatList } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, FlatList, ScrollView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useUser } from '../components/UserContext';
 import { signup } from '../api-functions';
@@ -10,7 +10,7 @@ import { globalStyles } from './Styles';
  * This component provides the functionality for users to sign up for the application.
  * It includes form fields for first name, last name, email, username, age, gender, and password.
  */
-export default function SignUp({navigation}) {
+export default function SignUp({ navigation }) {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,12 +28,9 @@ export default function SignUp({navigation}) {
     { label: 'Other', value: 'Other' }
   ]);
 
-  /**
-   * Validate the provided username based on several rules, including allowed characters, length, and specific sequences.
-   * 
-   * @param {string} input - The username to validate.
-   * @returns {boolean} True if the username is valid, otherwise false.
-   */
+  // Terms and Conditions checkbox state
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+
   const validateUsername = (input) => {
     const regex = /^[A-Za-z0-9._]+$/;
     if (!regex.test(input)) {
@@ -55,10 +52,6 @@ export default function SignUp({navigation}) {
     return true;
   };
 
-  /**
-   * Handle the sign-up process by validating inputs and calling the signup API.
-   * It checks if all fields are filled, validates the username and password, and makes the signup request.
-   */
   const handleSignUp = () => {
     const validatePassword = (input) => {
       const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
@@ -68,7 +61,13 @@ export default function SignUp({navigation}) {
       }
       return true;
     };
-    
+  
+    // Check if terms and conditions are accepted
+    if (!isTermsAccepted) {
+      Alert.alert('Terms and Conditions', 'You must agree to the Terms and Conditions to sign up.');
+      return;
+    }
+  
     async function fetchSign() {
       if (!first_name || !last_name || !email || !username || !age || !gender || !password) {
         Alert.alert('Missing Information', 'Please fill out all the fields.');
@@ -81,16 +80,6 @@ export default function SignUp({navigation}) {
       // Validate Password
       if (!validatePassword(password)) return;
   
-      console.log({
-        first_name,
-        last_name,
-        email,
-        username,
-        age,
-        gender,
-        password
-      });
-  
       try {
         const response = await signup(first_name, last_name, username, email, password, age, gender);
         if (response.errors) {
@@ -99,7 +88,6 @@ export default function SignUp({navigation}) {
           Alert.alert('Sign Up Error', firstErrorMessage);
           return;
         }
-        console.log(response);
         const userInfo = { token: response.token, id: response.user.id };
         setUser(userInfo);
         navigation.navigate('Preferences');
@@ -108,8 +96,10 @@ export default function SignUp({navigation}) {
         console.error(error);
       }
     }
+  
     fetchSign();
   };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -121,6 +111,7 @@ export default function SignUp({navigation}) {
         renderItem={() => (
           <View style={globalStyles.container}>
             <Text style={globalStyles.title}>Sign Up</Text>
+  
             {/* First Name */}
             <Text style={styles.label}>First Name</Text>
             <TextInput
@@ -129,6 +120,7 @@ export default function SignUp({navigation}) {
               value={first_name}
               onChangeText={setFirstName}
             />
+  
             {/* Last Name */}
             <Text style={styles.label}>Last Name</Text>
             <TextInput
@@ -137,6 +129,7 @@ export default function SignUp({navigation}) {
               value={last_name}
               onChangeText={setLastName}
             />
+  
             {/* Email */}
             <Text style={styles.label}>Email</Text>
             <TextInput
@@ -146,6 +139,7 @@ export default function SignUp({navigation}) {
               onChangeText={setEmail}
               keyboardType="email-address"
             />
+  
             {/* Username */}
             <Text style={styles.label}>Username</Text>
             <TextInput
@@ -155,6 +149,7 @@ export default function SignUp({navigation}) {
               onChangeText={setUsername}
               onBlur={() => validateUsername(username)}
             />
+  
             {/* Age */}
             <Text style={styles.label}>Age</Text>
             <TextInput
@@ -164,6 +159,7 @@ export default function SignUp({navigation}) {
               value={age}
               onChangeText={setAge}
             />
+  
             {/* Gender Dropdown */}
             <Text style={styles.label}>Gender</Text>
             <DropDownPicker
@@ -177,6 +173,7 @@ export default function SignUp({navigation}) {
               style={globalStyles.dropdown}
               dropDownStyle={globalStyles.dropdown}
             />
+  
             {/* Password */}
             <Text style={styles.label}>Password</Text>
             <TextInput
@@ -186,9 +183,57 @@ export default function SignUp({navigation}) {
               value={password}
               onChangeText={setPassword}
             />
-            <TouchableOpacity style={globalStyles.button} onPress={handleSignUp}>
+  
+            {/* Terms and Conditions */}
+            <View style={styles.termsContainer}>
+              <TouchableOpacity onPress={() => setIsTermsAccepted(!isTermsAccepted)}>
+                <Text style={styles.checkbox}>{isTermsAccepted ? '✔️' : '⬜️'}</Text>
+              </TouchableOpacity>
+              <Text style={styles.label}>I agree to the Terms and Conditions</Text>
+            </View>
+  
+            {/* Scrollable Terms and Conditions Text Box */}
+            <ScrollView style={styles.termsBox}>
+              <Text style={styles.termsText}>
+                <Text style={styles.termsTitle}>Terms and Conditions</Text>{'\n\n'}
+  
+                <Text style={styles.termsHeader}>1. Introduction</Text>{'\n'}
+                Welcome to BoozeCTRL. By signing up and using our application, you agree to comply with and be bound by the following Terms and Conditions. These terms govern your access to and use of the BoozeCTRL mobile application and its features. Please read these terms carefully before proceeding.{'\n\n'}
+  
+                <Text style={styles.termsHeader}>2. User Eligibility</Text>{'\n'}
+                By using BoozeCTRL, you confirm that you are at least 18 years of age or the legal age for alcohol consumption in your jurisdiction, whichever is higher. You agree to provide accurate and truthful information during the sign-up process.{'\n\n'}
+  
+                <Text style={styles.termsHeader}>3. User Consent for Data Collection</Text>{'\n'}
+                By signing up, you consent to BoozeCTRL collecting and processing your data, including but not limited to, alcohol consumption patterns, spending habits, and personal health information. This data is used to provide you with personalized insights, track your goals, and improve your experience within the app. You acknowledge that your data will be handled in accordance with our Privacy Policy, which you have reviewed and accepted as part of this agreement.{'\n\n'}
+  
+                <Text style={styles.termsHeader}>4. Data Privacy and Security</Text>{'\n'}
+                BoozeCTRL is committed to protecting your privacy and ensuring the security of your data. We employ industry-standard encryption and security protocols to safeguard your information. However, you acknowledge that no system is completely secure, and you agree to use the app at your own risk. You have the right to view, update, and delete your data at any time through the app's account settings. For detailed information on how we handle your data, please refer to our Privacy Policy.{'\n\n'}
+  
+                <Text style={styles.termsHeader}>5. Use of the Application</Text>{'\n'}
+                BoozeCTRL is intended to help users track and manage their alcohol consumption responsibly. You agree to use the app solely for its intended purpose and in a manner that is lawful and respectful of other users. You agree not to misuse or attempt to harm the app or other users, including engaging in unauthorized access, modifying the app’s features, or compromising user data.{'\n\n'}
+  
+                <Text style={styles.termsHeader}>6. Community Guidelines</Text>{'\n'}
+                BoozeCTRL provides community features that allow users to connect and share experiences. By participating in these community features, you agree to behave respectfully and not to engage in any form of harassment, abuse, or offensive behavior. You agree to comply with our Community Guidelines, which outline acceptable behavior and the consequences of violations. BoozeCTRL reserves the right to moderate content and take appropriate action against users who violate these guidelines.{'\n\n'}
+  
+                <Text style={styles.termsHeader}>7. Limitations of Liability</Text>{'\n'}
+                BoozeCTRL is not responsible for any harm or damages arising from your use of the application. The app provides informational resources but does not substitute for professional medical advice or treatment. You agree to use the app at your own discretion and assume all risks associated with its use. BoozeCTRL does not guarantee the accuracy or reliability of the information provided within the app and disclaims all warranties, whether express or implied, to the fullest extent permitted by law.{'\n\n'}
+  
+                <Text style={styles.termsHeader}>8. Changes to Terms and Conditions</Text>{'\n'}
+                BoozeCTRL reserves the right to modify these Terms and Conditions at any time. Any changes will be effective immediately upon posting within the app or on our website. It is your responsibility to review the terms regularly. Continued use of the app after changes are posted constitutes acceptance of the updated terms.{'\n\n'}
+  
+                <Text style={styles.termsHeader}>9. Termination of Service</Text>{'\n'}
+                BoozeCTRL reserves the right to suspend or terminate your account at its discretion if you violate these Terms and Conditions or if your actions harm other users or the integrity of the application.
+              </Text>
+            </ScrollView>
+  
+            {/* Sign Up Button */}
+            <TouchableOpacity
+              style={globalStyles.button}
+              onPress={handleSignUp}  // Button is always clickable
+            >
               <Text style={globalStyles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
+  
             <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
               <Text style={styles.loginText}>Log In</Text>
             </TouchableOpacity>
@@ -198,7 +243,8 @@ export default function SignUp({navigation}) {
       />
     </KeyboardAvoidingView>
   );
-}
+}  
+
 
 const styles = StyleSheet.create({
   container: {
@@ -218,6 +264,45 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     color: '#2c5d36',
+  },
+  termsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  checkbox: {
+    fontSize: 24, 
+    marginRight: 10,
+  },
+  termsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  termsText: {
+    fontSize: 14,  
+    color: '#333',
+    lineHeight: 24,  
+  },
+  termsHeader: {
+    fontSize: 16,  
+    fontWeight: 'bold',  
+    marginBottom: 10,  
+  },
+  termsTitle: {
+    fontSize: 18,  
+    fontWeight: 'bold',  
+    textDecorationLine: 'underline',  
+    textAlign: 'center',  
+    marginBottom: 20,  
+  },
+  termsBox: {
+    maxHeight: 150,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: 'white',
   },
   input: {
     borderWidth: 1,
